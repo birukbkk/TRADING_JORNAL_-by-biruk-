@@ -26,6 +26,8 @@
       --shadow: 0 6px 24px rgba(0, 0, 0, 0.38);
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+      --card-pad: 14px;
+      --grid-gap: 12px;
     }
 
     [data-theme="light"] {
@@ -48,6 +50,11 @@
       --shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
     }
 
+    [data-density="compact"] {
+      --card-pad: 10px;
+      --grid-gap: 8px;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -67,36 +74,18 @@
 
     /* Keyframe Motions */
     @keyframes cardEnter {
-      from {
-        opacity: 0;
-        transform: translateY(12px) scale(0.985);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(12px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     @keyframes modalPopIn {
-      from {
-        opacity: 0;
-        transform: translateY(18px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(18px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     @keyframes itemSlideIn {
-      from {
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     @keyframes shakeField {
@@ -117,12 +106,16 @@
       border-color: var(--red) !important;
     }
 
+    .hidden-section {
+      display: none !important;
+    }
+
     /* Top Bar */
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
       gap: 10px;
       animation: cardEnter 0.35s var(--ease-out) both;
@@ -161,7 +154,7 @@
 
     .topbar-actions {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       align-items: center;
       flex-wrap: wrap;
     }
@@ -184,7 +177,7 @@
       background: var(--bg-card);
       color: var(--text-main);
       border: 1px solid var(--border);
-      padding: 8px 12px;
+      padding: 8px 11px;
       border-radius: 9px;
       font-size: 12px;
       font-weight: 600;
@@ -200,9 +193,7 @@
       transform: translateY(-1px);
     }
 
-    .btn:active {
-      transform: scale(0.95);
-    }
+    .btn:active { transform: scale(0.95); }
 
     .btn-primary {
       background: var(--green);
@@ -221,18 +212,96 @@
       border-color: var(--red-border);
     }
 
-    /* Filter Pills */
-    .filter-bar {
+    /* Top Total Balance & Account Selector Banner */
+    .top-balance-banner {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: var(--card-pad);
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      animation: cardEnter 0.38s var(--ease-out) 0.03s both;
+    }
+
+    .total-bal-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .total-bal-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
       gap: 6px;
+    }
+
+    .total-bal-amount {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .total-bal-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .account-switcher-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .account-select {
+      background: var(--bg-input);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 165px;
+    }
+
+    /* Toolbar Row: Timeframe + Screen Templates */
+    .controls-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
       margin-bottom: 14px;
-      overflow-x: auto;
-      padding-bottom: 4px;
       animation: cardEnter 0.4s var(--ease-out) 0.05s both;
     }
 
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
     .pill {
-      padding: 6px 13px;
+      padding: 6px 12px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
@@ -249,9 +318,7 @@
       color: var(--text-main);
     }
 
-    .pill:active {
-      transform: scale(0.95);
-    }
+    .pill:active { transform: scale(0.95); }
 
     .pill.active {
       background: var(--green-bg);
@@ -259,18 +326,36 @@
       border-color: var(--green-border);
     }
 
-    /* Dashboard Grid matching screenshot */
+    .template-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .template-select {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Dashboard Grid & View Templates */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      gap: 12px;
+      gap: var(--grid-gap);
     }
 
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px;
+      padding: var(--card-pad);
       box-shadow: var(--shadow);
       animation: cardEnter 0.45s var(--ease-out) both;
       transition: transform 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background-color 0.25s var(--ease-out);
@@ -283,6 +368,19 @@
     .col-4 { grid-column: span 4; }
     .col-8 { grid-column: span 8; }
     .col-12 { grid-column: span 12; }
+
+    /* Template Overrides */
+    body[data-view-template="compact"] .col-4,
+    body[data-view-template="compact"] .col-8,
+    body[data-view-template="compact"] .col-12 {
+      grid-column: span 12;
+    }
+
+    body[data-view-template="calendar"] #secCalendar { order: -2; grid-column: span 12; }
+    body[data-view-template="calendar"] #secPerfRisk { order: -1; }
+
+    body[data-view-template="journal"] #secTradeLog { order: -2; grid-column: span 12; }
+    body[data-view-template="journal"] #secAccounts { order: -1; }
 
     @media (max-width: 960px) {
       .col-4 { grid-column: span 6; }
@@ -298,6 +396,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
+      gap: 8px;
     }
 
     .card-title {
@@ -320,11 +419,57 @@
       margin-top: 10px;
     }
 
-    .mini-box {
+    /* Multi-Account Performance Cards */
+    .accounts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .acc-perf-card {
       background: var(--bg-input);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px;
+      cursor: pointer;
+      transition: transform 0.18s var(--ease-spring), border-color 0.2s var(--ease-out);
+    }
+
+    .acc-perf-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--neutral);
+    }
+
+    .acc-perf-card.active-acc {
+      border-color: var(--green-border);
+      background: color-mix(in srgb, var(--bg-input) 88%, var(--green) 12%);
+    }
+
+    .acc-perf-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      gap: 6px;
+    }
+
+    .acc-perf-name {
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .acc-perf-bal {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .acc-perf-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
     /* Winstreak */
@@ -383,6 +528,16 @@
       text-align: center;
     }
 
+    .badge-lot {
+      background: rgba(59, 130, 246, 0.14);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
     /* Period Returns */
     .period-grid {
       display: grid;
@@ -439,7 +594,7 @@
     .cal-nav {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: 700;
       font-size: 15px;
     }
@@ -488,22 +643,15 @@
       overflow: hidden;
     }
 
-    .cal-cell:hover {
-      transform: translateY(-2px) scale(1.01);
-    }
-
-    .cal-cell:active {
-      transform: scale(0.96);
-    }
+    .cal-cell:hover { transform: translateY(-2px) scale(1.01); }
+    .cal-cell:active { transform: scale(0.96); }
 
     .cal-cell.empty {
       opacity: 0.35;
       cursor: default;
     }
 
-    .cal-cell.empty:hover {
-      transform: none;
-    }
+    .cal-cell.empty:hover { transform: none; }
 
     .cal-cell.win {
       background: var(--green-bg);
@@ -521,9 +669,7 @@
       cursor: default;
     }
 
-    .cal-cell.week-total:hover {
-      transform: none;
-    }
+    .cal-cell.week-total:hover { transform: none; }
 
     .cal-cell.week-total.win {
       background: var(--green-bg);
@@ -581,9 +727,7 @@
       background: var(--bg-card-hover);
     }
 
-    .trade-item:active {
-      transform: scale(0.985);
-    }
+    .trade-item:active { transform: scale(0.985); }
 
     .trade-item.win { border-left: 4px solid var(--green); }
     .trade-item.loss { border-left: 4px solid var(--red); }
@@ -624,7 +768,7 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 18px;
@@ -664,6 +808,16 @@
       gap: 10px;
     }
 
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 520px) {
+      .form-row-3 { grid-template-columns: 1fr; }
+    }
+
     .preview-img {
       width: 100%;
       max-height: 240px;
@@ -671,6 +825,18 @@
       border-radius: 8px;
       margin-top: 8px;
       border: 1px solid var(--border);
+    }
+
+    .check-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 10px;
+      border-radius: 8px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+      font-size: 13px;
     }
 
     /* Floating Add Button */
@@ -699,9 +865,7 @@
       box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5);
     }
 
-    .fab:active {
-      transform: scale(0.94);
-    }
+    .fab:active { transform: scale(0.94); }
 
     svg.chart-svg { width: 100%; display: block; }
 
@@ -733,17 +897,12 @@
     </div>
 
     <div class="topbar-actions">
-      <button class="btn" id="soundBtn" onclick="toggleSound()" title="Toggle motion UI sound">
-        <span id="soundIconWrap"></span>
-        <span id="soundBtnText">Sound On</span>
-      </button>
-
       <button class="btn" onclick="openSettingsModal()">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+          <line x1="2" y1="10" x2="22" y2="10"></line>
         </svg>
-        <span>Balance</span>
+        <span>Accounts</span>
       </button>
 
       <button class="btn" onclick="exportBackup()">
@@ -770,20 +929,82 @@
     </div>
   </div>
 
-  <!-- Timeframe Range Selector -->
-  <div class="filter-bar">
-    <div class="pill active" onclick="setRange('ALL', this)">All Time</div>
-    <div class="pill" onclick="setRange('YEAR', this)">This Year</div>
-    <div class="pill" onclick="setRange('MONTH', this)">This Month</div>
-    <div class="pill" onclick="setRange('WEEK', this)">This Week</div>
-    <div class="pill" onclick="setRange('DAY', this)">Today</div>
+  <!-- Top Total Balance & Account Selector Area -->
+  <div class="top-balance-banner">
+    <div class="total-bal-left">
+      <div class="total-bal-label">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        <span id="topBalanceTitle">Total Portfolio Balance (All Accounts)</span>
+      </div>
+      <div class="total-bal-amount">
+        <span id="topTotalBalance">$10,000.00</span>
+        <span class="badge-win" id="topTotalGainBadge">+0.00%</span>
+      </div>
+      <div class="total-bal-sub">
+        <span>Starting Capital: <b id="topTotalStart">$10,000.00</b></span>
+        <span>Net P&amp;L: <b id="topTotalNetPnl">$0.00</b></span>
+        <span>Total Lots: <b id="topTotalLots">0.00</b></span>
+      </div>
+    </div>
+
+    <div class="account-switcher-wrap">
+      <select id="accountFilterSelect" class="account-select" onchange="selectAccountFilter(this.value)" aria-label="Select Trading Account"></select>
+      <button class="btn" onclick="openSettingsModal()" title="Manage Accounts">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>New Account</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Timeframe Range & Screen View Template Controls -->
+  <div class="controls-strip">
+    <div class="filter-bar">
+      <div class="pill active" onclick="setRange('ALL', this)">All Time</div>
+      <div class="pill" onclick="setRange('YEAR', this)">This Year</div>
+      <div class="pill" onclick="setRange('MONTH', this)">This Month</div>
+      <div class="pill" onclick="setRange('WEEK', this)">This Week</div>
+      <div class="pill" onclick="setRange('DAY', this)">Today</div>
+    </div>
+
+    <div class="template-bar">
+      <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <select id="templateSelect" class="template-select" onchange="setViewTemplate(this.value)" aria-label="Screen View Template">
+        <option value="auto">View: Auto (Smart)</option>
+        <option value="pro">View: Pro Dashboard</option>
+        <option value="compact">View: Compact Mobile</option>
+        <option value="calendar">View: Calendar Focus</option>
+        <option value="journal">View: Journal &amp; Charts</option>
+        <option value="custom">View: Custom Layout</option>
+      </select>
+      <button class="btn" onclick="openTemplateModal()">Customize View</button>
+    </div>
   </div>
 
   <!-- Main Analytics Grid -->
   <div class="dashboard-grid">
 
+    <!-- Multi-Account Performance Comparison Section -->
+    <div class="col-12 card" id="secAccounts" style="animation-delay:0.04s;">
+      <div class="card-header">
+        <span style="font-weight:800; font-size:15px;">Account Performance Overview</span>
+        <span class="card-title" id="accountCountLabel">1 Account</span>
+      </div>
+      <div class="accounts-grid" id="accountsPerfGrid"></div>
+    </div>
+
     <!-- Left Column: Trade Count, Winrate, Avg Win/Loss, Winstreak -->
-    <div class="col-4" style="display:flex; flex-direction:column; gap:12px;">
+    <div class="col-4" id="secCoreStats" style="display:flex; flex-direction:column; gap:var(--grid-gap);">
       <div class="card" style="animation-delay:0.06s;">
         <div class="card-header">
           <span class="card-title">Trade Count</span>
@@ -816,7 +1037,7 @@
         </div>
       </div>
 
-      <div class="card" style="animation-delay:0.16s;">
+      <div class="card" id="secStreaks" style="animation-delay:0.16s;">
         <div class="card-title">Winstreak</div>
         <div class="streak-row">
           <div class="streak-item">
@@ -852,7 +1073,7 @@
     </div>
 
     <!-- Center Column: Performance Radar -->
-    <div class="col-4 card" style="display:flex; flex-direction:column; justify-content:space-between; animation-delay:0.12s;">
+    <div class="col-4 card" id="secRadar" style="display:flex; flex-direction:column; justify-content:space-between; animation-delay:0.12s;">
       <div class="card-header">
         <span style="font-weight:800; font-size:15px;">EdgeScore Radar</span>
         <span class="badge-win">LIVE</span>
@@ -866,12 +1087,12 @@
     </div>
 
     <!-- Right Column: Balance & Equity Curve -->
-    <div class="col-4 card" style="display:flex; flex-direction:column; justify-content:space-between; animation-delay:0.16s;">
+    <div class="col-4 card" id="secEquity" style="display:flex; flex-direction:column; justify-content:space-between; animation-delay:0.16s;">
       <div>
         <div class="card-header">
           <div>
             <div class="big-num" id="statBalance">$10,000.00</div>
-            <div class="card-title">Balance</div>
+            <div class="card-title" id="equityScopeLabel">Selected Balance</div>
           </div>
           <span class="badge-win" id="statGainBadge">+0.00%</span>
         </div>
@@ -882,14 +1103,14 @@
     </div>
 
     <!-- Bottom Left: Performance & Risk -->
-    <div class="col-4 card" style="animation-delay:0.2s;">
+    <div class="col-4 card" id="secPerfRisk" style="animation-delay:0.2s;">
       <div class="card-header">
         <span style="font-weight:700; font-size:14px;">Performance</span>
         <span style="font-weight:800; font-size:14px;" id="statNetPnl">$0.00</span>
       </div>
-      <div style="font-size:12px; margin-bottom:8px;">
-        <span class="text-muted">Gain %: </span>
-        <b id="statGainPct">0.00%</b>
+      <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px;">
+        <div><span class="text-muted">Gain %: </span><b id="statGainPct">0.00%</b></div>
+        <div><span class="text-muted">Avg Lot: </span><b id="statAvgLot">0.00</b></div>
       </div>
 
       <div class="card-title" style="margin-top:10px;">Period Returns (Day / Week / Month / Year)</div>
@@ -932,7 +1153,7 @@
     </div>
 
     <!-- Bottom Right: P&L Calendar -->
-    <div class="col-8 card" style="animation-delay:0.24s;">
+    <div class="col-8 card" id="secCalendar" style="animation-delay:0.24s;">
       <div class="cal-header">
         <div class="cal-nav">
           <button class="btn" onclick="changeMonth(-1)" aria-label="Previous Month">
@@ -965,9 +1186,9 @@
     </div>
 
     <!-- Trade Log & Experience Feed -->
-    <div class="col-12 card" style="animation-delay:0.28s;">
+    <div class="col-12 card" id="secTradeLog" style="animation-delay:0.28s;">
       <div class="card-header">
-        <span style="font-weight:800; font-size:15px;">Trade Log, Screenshots &amp; Experience</span>
+        <span style="font-weight:800; font-size:15px;">Trade Log, Lot Sizes, Screenshots &amp; Experience</span>
         <span class="card-title" id="logCountLabel">0 entries</span>
       </div>
       <div id="tradeListContainer"></div>
@@ -1000,16 +1221,20 @@
         <input type="hidden" id="tradeId" />
         <div class="form-row">
           <div class="form-group">
+            <label>Trading Account</label>
+            <select id="tradeAccount" class="form-control"></select>
+          </div>
+          <div class="form-group">
             <label>Date</label>
             <input type="date" id="tradeDate" class="form-control" required />
           </div>
-          <div class="form-group">
-            <label>Pair / Symbol (e.g., XAUUSD, EURUSD)</label>
-            <input type="text" id="tradePair" class="form-control" placeholder="XAUUSD" required />
-          </div>
         </div>
 
-        <div class="form-row">
+        <div class="form-row-3">
+          <div class="form-group">
+            <label>Pair / Symbol</label>
+            <input type="text" id="tradePair" class="form-control" placeholder="XAUUSD" required />
+          </div>
           <div class="form-group">
             <label>Direction</label>
             <select id="tradeDir" class="form-control">
@@ -1018,25 +1243,29 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Net Profit / Loss ($)</label>
-            <input type="number" step="0.01" id="tradePnl" class="form-control" placeholder="e.g. 120.50 or -45.00" required />
+            <label>Lot Size</label>
+            <input type="number" step="0.01" min="0" id="tradeLot" class="form-control" placeholder="e.g. 0.10" value="0.10" required />
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="form-row-3">
           <div class="form-group">
-            <label>Setup / Session</label>
-            <input type="text" id="tradeSetup" class="form-control" placeholder="London Breakout / BOS" />
+            <label>Net Profit / Loss ($)</label>
+            <input type="number" step="0.01" id="tradePnl" class="form-control" placeholder="120.50 or -45" required />
           </div>
           <div class="form-group">
-            <label>Emotion / Discipline (1-10)</label>
+            <label>Setup / Session</label>
+            <input type="text" id="tradeSetup" class="form-control" placeholder="London BOS" />
+          </div>
+          <div class="form-group">
+            <label>Discipline (1-10)</label>
             <input type="number" min="1" max="10" id="tradeScore" class="form-control" value="8" />
           </div>
         </div>
 
         <div class="form-group">
           <label>My Experience &amp; Lessons on this Trade</label>
-          <textarea id="tradeNotes" rows="3" class="form-control" placeholder="Write why you entered, how you managed risk, emotions, and what you learned..."></textarea>
+          <textarea id="tradeNotes" rows="3" class="form-control" placeholder="Write why you entered, lot sizing, how you managed risk, emotions, and what you learned..."></textarea>
         </div>
 
         <div class="form-group">
@@ -1067,11 +1296,11 @@
     <div class="modal" id="viewModalContent" onclick="event.stopPropagation()"></div>
   </div>
 
-  <!-- Settings / Starting Balance Modal -->
+  <!-- Accounts & Data Settings Modal -->
   <div class="modal-backdrop" id="settingsModal" onclick="handleBackdropClick(event, 'settingsModal')">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="card-header">
-        <h3>Account &amp; Data Settings</h3>
+        <h3>Trading Accounts &amp; Backup</h3>
         <button class="btn" onclick="closeModal('settingsModal')" aria-label="Close">
           <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -1079,16 +1308,73 @@
           </svg>
         </button>
       </div>
+
       <div class="form-group">
-        <label>Starting Account Balance ($)</label>
-        <input type="number" step="0.01" id="startingBalanceInput" class="form-control" />
+        <label>Your Trading Accounts &amp; Starting Capital ($)</label>
+        <div id="accountsManageList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
       </div>
+
+      <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:12px;">
+        <div style="font-size:12px; font-weight:700; margin-bottom:8px;">Add Another Trading Account</div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Account Name</label>
+            <input type="text" id="newAccName" class="form-control" placeholder="e.g. Prop Funded, Scalping" />
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Starting Balance ($)</label>
+            <input type="number" step="0.01" id="newAccBal" class="form-control" placeholder="5000" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="addTradingAccount()">+ Add Account</button>
+      </div>
+
       <div class="form-group">
         <label>Restore Backup (.json file)</label>
         <input type="file" accept=".json" class="form-control" onchange="importBackup(event)" />
       </div>
+
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
-        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+        <button class="btn btn-primary" onclick="saveAccountSettings()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Screen View Template Modal -->
+  <div class="modal-backdrop" id="templateModal" onclick="handleBackdropClick(event, 'templateModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="card-header">
+        <h3>Customize Screen View Template</h3>
+        <button class="btn" onclick="closeModal('templateModal')" aria-label="Close">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Layout Density</label>
+        <select id="customDensitySelect" class="form-control">
+          <option value="cozy">Cozy (Spacious cards)</option>
+          <option value="compact">Compact (Tighter screen fit)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Visible Sections in Custom Template</label>
+        <label class="check-row"><span>Account Performance Overview</span><input type="checkbox" id="chkAccounts" checked /></label>
+        <label class="check-row"><span>Trade Count, Winrate &amp; Streaks</span><input type="checkbox" id="chkCoreStats" checked /></label>
+        <label class="check-row"><span>EdgeScore Radar</span><input type="checkbox" id="chkRadar" checked /></label>
+        <label class="check-row"><span>Balance &amp; Equity Curve</span><input type="checkbox" id="chkEquity" checked /></label>
+        <label class="check-row"><span>Performance &amp; Risk Metrics</span><input type="checkbox" id="chkPerfRisk" checked /></label>
+        <label class="check-row"><span>Monthly &amp; Weekly P&amp;L Calendar</span><input type="checkbox" id="chkCalendar" checked /></label>
+        <label class="check-row"><span>Trade Log &amp; Screenshots</span><input type="checkbox" id="chkTradeLog" checked /></label>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+        <button type="button" class="btn" onclick="closeModal('templateModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveCustomTemplate()">Apply Custom Template</button>
       </div>
     </div>
   </div>
@@ -1103,14 +1389,25 @@
     } catch (e) {}
   }
 
-  // Per-User Storage Isolation (each Telegram user or local browser profile has its own isolated data & starts empty)
+  // Per-User Storage Isolation
   const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
   const userScopeId = (tgUser && tgUser.id) ? `tg_${tgUser.id}` : 'local_guest';
 
   const DB_NAME = `TradeVaultDB_${userScopeId}`;
   const KEY_START_BAL = `tv_start_bal_${userScopeId}`;
+  const KEY_ACCOUNTS = `tv_accounts_${userScopeId}`;
+  const KEY_ACTIVE_ACC = `tv_active_acc_${userScopeId}`;
   const KEY_THEME = `tv_theme_${userScopeId}`;
-  const KEY_SOUND = `tv_sound_${userScopeId}`;
+  const KEY_TEMPLATE = `tv_template_${userScopeId}`;
+  const KEY_CUSTOM_CFG = `tv_custom_cfg_${userScopeId}`;
+
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
   document.getElementById('userScopeLabel').innerHTML = `
     <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1120,129 +1417,128 @@
     <span>${tgUser && tgUser.first_name ? `Private Journal • ${escapeHtml(tgUser.first_name)}` : 'Private Journal • Isolated Local Data'}</span>
   `;
 
-  // SVG Icon Templates
+  // SVG Icons
   const ICONS = {
     sun: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`,
     moon: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
-    soundOn: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>`,
-    soundOff: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`,
     chartPlaceholder: `<svg class="icon-svg-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`,
     edit: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`
   };
 
-  // Motion-Matched Web Audio Synthesizer (100% offline, zero external audio files)
-  const MotionAudio = (() => {
-    let ctx = null;
-    let enabled = localStorage.getItem(KEY_SOUND) !== 'off';
-
-    function ensureCtx() {
-      if (!enabled) return null;
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return null;
-        if (!ctx) ctx = new AudioCtx();
-        if (ctx.state === 'suspended') ctx.resume();
-        return ctx;
-      } catch (e) {
-        return null;
+  // Multi-Account State (migrates legacy startingBalance automatically if present)
+  function loadAccountsState() {
+    try {
+      const raw = localStorage.getItem(KEY_ACCOUNTS);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length) return parsed;
       }
-    }
-
-    function sweep({ startFreq, endFreq, duration, type = 'sine', gainPeak = 0.05, delay = 0 }) {
-      const c = ensureCtx();
-      if (!c) return;
-      try {
-        const now = c.currentTime + delay;
-        const osc = c.createOscillator();
-        const gain = c.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(Math.max(40, startFreq), now);
-        osc.frequency.exponentialRampToValueAtTime(Math.max(40, endFreq), now + duration);
-
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.linearRampToValueAtTime(gainPeak, now + Math.min(0.015, duration * 0.25));
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-        osc.connect(gain);
-        gain.connect(c.destination);
-        osc.start(now);
-        osc.stop(now + duration + 0.02);
-      } catch (e) {}
-    }
-
-    return {
-      isEnabled: () => enabled,
-      setEnabled: (val) => {
-        enabled = Boolean(val);
-        localStorage.setItem(KEY_SOUND, enabled ? 'on' : 'off');
-      },
-      // Matches quick button press / pill slide
-      playSlideTick: (direction = 1) => {
-        sweep({
-          startFreq: direction >= 0 ? 440 : 520,
-          endFreq: direction >= 0 ? 580 : 410,
-          duration: 0.09,
-          type: 'triangle',
-          gainPeak: 0.035
-        });
-      },
-      // Matches modal pop-in expansion (260ms)
-      playPanelOpen: () => {
-        sweep({
-          startFreq: 260,
-          endFreq: 540,
-          duration: 0.22,
-          type: 'sine',
-          gainPeak: 0.045
-        });
-      },
-      // Matches modal close/collapse (190ms)
-      playPanelClose: () => {
-        sweep({
-          startFreq: 480,
-          endFreq: 220,
-          duration: 0.17,
-          type: 'sine',
-          gainPeak: 0.035
-        });
-      },
-      // Matches trade card slide-in + confirmation chime
-      playSaveSuccess: () => {
-        sweep({ startFreq: 440, endFreq: 587.33, duration: 0.12, type: 'triangle', gainPeak: 0.045 });
-        sweep({ startFreq: 587.33, endFreq: 880, duration: 0.18, type: 'sine', gainPeak: 0.05, delay: 0.08 });
-      },
-      // Matches trade removal release
-      playDeleteRelease: () => {
-        sweep({ startFreq: 360, endFreq: 150, duration: 0.2, type: 'sawtooth', gainPeak: 0.03 });
-      },
-      // Matches validation shake animation
-      playShakeError: () => {
-        sweep({ startFreq: 190, endFreq: 120, duration: 0.11, type: 'triangle', gainPeak: 0.05 });
-        sweep({ startFreq: 175, endFreq: 105, duration: 0.12, type: 'triangle', gainPeak: 0.045, delay: 0.1 });
-      }
-    };
-  })();
-
-  function syncSoundButtonUI() {
-    const on = MotionAudio.isEnabled();
-    document.getElementById('soundIconWrap').innerHTML = on ? ICONS.soundOn : ICONS.soundOff;
-    document.getElementById('soundBtnText').innerText = on ? 'Sound On' : 'Muted';
+    } catch (e) {}
+    const legacyBal = parseFloat(localStorage.getItem(KEY_START_BAL)) || 10000;
+    const defaultAccounts = [{ id: 'acc_main', name: 'Main Account', startingBalance: legacyBal }];
+    localStorage.setItem(KEY_ACCOUNTS, JSON.stringify(defaultAccounts));
+    return defaultAccounts;
   }
 
-  function toggleSound() {
-    const next = !MotionAudio.isEnabled();
-    MotionAudio.setEnabled(next);
-    syncSoundButtonUI();
-    if (next) MotionAudio.playSlideTick(1);
+  let accounts = loadAccountsState();
+  let activeAccountId = localStorage.getItem(KEY_ACTIVE_ACC) || 'ALL';
+  if (activeAccountId !== 'ALL' && !accounts.some(a => a.id === activeAccountId)) {
+    activeAccountId = 'ALL';
   }
 
-  // State (empty journal by default for every user)
   let trades = [];
-  let startingBalance = parseFloat(localStorage.getItem(KEY_START_BAL)) || 10000;
   let currentRange = 'ALL';
   let calDate = new Date();
   let currentBase64Image = '';
+
+  // View Template State (Auto + Presets + Custom)
+  let viewTemplate = localStorage.getItem(KEY_TEMPLATE) || 'auto';
+  const defaultCustomCfg = {
+    density: 'cozy',
+    secAccounts: true,
+    secCoreStats: true,
+    secRadar: true,
+    secEquity: true,
+    secPerfRisk: true,
+    secCalendar: true,
+    secTradeLog: true
+  };
+  let customTemplateCfg = (() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY_CUSTOM_CFG) || 'null');
+      return saved ? { ...defaultCustomCfg, ...saved } : { ...defaultCustomCfg };
+    } catch (e) {
+      return { ...defaultCustomCfg };
+    }
+  })();
+
+  function applyViewTemplate() {
+    const sel = document.getElementById('templateSelect');
+    if (sel) sel.value = viewTemplate;
+
+    let resolved = viewTemplate;
+    if (viewTemplate === 'auto') {
+      resolved = window.innerWidth <= 680 ? 'compact' : 'pro';
+    }
+
+    document.body.setAttribute('data-view-template', resolved);
+
+    const density = (viewTemplate === 'custom')
+      ? customTemplateCfg.density
+      : (resolved === 'compact' ? 'compact' : 'cozy');
+    document.body.setAttribute('data-density', density);
+
+    const allSections = ['secAccounts', 'secCoreStats', 'secRadar', 'secEquity', 'secPerfRisk', 'secCalendar', 'secTradeLog'];
+    allSections.forEach(secId => {
+      const el = document.getElementById(secId);
+      if (!el) return;
+      if (viewTemplate === 'custom') {
+        el.classList.toggle('hidden-section', !customTemplateCfg[secId]);
+      } else {
+        el.classList.remove('hidden-section');
+      }
+    });
+  }
+
+  function setViewTemplate(tpl) {
+    viewTemplate = tpl;
+    localStorage.setItem(KEY_TEMPLATE, viewTemplate);
+    applyViewTemplate();
+  }
+
+  window.addEventListener('resize', () => {
+    if (viewTemplate === 'auto') applyViewTemplate();
+  });
+
+  function openTemplateModal() {
+    document.getElementById('customDensitySelect').value = customTemplateCfg.density || 'cozy';
+    document.getElementById('chkAccounts').checked = customTemplateCfg.secAccounts !== false;
+    document.getElementById('chkCoreStats').checked = customTemplateCfg.secCoreStats !== false;
+    document.getElementById('chkRadar').checked = customTemplateCfg.secRadar !== false;
+    document.getElementById('chkEquity').checked = customTemplateCfg.secEquity !== false;
+    document.getElementById('chkPerfRisk').checked = customTemplateCfg.secPerfRisk !== false;
+    document.getElementById('chkCalendar').checked = customTemplateCfg.secCalendar !== false;
+    document.getElementById('chkTradeLog').checked = customTemplateCfg.secTradeLog !== false;
+    document.getElementById('templateModal').classList.add('open');
+  }
+
+  function saveCustomTemplate() {
+    customTemplateCfg = {
+      density: document.getElementById('customDensitySelect').value,
+      secAccounts: document.getElementById('chkAccounts').checked,
+      secCoreStats: document.getElementById('chkCoreStats').checked,
+      secRadar: document.getElementById('chkRadar').checked,
+      secEquity: document.getElementById('chkEquity').checked,
+      secPerfRisk: document.getElementById('chkPerfRisk').checked,
+      secCalendar: document.getElementById('chkCalendar').checked,
+      secTradeLog: document.getElementById('chkTradeLog').checked
+    };
+    localStorage.setItem(KEY_CUSTOM_CFG, JSON.stringify(customTemplateCfg));
+    viewTemplate = 'custom';
+    localStorage.setItem(KEY_TEMPLATE, 'custom');
+    applyViewTemplate();
+    closeModal('templateModal');
+  }
 
   // Per-User IndexedDB Setup
   let db;
@@ -1273,7 +1569,13 @@
     const req = store.getAll();
     req.onsuccess = () => {
       const list = Array.isArray(req.result) ? req.result : [];
-      trades = list.sort((a, b) => new Date(a.date) - new Date(b.date));
+      trades = list
+        .map(t => ({
+          ...t,
+          accountId: t.accountId || accounts[0].id,
+          lot: Number.isFinite(parseFloat(t.lot)) ? parseFloat(t.lot) : 0
+        }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
       renderAll();
     };
   }
@@ -1296,14 +1598,6 @@
     });
   }
 
-  function escapeHtml(str) {
-    return String(str || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
   // Theme Toggle
   function applyTheme(theme) {
     const isLight = theme === 'light';
@@ -1317,11 +1611,47 @@
     const next = isDark ? 'light' : 'dark';
     applyTheme(next);
     localStorage.setItem(KEY_THEME, next);
-    MotionAudio.playSlideTick(isDark ? 1 : -1);
   }
 
   applyTheme(localStorage.getItem(KEY_THEME) === 'light' ? 'light' : 'dark');
-  syncSoundButtonUI();
+  applyViewTemplate();
+
+  // Account Helpers
+  function getAccountName(accId) {
+    const found = accounts.find(a => a.id === accId);
+    return found ? found.name : (accounts[0] ? accounts[0].name : 'Main Account');
+  }
+
+  function getActiveStartingBalance() {
+    if (activeAccountId === 'ALL') {
+      return accounts.reduce((sum, a) => sum + (Number(a.startingBalance) || 0), 0);
+    }
+    const found = accounts.find(a => a.id === activeAccountId);
+    return found ? (Number(found.startingBalance) || 0) : 10000;
+  }
+
+  function getAccountScopedTrades() {
+    if (activeAccountId === 'ALL') return trades;
+    return trades.filter(t => (t.accountId || accounts[0].id) === activeAccountId);
+  }
+
+  function selectAccountFilter(accId) {
+    activeAccountId = accId;
+    localStorage.setItem(KEY_ACTIVE_ACC, activeAccountId);
+    renderAll();
+  }
+
+  function populateAccountSelects() {
+    const filterSel = document.getElementById('accountFilterSelect');
+    filterSel.innerHTML = `<option value="ALL">All Accounts (${accounts.length})</option>` +
+      accounts.map(a => `<option value="${escapeHtml(a.id)}">${escapeHtml(a.name)}</option>`).join('');
+    filterSel.value = activeAccountId;
+
+    const tradeAccSel = document.getElementById('tradeAccount');
+    if (tradeAccSel) {
+      tradeAccSel.innerHTML = accounts.map(a => `<option value="${escapeHtml(a.id)}">${escapeHtml(a.name)}</option>`).join('');
+    }
+  }
 
   // Filter Range
   function setRange(range, el) {
@@ -1330,14 +1660,14 @@
     el.classList.add('active');
     const labels = { ALL: 'All Time', YEAR: 'This Year', MONTH: 'This Month', WEEK: 'This Week', DAY: 'Today' };
     document.getElementById('rangeLabel').innerText = labels[range];
-    MotionAudio.playSlideTick(1);
     renderAll();
   }
 
   function getFilteredTrades() {
+    const scoped = getAccountScopedTrades();
     const now = new Date();
     const todayStr = now.toISOString().slice(0, 10);
-    return trades.filter(t => {
+    return scoped.filter(t => {
       const d = new Date(t.date + 'T00:00:00');
       if (currentRange === 'DAY') return t.date === todayStr;
       if (currentRange === 'WEEK') {
@@ -1374,7 +1704,6 @@
         const preview = document.getElementById('imagePreview');
         preview.src = currentBase64Image;
         preview.style.display = 'block';
-        MotionAudio.playSlideTick(1);
       };
       img.src = event.target.result;
     };
@@ -1383,6 +1712,7 @@
 
   // Modals
   function openTradeModal(datePrefill = '', tradeToEdit = null) {
+    populateAccountSelects();
     document.getElementById('tradeForm').reset();
     document.querySelectorAll('#tradeForm .form-control').forEach(el => el.classList.remove('anim-shake'));
     document.getElementById('imagePreview').style.display = 'none';
@@ -1392,9 +1722,11 @@
     if (tradeToEdit) {
       document.getElementById('modalTitle').innerText = 'Edit Trade';
       document.getElementById('tradeId').value = tradeToEdit.id;
+      document.getElementById('tradeAccount').value = tradeToEdit.accountId || accounts[0].id;
       document.getElementById('tradeDate').value = tradeToEdit.date;
       document.getElementById('tradePair').value = tradeToEdit.pair;
       document.getElementById('tradeDir').value = tradeToEdit.dir;
+      document.getElementById('tradeLot').value = tradeToEdit.lot !== undefined ? tradeToEdit.lot : 0.10;
       document.getElementById('tradePnl').value = tradeToEdit.pnl;
       document.getElementById('tradeSetup').value = tradeToEdit.setup || '';
       document.getElementById('tradeScore').value = tradeToEdit.score || 8;
@@ -1408,16 +1740,16 @@
     } else {
       document.getElementById('modalTitle').innerText = 'Log New Trade';
       document.getElementById('tradeId').value = '';
+      document.getElementById('tradeAccount').value = activeAccountId !== 'ALL' ? activeAccountId : accounts[0].id;
       document.getElementById('tradeDate').value = datePrefill || new Date().toISOString().slice(0, 10);
+      document.getElementById('tradeLot').value = '0.10';
     }
     document.getElementById('tradeModal').classList.add('open');
-    MotionAudio.playPanelOpen();
   }
 
   function closeModal(id) {
     const backdrop = document.getElementById(id);
-    if (!backdrop || !backdrop.classList.contains('open')) return;
-    MotionAudio.playPanelClose();
+    if (!backdrop) return;
     backdrop.classList.remove('open');
   }
 
@@ -1437,26 +1769,30 @@
     e.preventDefault();
     const dateInput = document.getElementById('tradeDate');
     const pairInput = document.getElementById('tradePair');
+    const lotInput = document.getElementById('tradeLot');
     const pnlInput = document.getElementById('tradePnl');
 
     const dateVal = dateInput.value;
     const pairVal = pairInput.value.trim().toUpperCase();
+    const lotVal = parseFloat(lotInput.value);
     const pnlVal = parseFloat(pnlInput.value);
 
-    if (!dateVal || !pairVal || Number.isNaN(pnlVal)) {
+    if (!dateVal || !pairVal || Number.isNaN(pnlVal) || Number.isNaN(lotVal) || lotVal < 0) {
       if (!dateVal) triggerFieldShake(dateInput);
       if (!pairVal) triggerFieldShake(pairInput);
+      if (Number.isNaN(lotVal) || lotVal < 0) triggerFieldShake(lotInput);
       if (Number.isNaN(pnlVal)) triggerFieldShake(pnlInput);
-      MotionAudio.playShakeError();
       return;
     }
 
     const id = document.getElementById('tradeId').value || (Date.now().toString() + '_' + Math.random().toString(36).slice(2, 6));
     const trade = {
       id,
+      accountId: document.getElementById('tradeAccount').value || accounts[0].id,
       date: dateVal,
       pair: pairVal,
       dir: document.getElementById('tradeDir').value,
+      lot: lotVal,
       pnl: pnlVal,
       setup: document.getElementById('tradeSetup').value,
       score: parseInt(document.getElementById('tradeScore').value, 10) || 8,
@@ -1465,7 +1801,6 @@
     };
 
     await saveTradeToDB(trade);
-    MotionAudio.playSaveSuccess();
     closeModal('tradeModal');
     loadTrades();
   }
@@ -1474,29 +1809,100 @@
     const id = document.getElementById('tradeId').value;
     if (id && confirm('Delete this trade?')) {
       await deleteTradeFromDB(id);
-      MotionAudio.playDeleteRelease();
       closeModal('tradeModal');
       loadTrades();
     }
   }
 
-  function openSettingsModal() {
-    document.getElementById('startingBalanceInput').value = startingBalance;
-    document.getElementById('settingsModal').classList.add('open');
-    MotionAudio.playPanelOpen();
+  // Multi-Account Settings Modal
+  function renderAccountsManageList() {
+    const listEl = document.getElementById('accountsManageList');
+    listEl.innerHTML = accounts.map((acc, index) => `
+      <div style="display:grid; grid-template-columns:1.3fr 1fr auto; gap:8px; align-items:center;">
+        <input type="text" class="form-control" data-acc-name="${escapeHtml(acc.id)}" value="${escapeHtml(acc.name)}" />
+        <input type="number" step="0.01" class="form-control" data-acc-bal="${escapeHtml(acc.id)}" value="${Number(acc.startingBalance)}" />
+        ${accounts.length > 1
+          ? `<button type="button" class="btn btn-danger" onclick="removeTradingAccount('${escapeHtml(acc.id)}')" title="Remove Account">✕</button>`
+          : `<span style="font-size:11px; color:var(--text-muted); padding:0 6px;">Primary</span>`}
+      </div>
+    `).join('');
   }
 
-  function saveSettings() {
-    startingBalance = parseFloat(document.getElementById('startingBalanceInput').value) || 10000;
-    localStorage.setItem(KEY_START_BAL, startingBalance);
-    MotionAudio.playSaveSuccess();
+  function openSettingsModal() {
+    renderAccountsManageList();
+    document.getElementById('newAccName').value = '';
+    document.getElementById('newAccBal').value = '';
+    document.getElementById('settingsModal').classList.add('open');
+  }
+
+  function addTradingAccount() {
+    const nameEl = document.getElementById('newAccName');
+    const balEl = document.getElementById('newAccBal');
+    const name = nameEl.value.trim();
+    const bal = parseFloat(balEl.value);
+
+    if (!name || Number.isNaN(bal) || bal < 0) {
+      if (!name) triggerFieldShake(nameEl);
+      if (Number.isNaN(bal) || bal < 0) triggerFieldShake(balEl);
+      return;
+    }
+
+    const newAcc = {
+      id: 'acc_' + Date.now().toString(36),
+      name,
+      startingBalance: bal
+    };
+    accounts.push(newAcc);
+    localStorage.setItem(KEY_ACCOUNTS, JSON.stringify(accounts));
+    nameEl.value = '';
+    balEl.value = '';
+    renderAccountsManageList();
+    renderAll();
+  }
+
+  function removeTradingAccount(accId) {
+    if (accounts.length <= 1) return;
+    if (!confirm('Remove this account from the account list? Existing trades will be reassigned to your primary account.')) return;
+    const fallbackId = accounts.find(a => a.id !== accId).id;
+    accounts = accounts.filter(a => a.id !== accId);
+    localStorage.setItem(KEY_ACCOUNTS, JSON.stringify(accounts));
+    if (activeAccountId === accId) {
+      activeAccountId = 'ALL';
+      localStorage.setItem(KEY_ACTIVE_ACC, 'ALL');
+    }
+    trades.forEach(async t => {
+      if (t.accountId === accId) {
+        t.accountId = fallbackId;
+        await saveTradeToDB(t);
+      }
+    });
+    renderAccountsManageList();
+    renderAll();
+  }
+
+  function saveAccountSettings() {
+    accounts = accounts.map(acc => {
+      const nameInput = document.querySelector(`[data-acc-name="${acc.id}"]`);
+      const balInput = document.querySelector(`[data-acc-bal="${acc.id}"]`);
+      return {
+        ...acc,
+        name: nameInput && nameInput.value.trim() ? nameInput.value.trim() : acc.name,
+        startingBalance: balInput && !Number.isNaN(parseFloat(balInput.value)) ? parseFloat(balInput.value) : acc.startingBalance
+      };
+    });
+    localStorage.setItem(KEY_ACCOUNTS, JSON.stringify(accounts));
+    localStorage.setItem(KEY_START_BAL, accounts[0].startingBalance);
     closeModal('settingsModal');
     renderAll();
   }
 
   // Backup Export / Import
   function exportBackup() {
-    const dataStr = JSON.stringify({ startingBalance, trades }, null, 2);
+    const dataStr = JSON.stringify({
+      startingBalance: accounts[0].startingBalance,
+      accounts,
+      trades
+    }, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -1504,7 +1910,6 @@
     a.download = `TradeVault_Backup_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    MotionAudio.playSlideTick(1);
   }
 
   function importBackup(e) {
@@ -1514,29 +1919,96 @@
     reader.onload = async (ev) => {
       try {
         const parsed = JSON.parse(ev.target.result);
-        if (parsed.startingBalance) {
-          startingBalance = parsed.startingBalance;
-          localStorage.setItem(KEY_START_BAL, startingBalance);
+        if (Array.isArray(parsed.accounts) && parsed.accounts.length) {
+          accounts = parsed.accounts;
+          localStorage.setItem(KEY_ACCOUNTS, JSON.stringify(accounts));
+        } else if (parsed.startingBalance) {
+          accounts[0].startingBalance = parsed.startingBalance;
+          localStorage.setItem(KEY_ACCOUNTS, JSON.stringify(accounts));
         }
         if (Array.isArray(parsed.trades)) {
           for (const t of parsed.trades) {
-            await saveTradeToDB(t);
+            await saveTradeToDB({
+              ...t,
+              accountId: t.accountId || accounts[0].id,
+              lot: Number.isFinite(parseFloat(t.lot)) ? parseFloat(t.lot) : 0
+            });
           }
           loadTrades();
-          MotionAudio.playSaveSuccess();
           closeModal('settingsModal');
           alert('Backup restored!');
         }
       } catch (err) {
-        MotionAudio.playShakeError();
         alert('Invalid backup file.');
       }
     };
     reader.readAsText(file);
   }
 
+  // Render Top Total Balance & Per-Account Performance Cards
+  function renderTopAndAccountCards() {
+    populateAccountSelects();
+
+    // Portfolio-wide totals across ALL accounts
+    const allStart = accounts.reduce((sum, a) => sum + (Number(a.startingBalance) || 0), 0);
+    const allNetPnl = trades.reduce((sum, t) => sum + (Number(t.pnl) || 0), 0);
+    const allCurrent = allStart + allNetPnl;
+    const allGainPct = allStart > 0 ? (allNetPnl / allStart) * 100 : 0;
+    const allLots = trades.reduce((sum, t) => sum + (Number(t.lot) || 0), 0);
+
+    document.getElementById('topBalanceTitle').innerText = `Total Portfolio Balance (${accounts.length} ${accounts.length === 1 ? 'Account' : 'Accounts'})`;
+    document.getElementById('topTotalBalance').innerText = formatMoney(allCurrent);
+    document.getElementById('topTotalStart').innerText = formatMoney(allStart);
+    document.getElementById('topTotalLots').innerText = allLots.toFixed(2);
+
+    const topPnlEl = document.getElementById('topTotalNetPnl');
+    topPnlEl.innerText = (allNetPnl >= 0 ? '+' : '') + formatMoney(allNetPnl);
+    topPnlEl.className = allNetPnl >= 0 ? 'text-green' : 'text-red';
+
+    const topBadge = document.getElementById('topTotalGainBadge');
+    topBadge.innerText = (allGainPct >= 0 ? '+' : '') + allGainPct.toFixed(2) + '%';
+    topBadge.className = allGainPct >= 0 ? 'badge-win' : 'badge-loss';
+
+    // Individual Account Performance Cards
+    document.getElementById('accountCountLabel').innerText = `${accounts.length} ${accounts.length === 1 ? 'Account' : 'Accounts'}`;
+    const grid = document.getElementById('accountsPerfGrid');
+    grid.innerHTML = accounts.map(acc => {
+      const accTrades = trades.filter(t => (t.accountId || accounts[0].id) === acc.id);
+      const start = Number(acc.startingBalance) || 0;
+      const net = accTrades.reduce((s, t) => s + (Number(t.pnl) || 0), 0);
+      const cur = start + net;
+      const pct = start > 0 ? (net / start) * 100 : 0;
+      const wins = accTrades.filter(t => t.pnl > 0).length;
+      const wr = accTrades.length ? ((wins / accTrades.length) * 100).toFixed(0) : '0';
+      const lots = accTrades.reduce((s, t) => s + (Number(t.lot) || 0), 0);
+      const isSelected = activeAccountId === acc.id;
+
+      return `
+        <div class="acc-perf-card ${isSelected ? 'active-acc' : ''}" onclick="selectAccountFilter('${isSelected ? 'ALL' : escapeHtml(acc.id)}')">
+          <div class="acc-perf-top">
+            <span class="acc-perf-name">${escapeHtml(acc.name)}</span>
+            <span class="${pct >= 0 ? 'badge-win' : 'badge-loss'}">${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%</span>
+          </div>
+          <div class="acc-perf-bal">${formatMoney(cur)}</div>
+          <div class="acc-perf-meta">
+            <span>Trades: <b>${accTrades.length}</b> (${wr}% WR)</span>
+            <span>Lots: <b>${lots.toFixed(2)}</b></span>
+          </div>
+          <div class="acc-perf-meta" style="margin-top:4px;">
+            <span>Start: ${formatMoney(start)}</span>
+            <span class="${net >= 0 ? 'text-green' : 'text-red'}">${net >= 0 ? '+' : ''}${formatMoney(net)}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
   // Render Dashboard & Charts
   function renderAll() {
+    renderTopAndAccountCards();
+
+    const scopedTrades = getAccountScopedTrades();
+    const startingBalance = getActiveStartingBalance();
     const filtered = getFilteredTrades();
     const total = filtered.length;
     const wins = filtered.filter(t => t.pnl > 0);
@@ -1546,14 +2018,15 @@
     const avgWin = wins.length ? wins.reduce((s, t) => s + t.pnl, 0) / wins.length : 0;
     const avgLoss = losses.length ? Math.abs(losses.reduce((s, t) => s + t.pnl, 0) / losses.length) : 0;
     const ratio = avgLoss > 0 ? avgWin / avgLoss : (avgWin > 0 ? avgWin : 0);
+    const avgLot = total ? filtered.reduce((s, t) => s + (Number(t.lot) || 0), 0) / total : 0;
 
-    // Overall Balance & Equity Curve (All trades chronologically)
+    // Balance & Equity Curve for Active Account Scope
     let runningBal = startingBalance;
     let highBal = startingBalance;
     let maxDD = 0;
     const equityPoints = [startingBalance];
 
-    trades.forEach(t => {
+    scopedTrades.forEach(t => {
       runningBal += t.pnl;
       equityPoints.push(runningBal);
       if (runningBal > highBal) highBal = runningBal;
@@ -1570,6 +2043,7 @@
     document.getElementById('statRatio').innerText = ratio.toFixed(2);
     document.getElementById('avgWinText').innerText = `+$${avgWin.toFixed(2)}`;
     document.getElementById('avgLossText').innerText = `-$${avgLoss.toFixed(2)}`;
+    document.getElementById('statAvgLot').innerText = avgLot.toFixed(2);
 
     const totalAvg = avgWin + avgLoss;
     const winBarPct = totalAvg > 0 ? (avgWin / totalAvg) * 100 : 50;
@@ -1577,6 +2051,7 @@
     document.getElementById('barLoss').style.width = (100 - winBarPct) + '%';
 
     // Balance & Risk
+    document.getElementById('equityScopeLabel').innerText = activeAccountId === 'ALL' ? 'Combined Balance' : `${getAccountName(activeAccountId)} Balance`;
     document.getElementById('statBalance').innerText = formatMoney(runningBal);
     document.getElementById('statCurBal').innerText = formatMoney(runningBal);
     document.getElementById('statStartBal').innerText = formatMoney(startingBalance);
@@ -1596,11 +2071,11 @@
     gainBadge.innerText = (totalGain >= 0 ? '+' : '') + totalGain.toFixed(2) + '%';
     gainBadge.className = totalGain >= 0 ? 'badge-win' : 'badge-loss';
 
-    // Period Returns (Daily, Weekly, Monthly, Yearly)
-    updatePeriodReturn('retDaily', 1);
-    updatePeriodReturn('retWeekly', 7);
-    updatePeriodReturn('retMonthly', 30);
-    updatePeriodReturn('retYearly', 365);
+    // Period Returns
+    updatePeriodReturn('retDaily', 1, scopedTrades, startingBalance);
+    updatePeriodReturn('retWeekly', 7, scopedTrades, startingBalance);
+    updatePeriodReturn('retMonthly', 30, scopedTrades, startingBalance);
+    updatePeriodReturn('retYearly', 365, scopedTrades, startingBalance);
 
     // Streaks
     computeStreaks(filtered);
@@ -1612,14 +2087,14 @@
     drawBalanceCurve(equityPoints);
 
     // Render Calendar & Trade Feed
-    renderCalendar();
+    renderCalendar(scopedTrades, startingBalance);
     renderTradeList(filtered);
   }
 
-  function updatePeriodReturn(elId, days) {
+  function updatePeriodReturn(elId, days, scopedTrades, startingBalance) {
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - days);
-    const sum = trades.filter(t => new Date(t.date + 'T00:00:00') >= cutoff).reduce((s, t) => s + t.pnl, 0);
+    const sum = scopedTrades.filter(t => new Date(t.date + 'T00:00:00') >= cutoff).reduce((s, t) => s + t.pnl, 0);
     const pct = startingBalance > 0 ? (sum / startingBalance) * 100 : 0;
     const el = document.getElementById(elId);
     el.innerText = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
@@ -1763,17 +2238,16 @@
   // Monthly P&L Calendar with Weekly Totals
   function changeMonth(delta) {
     calDate.setMonth(calDate.getMonth() + delta);
-    MotionAudio.playSlideTick(delta);
-    renderCalendar();
+    renderCalendar(getAccountScopedTrades(), getActiveStartingBalance());
   }
 
-  function renderCalendar() {
+  function renderCalendar(scopedTrades, startingBalance) {
     const year = calDate.getFullYear();
     const month = calDate.getMonth();
     const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     document.getElementById('calMonthLabel').innerText = `${monthNames[month]} ${year}`;
 
-    const monthTrades = trades.filter(t => {
+    const monthTrades = scopedTrades.filter(t => {
       const d = new Date(t.date + 'T00:00:00');
       return d.getFullYear() === year && d.getMonth() === month;
     });
@@ -1867,7 +2341,7 @@
     document.getElementById('logCountLabel').innerText = `${list.length} entries`;
 
     if (!list.length) {
-      container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">No trades logged for this period. Tap <b>+ Add Trade</b> to record your first trade, screenshot, and experience.</div>`;
+      container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">No trades logged for this period. Tap <b>+ Add Trade</b> to record your first trade, lot size, screenshot, and experience.</div>`;
       return;
     }
 
@@ -1875,6 +2349,8 @@
     container.innerHTML = reversed.map((t, idx) => {
       const isWin = t.pnl >= 0;
       const delayMs = Math.min(idx * 35, 280);
+      const lotText = Number(t.lot || 0).toFixed(2);
+      const accLabel = getAccountName(t.accountId);
       const thumb = t.image
         ? `<img src="${t.image}" class="trade-thumb" />`
         : `<div class="trade-thumb" style="display:flex;align-items:center;justify-content:center;">${ICONS.chartPlaceholder}</div>`;
@@ -1883,7 +2359,11 @@
           <div style="display:flex; align-items:center; gap:10px; overflow:hidden;">
             ${thumb}
             <div style="overflow:hidden;">
-              <div style="font-weight:800; font-size:14px;">${escapeHtml(t.pair)} <span style="font-size:11px; color:var(--text-muted);">(${escapeHtml(t.dir)} • ${escapeHtml(t.date)})</span></div>
+              <div style="font-weight:800; font-size:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <span>${escapeHtml(t.pair)}</span>
+                <span class="badge-lot">${lotText} lot</span>
+                <span style="font-size:11px; color:var(--text-muted);">(${escapeHtml(t.dir)} • ${escapeHtml(t.date)})</span>
+              </div>
               <div style="font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:450px;">
                 ${escapeHtml(t.notes || 'No experience notes written.')}
               </div>
@@ -1893,7 +2373,7 @@
             <div style="font-weight:800; font-size:15px;" class="${isWin ? 'text-green' : 'text-red'}">
               ${isWin ? '+' : ''}$${Number(t.pnl).toFixed(2)}
             </div>
-            <div style="font-size:10px; color:var(--text-muted);">${escapeHtml(t.setup || 'Standard')}</div>
+            <div style="font-size:10px; color:var(--text-muted);">${escapeHtml(accLabel)} • ${escapeHtml(t.setup || 'Standard')}</div>
           </div>
         </div>
       `;
@@ -1904,6 +2384,7 @@
     const t = trades.find(x => x.id === id);
     if (!t) return;
     const isWin = t.pnl >= 0;
+    const lotText = Number(t.lot || 0).toFixed(2);
     const content = document.getElementById('viewModalContent');
     content.innerHTML = `
       <div class="card-header">
@@ -1915,14 +2396,18 @@
           </svg>
         </button>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:8px; background:var(--bg-input); margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:8px; background:var(--bg-input); margin-bottom:12px; flex-wrap:wrap; gap:8px;">
         <div>
           <div style="font-size:11px; color:var(--text-muted);">Net P&amp;L</div>
           <div style="font-size:22px; font-weight:800;" class="${isWin ? 'text-green' : 'text-red'}">${isWin ? '+' : ''}$${Number(t.pnl).toFixed(2)}</div>
         </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px; color:var(--text-muted);">Position Size</div>
+          <div style="font-weight:800;">${lotText} Lots</div>
+        </div>
         <div style="text-align:right;">
-          <div style="font-size:11px; color:var(--text-muted);">Setup / Discipline</div>
-          <div style="font-weight:700;">${escapeHtml(t.setup || 'N/A')} • ${escapeHtml(t.score || 8)}/10</div>
+          <div style="font-size:11px; color:var(--text-muted);">Account / Discipline</div>
+          <div style="font-weight:700;">${escapeHtml(getAccountName(t.accountId))} • ${escapeHtml(t.score || 8)}/10</div>
         </div>
       </div>
       <div style="margin-bottom:12px;">
@@ -1939,7 +2424,6 @@
       </div>
     `;
     document.getElementById('viewModal').classList.add('open');
-    MotionAudio.playPanelOpen();
   }
 
   function formatMoney(num) {
