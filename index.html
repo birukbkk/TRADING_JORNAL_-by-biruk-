@@ -12,8 +12,8 @@
       --bg-card-hover: #1a212e;
       --bg-input: #0e121a;
       --border: #222b3a;
-      --text-main: #f1f5f9;
-      --text-muted: #8492a6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --green: #10b981;
       --green-bg: rgba(16, 185, 129, 0.16);
       --green-border: rgba(16, 185, 129, 0.45);
@@ -34,26 +34,26 @@
     }
 
     [data-theme="light"] {
-      --bg-main: #f1f5f9;
+      --bg-main: #eef2f6;
       --bg-card: #ffffff;
       --bg-card-hover: #f8fafc;
       --bg-input: #f8fafc;
-      --border: #dce3ec;
+      --border: #cbd5e1;
       --text-main: #0f172a;
-      --text-muted: #64748b;
-      --green: #059669;
-      --green-bg: rgba(16, 185, 129, 0.14);
-      --green-border: rgba(5, 150, 105, 0.4);
-      --red: #dc2626;
-      --red-bg: rgba(239, 68, 68, 0.12);
-      --red-border: rgba(220, 38, 38, 0.4);
-      --neutral: #2563eb;
+      --text-muted: #475569;
+      --green: #047857;
+      --green-bg: rgba(5, 150, 105, 0.14);
+      --green-border: rgba(4, 120, 87, 0.42);
+      --red: #b91c1c;
+      --red-bg: rgba(220, 38, 38, 0.13);
+      --red-border: rgba(185, 28, 28, 0.42);
+      --neutral: #1d4ed8;
       --neutral-bg: #e2e8f0;
-      --neutral-border: #cbd5e1;
+      --neutral-border: #94a3b8;
       --banner-bg: var(--bg-card);
       --banner-text: var(--text-main);
       --banner-muted: var(--text-muted);
-      --shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+      --shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
     }
 
     [data-density="compact"] {
@@ -73,7 +73,7 @@
       background-color: var(--bg-main);
       color: var(--text-main);
       padding: 12px;
-      padding-bottom: 88px;
+      padding-bottom: 92px;
       transition: background-color 0.28s var(--ease-out), color 0.28s var(--ease-out);
       overflow-x: hidden;
     }
@@ -183,6 +183,7 @@
       gap: 8px;
       font-weight: 800;
       font-size: 18px;
+      color: var(--text-main);
       letter-spacing: -0.3px;
     }
 
@@ -262,7 +263,7 @@
       border-color: var(--red-border);
     }
 
-    /* Top Active Account Balance & Account Selector Banner */
+    /* Top Logged Account Balance & Account Selector Banner */
     .top-balance-banner {
       background: var(--banner-bg);
       color: var(--banner-text);
@@ -410,12 +411,13 @@
 
     .card {
       background: var(--bg-card);
+      color: var(--text-main);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: var(--card-pad);
       box-shadow: var(--shadow);
       animation: cardEnter 0.45s var(--ease-out) both;
-      transition: transform 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background-color 0.25s var(--ease-out);
+      transition: transform 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background-color 0.25s var(--ease-out), color 0.25s var(--ease-out);
     }
 
     .card:hover {
@@ -465,6 +467,7 @@
     .big-num {
       font-size: 24px;
       font-weight: 800;
+      color: var(--text-main);
       letter-spacing: -0.5px;
       transition: color 0.2s var(--ease-out);
     }
@@ -486,6 +489,7 @@
 
     .acc-perf-card {
       background: var(--bg-input);
+      color: var(--text-main);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px;
@@ -514,11 +518,13 @@
     .acc-perf-name {
       font-weight: 800;
       font-size: 13px;
+      color: var(--text-main);
     }
 
     .acc-perf-bal {
       font-size: 18px;
       font-weight: 800;
+      color: var(--text-main);
       margin-bottom: 6px;
     }
 
@@ -527,6 +533,118 @@
       justify-content: space-between;
       font-size: 11px;
       color: var(--text-muted);
+    }
+
+    .acc-perf-meta b {
+      color: var(--text-main);
+    }
+
+    /* Score / Leaderboard Section */
+    .leaderboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 10px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      transition: transform 0.18s var(--ease-spring), border-color 0.2s var(--ease-out);
+    }
+
+    .score-row:hover {
+      transform: translateX(2px);
+      border-color: var(--neutral);
+    }
+
+    .score-row.rank-1 {
+      border-color: rgba(245, 158, 11, 0.65);
+      background: color-mix(in srgb, var(--bg-input) 86%, #f59e0b 14%);
+    }
+
+    .score-row.rank-2 {
+      border-color: rgba(148, 163, 184, 0.65);
+      background: color-mix(in srgb, var(--bg-input) 90%, #94a3b8 10%);
+    }
+
+    .score-row.rank-3 {
+      border-color: rgba(180, 83, 9, 0.6);
+      background: color-mix(in srgb, var(--bg-input) 90%, #b45309 10%);
+    }
+
+    .score-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .rank-slot {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 12px;
+      flex-shrink: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .rank-1 .rank-slot {
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.55);
+    }
+
+    .rank-2 .rank-slot {
+      color: #94a3b8;
+      border-color: rgba(148, 163, 184, 0.55);
+    }
+
+    .rank-3 .rank-slot {
+      color: #d97706;
+      border-color: rgba(217, 119, 6, 0.55);
+    }
+
+    .scorer-name {
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .scorer-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .score-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .score-pts {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--green);
+    }
+
+    .score-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 700;
     }
 
     /* Winstreak */
@@ -606,6 +724,7 @@
 
     .period-box {
       background: var(--bg-input);
+      color: var(--text-main);
       border: 1px solid var(--border);
       padding: 8px 4px;
       border-radius: 8px;
@@ -634,6 +753,7 @@
       padding: 7px 0;
       border-bottom: 1px solid var(--border);
       font-size: 12px;
+      color: var(--text-main);
     }
 
     .stat-row:last-child { border-bottom: none; }
@@ -654,12 +774,14 @@
       gap: 10px;
       font-weight: 700;
       font-size: 15px;
+      color: var(--text-main);
     }
 
     .cal-summary {
       display: flex;
       gap: 12px;
       font-size: 11px;
+      color: var(--text-muted);
       background: var(--bg-input);
       padding: 6px 10px;
       border-radius: 8px;
@@ -670,6 +792,7 @@
       display: block;
       font-size: 12px;
       margin-top: 2px;
+      color: var(--text-main);
     }
 
     .cal-grid {
@@ -695,6 +818,7 @@
       justify-content: space-between;
       border: 1px solid var(--neutral-border);
       background: var(--neutral-bg);
+      color: var(--text-main);
       cursor: pointer;
       transition: transform 0.16s var(--ease-spring), border-color 0.2s var(--ease-out);
       overflow: hidden;
@@ -756,7 +880,8 @@
     .cell-pct {
       font-size: 9px;
       text-align: center;
-      opacity: 0.85;
+      color: var(--text-muted);
+      opacity: 0.9;
     }
 
     .text-green { color: var(--green); }
@@ -771,6 +896,7 @@
       padding: 12px;
       border-radius: 10px;
       background: var(--bg-input);
+      color: var(--text-main);
       border: 1px solid var(--border);
       margin-bottom: 8px;
       cursor: pointer;
@@ -822,6 +948,7 @@
 
     .modal {
       background: var(--bg-card);
+      color: var(--text-main);
       border: 1px solid var(--border);
       border-radius: 14px;
       width: 100%;
@@ -876,6 +1003,7 @@
 
     .color-card {
       background: var(--bg-input);
+      color: var(--text-main);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 10px;
@@ -929,6 +1057,7 @@
 
     .gradient-box {
       background: var(--bg-input);
+      color: var(--text-main);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px;
@@ -960,6 +1089,7 @@
       justify-content: space-between;
       gap: 8px;
       background: var(--bg-card);
+      color: var(--text-main);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 6px 8px;
@@ -967,6 +1097,7 @@
 
     .anim-option-card {
       background: var(--bg-input);
+      color: var(--text-main);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 11px 12px;
@@ -1046,9 +1177,21 @@
       padding: 9px 10px;
       border-radius: 8px;
       background: var(--bg-input);
+      color: var(--text-main);
       border: 1px solid var(--border);
       margin-bottom: 8px;
       font-size: 13px;
+    }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 20px;
+      padding: 14px 10px 6px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
     }
 
     /* Floating Add Button */
@@ -1201,6 +1344,15 @@
         <span class="card-title" id="accountCountLabel">1 Account</span>
       </div>
       <div class="accounts-grid" id="accountsPerfGrid"></div>
+    </div>
+
+    <!-- Live Trader & User Score Leaderboard Section -->
+    <div class="col-12 card" id="secLeaderboard" style="animation-delay:0.05s;">
+      <div class="card-header">
+        <span style="font-weight:800; font-size:15px;">Trader &amp; User Score Leaderboard</span>
+        <span class="card-title" id="leaderboardMeta">Auto-Ranked Live</span>
+      </div>
+      <div class="leaderboard-list" id="leaderboardList"></div>
     </div>
 
     <!-- Left Column: Trade Count, Winrate, Avg Win/Loss, Winstreak -->
@@ -1396,6 +1548,11 @@
 
   </div>
 
+  <!-- Copyright Footer -->
+  <footer class="site-footer">
+    All rights reserved by BIRUK MELKU
+  </footer>
+
   <!-- Floating Action Button -->
   <button class="fab" onclick="openTradeModal()">
     <svg class="icon-svg-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1575,6 +1732,7 @@
           <div class="form-group">
             <label>Visible Sections (Applies when Custom Template is selected)</label>
             <label class="check-row"><span>Account Performance Overview</span><input type="checkbox" id="chkAccounts" checked /></label>
+            <label class="check-row"><span>Trader &amp; User Score Leaderboard</span><input type="checkbox" id="chkLeaderboard" checked /></label>
             <label class="check-row"><span>Trade Count, Winrate &amp; Streaks</span><input type="checkbox" id="chkCoreStats" checked /></label>
             <label class="check-row"><span>EdgeScore Radar</span><input type="checkbox" id="chkRadar" checked /></label>
             <label class="check-row"><span>Balance &amp; Equity Curve</span><input type="checkbox" id="chkEquity" checked /></label>
@@ -1764,6 +1922,9 @@
   // Per-User Storage Isolation
   const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
   const userScopeId = (tgUser && tgUser.id) ? `tg_${tgUser.id}` : 'local_guest';
+  const currentUserDisplayName = (tgUser && (tgUser.first_name || tgUser.username))
+    ? (tgUser.first_name || tgUser.username)
+    : 'You (Local Trader)';
 
   const DB_NAME = `TradeVaultDB_${userScopeId}`;
   const KEY_START_BAL = `tv_start_bal_${userScopeId}`;
@@ -1774,6 +1935,7 @@
   const KEY_CUSTOM_CFG = `tv_custom_cfg_${userScopeId}`;
   const KEY_CUSTOM_COLORS = `tv_custom_colors_${userScopeId}`;
   const KEY_CAL_ANIM = `tv_cal_anim_${userScopeId}`;
+  const KEY_SCOREBOARD = `tv_scoreboard_${userScopeId}`;
 
   function escapeHtml(str) {
     return String(str || '')
@@ -1791,15 +1953,18 @@
     <span>${tgUser && tgUser.first_name ? `Private Journal • ${escapeHtml(tgUser.first_name)}` : 'Private Journal • Isolated Local Data'}</span>
   `;
 
-  // SVG Icons
+  // SVG Icons (Rank icons only for #1, #2, #3; none for #4+)
   const ICONS = {
     sun: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`,
     moon: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
     chartPlaceholder: `<svg class="icon-svg-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`,
-    edit: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`
+    edit: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
+    rank1: `<svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>`,
+    rank2: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>`,
+    rank3: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>`
   };
 
-  // Multi-Account State (starts with default account & empty trades; selects first account by default)
+  // Multi-Account State
   function loadAccountsState() {
     try {
       const raw = localStorage.getItem(KEY_ACCOUNTS);
@@ -1857,11 +2022,11 @@
   }
 
   function getAutoReadableText(bgColorStr) {
-    return getRelativeLuminance(bgColorStr) > 0.42 ? '#0f172a' : '#f8fafc';
+    return getRelativeLuminance(bgColorStr) > 0.36 ? '#0f172a' : '#f8fafc';
   }
 
   function getAutoReadableMuted(bgColorStr) {
-    return getRelativeLuminance(bgColorStr) > 0.42 ? '#334155' : '#cbd5e1';
+    return getRelativeLuminance(bgColorStr) > 0.36 ? '#334155' : '#cbd5e1';
   }
 
   function hexToRgba(hex, alpha) {
@@ -1902,6 +2067,7 @@
       root.style.removeProperty('--red-border');
       root.style.removeProperty('--neutral');
       root.style.removeProperty('--bg-card');
+      root.style.removeProperty('--bg-input');
       root.style.removeProperty('--text-main');
       root.style.removeProperty('--text-muted');
       root.style.removeProperty('--banner-bg');
@@ -1925,11 +2091,15 @@
     }
 
     if (cfg.cardTint && cfg.useCardTint) {
+      const cardLum = getRelativeLuminance(cfg.cardTint);
+      const isCardLight = cardLum > 0.36;
       root.style.setProperty('--bg-card', cfg.cardTint);
-      root.style.setProperty('--text-main', getAutoReadableText(cfg.cardTint));
-      root.style.setProperty('--text-muted', getAutoReadableMuted(cfg.cardTint));
+      root.style.setProperty('--bg-input', isCardLight ? 'rgba(15, 23, 42, 0.05)' : 'rgba(255, 255, 255, 0.05)');
+      root.style.setProperty('--text-main', isCardLight ? '#0f172a' : '#f8fafc');
+      root.style.setProperty('--text-muted', isCardLight ? '#334155' : '#cbd5e1');
     } else {
       root.style.removeProperty('--bg-card');
+      root.style.removeProperty('--bg-input');
       root.style.removeProperty('--text-main');
       root.style.removeProperty('--text-muted');
     }
@@ -1937,10 +2107,9 @@
     if (cfg.useGradient && Array.isArray(cfg.gradientStops) && cfg.gradientStops.length >= 2) {
       const gradCss = buildCssGradientString(cfg.gradientStops, cfg.gradientAngle);
       root.style.setProperty('--banner-bg', gradCss);
-      // Average luminance across stops for guaranteed readable banner text
       const avgLum = cfg.gradientStops.reduce((s, c) => s + getRelativeLuminance(c), 0) / cfg.gradientStops.length;
-      root.style.setProperty('--banner-text', avgLum > 0.42 ? '#0f172a' : '#f8fafc');
-      root.style.setProperty('--banner-muted', avgLum > 0.42 ? '#334155' : '#e2e8f0');
+      root.style.setProperty('--banner-text', avgLum > 0.36 ? '#0f172a' : '#f8fafc');
+      root.style.setProperty('--banner-muted', avgLum > 0.36 ? '#334155' : '#e2e8f0');
     } else {
       const activeSurface = (cfg.cardTint && cfg.useCardTint) ? cfg.cardTint : (isLight ? '#ffffff' : '#131822');
       root.style.setProperty('--banner-bg', activeSurface);
@@ -1970,7 +2139,7 @@
       const cssGrad = buildCssGradientString(draftGradientStops, angleVal);
       previewEl.style.background = cssGrad;
       const avgLum = draftGradientStops.reduce((s, c) => s + getRelativeLuminance(c), 0) / draftGradientStops.length;
-      previewEl.style.color = avgLum > 0.42 ? '#0f172a' : '#f8fafc';
+      previewEl.style.color = avgLum > 0.36 ? '#0f172a' : '#f8fafc';
     }
   }
 
@@ -2044,9 +2213,9 @@
     localStorage.removeItem(KEY_CUSTOM_COLORS);
     draftGradientStops = ['#0f766e', '#1d4ed8', '#6d28d9'];
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    document.getElementById('clrWin').value = isLight ? '#059669' : '#10b981';
-    document.getElementById('clrLoss').value = isLight ? '#dc2626' : '#ef4444';
-    document.getElementById('clrNeutral').value = isLight ? '#2563eb' : '#3b82f6';
+    document.getElementById('clrWin').value = isLight ? '#047857' : '#10b981';
+    document.getElementById('clrLoss').value = isLight ? '#b91c1c' : '#ef4444';
+    document.getElementById('clrNeutral').value = isLight ? '#1d4ed8' : '#3b82f6';
     document.getElementById('clrCardTint').value = isLight ? '#ffffff' : '#131822';
     document.getElementById('chkUseGradient').checked = false;
     document.getElementById('gradAngle').value = 135;
@@ -2102,6 +2271,7 @@
   const defaultCustomCfg = {
     density: 'cozy',
     secAccounts: true,
+    secLeaderboard: true,
     secCoreStats: true,
     secRadar: true,
     secEquity: true,
@@ -2134,7 +2304,7 @@
       : (resolved === 'compact' ? 'compact' : 'cozy');
     document.body.setAttribute('data-density', density);
 
-    const allSections = ['secAccounts', 'secCoreStats', 'secRadar', 'secEquity', 'secPerfRisk', 'secCalendar', 'secTradeLog'];
+    const allSections = ['secAccounts', 'secLeaderboard', 'secCoreStats', 'secRadar', 'secEquity', 'secPerfRisk', 'secCalendar', 'secTradeLog'];
     allSections.forEach(secId => {
       const el = document.getElementById(secId);
       if (!el) return;
@@ -2162,6 +2332,7 @@
     customTemplateCfg = {
       density: document.getElementById('customDensitySelect').value,
       secAccounts: document.getElementById('chkAccounts').checked,
+      secLeaderboard: document.getElementById('chkLeaderboard').checked,
       secCoreStats: document.getElementById('chkCoreStats').checked,
       secRadar: document.getElementById('chkRadar').checked,
       secEquity: document.getElementById('chkEquity').checked,
@@ -2323,6 +2494,93 @@
       }
       return true;
     });
+  }
+
+  // Score Calculation & Live Leaderboard (Top 1, 2, 3 get icons; others have no icon)
+  function computeTraderScore(traderTrades, startingBal) {
+    const count = traderTrades.length;
+    if (!count) {
+      return { score: 0, winrate: 0, netPnl: 0, count: 0 };
+    }
+    const wins = traderTrades.filter(t => Number(t.pnl) > 0);
+    const losses = traderTrades.filter(t => Number(t.pnl) < 0);
+    const winrate = (wins.length / count) * 100;
+    const netPnl = traderTrades.reduce((s, t) => s + (Number(t.pnl) || 0), 0);
+    const gainPct = startingBal > 0 ? (netPnl / startingBal) * 100 : 0;
+    const avgWin = wins.length ? wins.reduce((s, t) => s + Number(t.pnl), 0) / wins.length : 0;
+    const avgLoss = losses.length ? Math.abs(losses.reduce((s, t) => s + Number(t.pnl), 0) / losses.length) : 0;
+    const rr = avgLoss > 0 ? Math.min(4, avgWin / avgLoss) : (avgWin > 0 ? 2 : 0);
+    const avgDisc = traderTrades.reduce((s, t) => s + (Number(t.score) || 8), 0) / count;
+
+    const rawScore =
+      (winrate * 3.5) +
+      (Math.max(-50, Math.min(150, gainPct)) * 2.2) +
+      (rr * 35) +
+      (avgDisc * 12) +
+      (Math.min(40, count) * 2.5);
+
+    return {
+      score: Math.max(0, Math.round(rawScore)),
+      winrate,
+      netPnl,
+      count
+    };
+  }
+
+  function renderLeaderboard() {
+    const listEl = document.getElementById('leaderboardList');
+    const metaEl = document.getElementById('leaderboardMeta');
+    if (!listEl) return;
+
+    const currentMetrics = computeTraderScore(trades, accounts.reduce((s, a) => s + (Number(a.startingBalance) || 0), 0));
+    const currentEntry = {
+      id: userScopeId,
+      name: currentUserDisplayName,
+      score: currentMetrics.score,
+      winrate: currentMetrics.winrate,
+      netPnl: currentMetrics.netPnl,
+      tradesCount: currentMetrics.count,
+      isCurrent: true
+    };
+
+    let storedPeers = [];
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY_SCOREBOARD) || '[]');
+      if (Array.isArray(raw)) storedPeers = raw.filter(p => p && p.id !== userScopeId);
+    } catch (e) {}
+
+    const combined = [currentEntry, ...storedPeers].sort((a, b) => b.score - a.score);
+    if (metaEl) {
+      metaEl.innerText = `${combined.length} ${combined.length === 1 ? 'Trader' : 'Traders'} • Live`;
+    }
+
+    listEl.innerHTML = combined.map((item, idx) => {
+      const rank = idx + 1;
+      const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
+      const rankIcon = rank === 1 ? ICONS.rank1 : rank === 2 ? ICONS.rank2 : rank === 3 ? ICONS.rank3 : '';
+      const pnlSign = Number(item.netPnl) >= 0 ? '+' : '';
+
+      return `
+        <div class="score-row ${rankClass}">
+          <div class="score-left">
+            <div class="rank-slot">${rankIcon || rank}</div>
+            <div style="min-width:0;">
+              <div class="scorer-name">
+                ${escapeHtml(item.name)}
+                ${item.isCurrent ? `<span class="badge-lot" style="margin-left:5px;">YOU</span>` : ''}
+              </div>
+              <div class="scorer-sub">
+                ${Number(item.tradesCount || 0)} trades • ${Number(item.winrate || 0).toFixed(1)}% WR • ${pnlSign}${formatMoney(item.netPnl || 0)}
+              </div>
+            </div>
+          </div>
+          <div class="score-right">
+            <div class="score-pts">${Number(item.score || 0).toLocaleString()}</div>
+            <div class="score-label">SCORE</div>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
   // Image Compression before saving
@@ -2492,6 +2750,7 @@
     document.getElementById('templateSelect').value = viewTemplate;
     document.getElementById('customDensitySelect').value = customTemplateCfg.density || 'cozy';
     document.getElementById('chkAccounts').checked = customTemplateCfg.secAccounts !== false;
+    document.getElementById('chkLeaderboard').checked = customTemplateCfg.secLeaderboard !== false;
     document.getElementById('chkCoreStats').checked = customTemplateCfg.secCoreStats !== false;
     document.getElementById('chkRadar').checked = customTemplateCfg.secRadar !== false;
     document.getElementById('chkEquity').checked = customTemplateCfg.secEquity !== false;
@@ -2500,9 +2759,9 @@
     document.getElementById('chkTradeLog').checked = customTemplateCfg.secTradeLog !== false;
 
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    document.getElementById('clrWin').value = (customColors && customColors.win) || (isLight ? '#059669' : '#10b981');
-    document.getElementById('clrLoss').value = (customColors && customColors.loss) || (isLight ? '#dc2626' : '#ef4444');
-    document.getElementById('clrNeutral').value = (customColors && customColors.neutral) || (isLight ? '#2563eb' : '#3b82f6');
+    document.getElementById('clrWin').value = (customColors && customColors.win) || (isLight ? '#047857' : '#10b981');
+    document.getElementById('clrLoss').value = (customColors && customColors.loss) || (isLight ? '#b91c1c' : '#ef4444');
+    document.getElementById('clrNeutral').value = (customColors && customColors.neutral) || (isLight ? '#1d4ed8' : '#3b82f6');
     document.getElementById('clrCardTint').value = (customColors && customColors.cardTint) || (isLight ? '#ffffff' : '#131822');
 
     if (customColors && Array.isArray(customColors.gradientStops) && customColors.gradientStops.length >= 2) {
@@ -2691,6 +2950,7 @@
   // Render Dashboard & Charts
   function renderAll() {
     renderTopAndAccountCards();
+    renderLeaderboard();
 
     const scopedTrades = getAccountScopedTrades();
     const startingBalance = getActiveStartingBalance();
