@@ -23,7 +23,9 @@
       --neutral: #3b82f6;
       --neutral-bg: #18202c;
       --neutral-border: #283447;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      --shadow: 0 6px 24px rgba(0, 0, 0, 0.38);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
     }
 
     [data-theme="light"] {
@@ -43,7 +45,7 @@
       --neutral: #2563eb;
       --neutral-bg: #e2e8f0;
       --neutral-border: #cbd5e1;
-      --shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+      --shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
     }
 
     * {
@@ -51,14 +53,68 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background-color: var(--bg-main);
       color: var(--text-main);
       padding: 12px;
-      padding-bottom: 84px;
-      transition: background 0.25s, color 0.25s;
+      padding-bottom: 88px;
+      transition: background-color 0.28s var(--ease-out), color 0.28s var(--ease-out);
+      overflow-x: hidden;
+    }
+
+    /* Keyframe Motions */
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes modalPopIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes itemSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes shakeField {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.35); }
+      50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+    }
+
+    .anim-shake {
+      animation: shakeField 0.32s var(--ease-out);
+      border-color: var(--red) !important;
     }
 
     /* Top Bar */
@@ -69,6 +125,13 @@
       margin-bottom: 14px;
       flex-wrap: wrap;
       gap: 10px;
+      animation: cardEnter 0.35s var(--ease-out) both;
+    }
+
+    .brand-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .brand {
@@ -85,12 +148,36 @@
       height: 10px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--green), var(--red));
+      animation: pulseGlow 2.6s infinite;
+    }
+
+    .user-scope-badge {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .topbar-actions {
       display: flex;
       gap: 8px;
       align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .icon-svg {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .icon-svg-lg {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      flex-shrink: 0;
     }
 
     .btn {
@@ -98,17 +185,24 @@
       color: var(--text-main);
       border: 1px solid var(--border);
       padding: 8px 12px;
-      border-radius: 8px;
+      border-radius: 9px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: 0.2s;
+      transition: transform 0.18s var(--ease-spring), background-color 0.2s var(--ease-out), border-color 0.2s var(--ease-out), opacity 0.2s;
     }
 
-    .btn:hover { background: var(--bg-card-hover); }
+    .btn:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
 
     .btn-primary {
       background: var(--green);
@@ -116,7 +210,10 @@
       border-color: var(--green);
     }
 
-    .btn-primary:hover { opacity: 0.9; background: var(--green); }
+    .btn-primary:hover {
+      opacity: 0.92;
+      background: var(--green);
+    }
 
     .btn-danger {
       background: var(--red-bg);
@@ -131,10 +228,11 @@
       margin-bottom: 14px;
       overflow-x: auto;
       padding-bottom: 4px;
+      animation: cardEnter 0.4s var(--ease-out) 0.05s both;
     }
 
     .pill {
-      padding: 6px 12px;
+      padding: 6px 13px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
@@ -143,6 +241,16 @@
       color: var(--text-muted);
       cursor: pointer;
       white-space: nowrap;
+      transition: transform 0.18s var(--ease-spring), background-color 0.2s var(--ease-out), color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+    }
+
+    .pill:hover {
+      transform: translateY(-1px);
+      color: var(--text-main);
+    }
+
+    .pill:active {
+      transform: scale(0.95);
     }
 
     .pill.active {
@@ -164,6 +272,12 @@
       border-radius: 12px;
       padding: 14px;
       box-shadow: var(--shadow);
+      animation: cardEnter 0.45s var(--ease-out) both;
+      transition: transform 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background-color 0.25s var(--ease-out);
+    }
+
+    .card:hover {
+      border-color: color-mix(in srgb, var(--border) 65%, var(--neutral) 35%);
     }
 
     .col-4 { grid-column: span 4; }
@@ -196,6 +310,7 @@
       font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.5px;
+      transition: color 0.2s var(--ease-out);
     }
 
     .sub-grid-2 {
@@ -224,6 +339,20 @@
       display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    .streak-flame {
+      color: #f59e0b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.22s var(--ease-spring);
+    }
+
+    .streak-item:hover .streak-flame {
+      transform: scale(1.18) rotate(-4deg);
     }
 
     .streak-badges {
@@ -268,6 +397,12 @@
       border: 1px solid var(--border);
       padding: 8px 4px;
       border-radius: 8px;
+      transition: transform 0.18s var(--ease-spring), border-color 0.2s var(--ease-out);
+    }
+
+    .period-box:hover {
+      transform: translateY(-2px);
+      border-color: var(--neutral-border);
     }
 
     .period-label {
@@ -349,15 +484,25 @@
       border: 1px solid var(--neutral-border);
       background: var(--neutral-bg);
       cursor: pointer;
-      transition: transform 0.15s;
+      transition: transform 0.16s var(--ease-spring), border-color 0.2s var(--ease-out);
       overflow: hidden;
     }
 
-    .cal-cell:hover { transform: translateY(-1px); }
+    .cal-cell:hover {
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .cal-cell:active {
+      transform: scale(0.96);
+    }
 
     .cal-cell.empty {
       opacity: 0.35;
       cursor: default;
+    }
+
+    .cal-cell.empty:hover {
+      transform: none;
     }
 
     .cal-cell.win {
@@ -374,6 +519,10 @@
       background: var(--bg-input);
       border-style: dashed;
       cursor: default;
+    }
+
+    .cal-cell.week-total:hover {
+      transform: none;
     }
 
     .cal-cell.week-total.win {
@@ -423,6 +572,17 @@
       margin-bottom: 8px;
       cursor: pointer;
       gap: 10px;
+      animation: itemSlideIn 0.28s var(--ease-out) both;
+      transition: transform 0.18s var(--ease-spring), background-color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+    }
+
+    .trade-item:hover {
+      transform: translateX(3px);
+      background: var(--bg-card-hover);
+    }
+
+    .trade-item:active {
+      transform: scale(0.985);
     }
 
     .trade-item.win { border-left: 4px solid var(--green); }
@@ -431,10 +591,12 @@
     .trade-thumb {
       width: 48px;
       height: 48px;
-      border-radius: 6px;
+      border-radius: 8px;
       object-fit: cover;
       border: 1px solid var(--border);
       flex-shrink: 0;
+      background: var(--bg-card);
+      color: var(--text-muted);
     }
 
     /* Modals */
@@ -442,14 +604,20 @@
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(2px);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 1000;
       padding: 12px;
+      opacity: 0;
+      transition: opacity 0.22s var(--ease-out);
     }
 
-    .modal-backdrop.open { display: flex; }
+    .modal-backdrop.open {
+      display: flex;
+      opacity: 1;
+    }
 
     .modal {
       background: var(--bg-card);
@@ -460,6 +628,8 @@
       max-height: 90vh;
       overflow-y: auto;
       padding: 18px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+      animation: modalPopIn 0.26s var(--ease-spring) both;
     }
 
     .form-group { margin-bottom: 12px; }
@@ -479,6 +649,13 @@
       padding: 10px;
       border-radius: 8px;
       font-size: 13px;
+      transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--neutral);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
     }
 
     .form-row {
@@ -508,27 +685,88 @@
       padding: 14px 20px;
       font-size: 14px;
       font-weight: 800;
-      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 8px 26px rgba(16, 185, 129, 0.42);
       cursor: pointer;
       z-index: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-out);
     }
 
-    svg { width: 100%; display: block; }
+    .fab:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5);
+    }
+
+    .fab:active {
+      transform: scale(0.94);
+    }
+
+    svg.chart-svg { width: 100%; display: block; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
 
   <!-- Top Navigation -->
   <div class="topbar">
-    <div class="brand">
-      <div class="brand-dot"></div>
-      <span>TradeVault Journal</span>
+    <div class="brand-wrap">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <span>TradeVault Journal</span>
+      </div>
+      <div class="user-scope-badge" id="userScopeLabel">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>Private Journal</span>
+      </div>
     </div>
+
     <div class="topbar-actions">
-      <button class="btn" onclick="openSettingsModal()">⚙️ Balance</button>
-      <button class="btn" onclick="exportBackup()">⬇️ Backup</button>
-      <button class="btn" id="themeBtn" onclick="toggleTheme()">☀️ Light</button>
-      <button class="btn btn-primary" onclick="openTradeModal()">+ Log Trade</button>
+      <button class="btn" id="soundBtn" onclick="toggleSound()" title="Toggle motion UI sound">
+        <span id="soundIconWrap"></span>
+        <span id="soundBtnText">Sound On</span>
+      </button>
+
+      <button class="btn" onclick="openSettingsModal()">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Balance</span>
+      </button>
+
+      <button class="btn" onclick="exportBackup()">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Backup</span>
+      </button>
+
+      <button class="btn" id="themeBtn" onclick="toggleTheme()">
+        <span id="themeIconWrap"></span>
+        <span id="themeBtnText">Light</span>
+      </button>
+
+      <button class="btn btn-primary" onclick="openTradeModal()">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Log Trade</span>
+      </button>
     </div>
   </div>
 
@@ -546,30 +784,30 @@
 
     <!-- Left Column: Trade Count, Winrate, Avg Win/Loss, Winstreak -->
     <div class="col-4" style="display:flex; flex-direction:column; gap:12px;">
-      <div class="card">
+      <div class="card" style="animation-delay:0.06s;">
         <div class="card-header">
           <span class="card-title">Trade Count</span>
           <span class="card-title" id="rangeLabel">All Time</span>
         </div>
         <div class="big-num" id="statTradeCount">0</div>
         <div style="height:55px; margin-top:8px;">
-          <svg id="sparklineSvg" viewBox="0 0 260 55" preserveAspectRatio="none"></svg>
+          <svg id="sparklineSvg" class="chart-svg" viewBox="0 0 260 55" preserveAspectRatio="none"></svg>
         </div>
       </div>
 
       <div class="sub-grid-2" style="margin-top:0;">
-        <div class="card">
+        <div class="card" style="animation-delay:0.1s;">
           <div class="big-num" id="statWinrate">0.00%</div>
           <div class="card-title" style="margin-bottom:8px;">Winrate</div>
-          <svg id="gaugeSvg" viewBox="0 0 120 68"></svg>
+          <svg id="gaugeSvg" class="chart-svg" viewBox="0 0 120 68"></svg>
         </div>
 
-        <div class="card">
+        <div class="card" style="animation-delay:0.13s;">
           <div class="big-num" id="statRatio">0.00</div>
           <div class="card-title" style="margin-bottom:16px;">Avg Win / Avg Loss</div>
           <div style="height:16px; border-radius:8px; overflow:hidden; display:flex; background:var(--neutral-bg);">
-            <div id="barWin" style="background:var(--green); width:50%; transition:0.3s;"></div>
-            <div id="barLoss" style="background:var(--red); width:50%; transition:0.3s;"></div>
+            <div id="barWin" style="background:var(--green); width:50%; transition:width 0.35s cubic-bezier(0.22, 1, 0.36, 1);"></div>
+            <div id="barLoss" style="background:var(--red); width:50%; transition:width 0.35s cubic-bezier(0.22, 1, 0.36, 1);"></div>
           </div>
           <div style="display:flex; justify-content:space-between; font-size:10px; margin-top:6px; color:var(--text-muted);">
             <span id="avgWinText" class="text-green">$0</span>
@@ -578,12 +816,16 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" style="animation-delay:0.16s;">
         <div class="card-title">Winstreak</div>
         <div class="streak-row">
           <div class="streak-item">
             <span class="big-num" id="curDayStreak">0</span>
-            <span style="font-size:20px;">🔥</span>
+            <span class="streak-flame">
+              <svg class="icon-svg-lg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
+              </svg>
+            </span>
             <div class="streak-badges">
               <span class="badge-win" id="maxWinDays">0</span>
               <span class="badge-loss" id="maxLossDays">0</span>
@@ -591,7 +833,11 @@
           </div>
           <div class="streak-item">
             <span class="big-num" id="curTradeStreak">0</span>
-            <span style="font-size:20px;">🔥</span>
+            <span class="streak-flame">
+              <svg class="icon-svg-lg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
+              </svg>
+            </span>
             <div class="streak-badges">
               <span class="badge-win" id="maxWinTrades">0</span>
               <span class="badge-loss" id="maxLossTrades">0</span>
@@ -606,21 +852,21 @@
     </div>
 
     <!-- Center Column: Performance Radar -->
-    <div class="col-4 card" style="display:flex; flex-direction:column; justify-content:space-between;">
+    <div class="col-4 card" style="display:flex; flex-direction:column; justify-content:space-between; animation-delay:0.12s;">
       <div class="card-header">
         <span style="font-weight:800; font-size:15px;">EdgeScore Radar</span>
         <span class="badge-win">LIVE</span>
       </div>
       <div style="position:relative; width:100%; max-width:290px; margin:0 auto;">
-        <svg id="radarSvg" viewBox="0 0 280 260"></svg>
+        <svg id="radarSvg" class="chart-svg" viewBox="0 0 280 260"></svg>
       </div>
       <div style="text-align:center; font-size:11px; color:var(--text-muted);">
-        Calculated from Winrate, Risk/Reward, Consistency & Drawdown
+        Calculated from Winrate, Risk/Reward, Consistency &amp; Drawdown
       </div>
     </div>
 
     <!-- Right Column: Balance & Equity Curve -->
-    <div class="col-4 card" style="display:flex; flex-direction:column; justify-content:space-between;">
+    <div class="col-4 card" style="display:flex; flex-direction:column; justify-content:space-between; animation-delay:0.16s;">
       <div>
         <div class="card-header">
           <div>
@@ -631,12 +877,12 @@
         </div>
       </div>
       <div style="height:220px; margin-top:10px;">
-        <svg id="balanceSvg" viewBox="0 0 320 210" preserveAspectRatio="none"></svg>
+        <svg id="balanceSvg" class="chart-svg" viewBox="0 0 320 210" preserveAspectRatio="none"></svg>
       </div>
     </div>
 
     <!-- Bottom Left: Performance & Risk -->
-    <div class="col-4 card">
+    <div class="col-4 card" style="animation-delay:0.2s;">
       <div class="card-header">
         <span style="font-weight:700; font-size:14px;">Performance</span>
         <span style="font-weight:800; font-size:14px;" id="statNetPnl">$0.00</span>
@@ -686,12 +932,20 @@
     </div>
 
     <!-- Bottom Right: P&L Calendar -->
-    <div class="col-8 card">
+    <div class="col-8 card" style="animation-delay:0.24s;">
       <div class="cal-header">
         <div class="cal-nav">
-          <button class="btn" onclick="changeMonth(-1)">◀</button>
+          <button class="btn" onclick="changeMonth(-1)" aria-label="Previous Month">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
           <span id="calMonthLabel">November 2026</span>
-          <button class="btn" onclick="changeMonth(1)">▶</button>
+          <button class="btn" onclick="changeMonth(1)" aria-label="Next Month">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
         </div>
         <div class="cal-summary">
           <span>Trades<b id="calTrades">0</b></span>
@@ -702,7 +956,7 @@
       </div>
 
       <div class="cal-grid" id="calendarGrid"></div>
-      <div style="display:flex; gap:14px; font-size:11px; color:var(--text-muted); margin-top:10px;">
+      <div style="display:flex; gap:14px; font-size:11px; color:var(--text-muted); margin-top:10px; flex-wrap:wrap;">
         <span><b class="text-green">■</b> Win Day</span>
         <span><b class="text-red">■</b> Loss Day</span>
         <span><b class="text-neutral">■</b> No Trade Day</span>
@@ -711,9 +965,9 @@
     </div>
 
     <!-- Trade Log & Experience Feed -->
-    <div class="col-12 card">
+    <div class="col-12 card" style="animation-delay:0.28s;">
       <div class="card-header">
-        <span style="font-weight:800; font-size:15px;">Trade Log, Screenshots & Experience</span>
+        <span style="font-weight:800; font-size:15px;">Trade Log, Screenshots &amp; Experience</span>
         <span class="card-title" id="logCountLabel">0 entries</span>
       </div>
       <div id="tradeListContainer"></div>
@@ -722,16 +976,27 @@
   </div>
 
   <!-- Floating Action Button -->
-  <button class="fab" onclick="openTradeModal()">+ Add Trade</button>
+  <button class="fab" onclick="openTradeModal()">
+    <svg class="icon-svg-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+    <span>Add Trade</span>
+  </button>
 
   <!-- Add / Edit Trade Modal -->
-  <div class="modal-backdrop" id="tradeModal">
-    <div class="modal">
+  <div class="modal-backdrop" id="tradeModal" onclick="handleBackdropClick(event, 'tradeModal')">
+    <div class="modal" onclick="event.stopPropagation()">
       <div class="card-header">
         <h3 id="modalTitle">Log New Trade</h3>
-        <button class="btn" onclick="closeModal('tradeModal')">✕</button>
+        <button class="btn" onclick="closeModal('tradeModal')" aria-label="Close">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
-      <form id="tradeForm" onsubmit="saveTrade(event)">
+      <form id="tradeForm" onsubmit="saveTrade(event)" novalidate>
         <input type="hidden" id="tradeId" />
         <div class="form-row">
           <div class="form-group">
@@ -770,7 +1035,7 @@
         </div>
 
         <div class="form-group">
-          <label>My Experience & Lessons on this Trade</label>
+          <label>My Experience &amp; Lessons on this Trade</label>
           <textarea id="tradeNotes" rows="3" class="form-control" placeholder="Write why you entered, how you managed risk, emotions, and what you learned..."></textarea>
         </div>
 
@@ -781,7 +1046,15 @@
         </div>
 
         <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:14px;">
-          <button type="button" class="btn btn-danger" id="deleteTradeBtn" style="display:none; margin-right:auto;" onclick="deleteCurrentTrade()">Delete</button>
+          <button type="button" class="btn btn-danger" id="deleteTradeBtn" style="display:none; margin-right:auto;" onclick="deleteCurrentTrade()">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+              <path d="M10 11v6"></path>
+              <path d="M14 11v6"></path>
+            </svg>
+            <span>Delete</span>
+          </button>
           <button type="button" class="btn" onclick="closeModal('tradeModal')">Cancel</button>
           <button type="submit" class="btn btn-primary">Save Trade</button>
         </div>
@@ -790,16 +1063,21 @@
   </div>
 
   <!-- View Single Trade Detail Modal -->
-  <div class="modal-backdrop" id="viewModal">
-    <div class="modal" id="viewModalContent"></div>
+  <div class="modal-backdrop" id="viewModal" onclick="handleBackdropClick(event, 'viewModal')">
+    <div class="modal" id="viewModalContent" onclick="event.stopPropagation()"></div>
   </div>
 
   <!-- Settings / Starting Balance Modal -->
-  <div class="modal-backdrop" id="settingsModal">
-    <div class="modal">
+  <div class="modal-backdrop" id="settingsModal" onclick="handleBackdropClick(event, 'settingsModal')">
+    <div class="modal" onclick="event.stopPropagation()">
       <div class="card-header">
-        <h3>Account & Data Settings</h3>
-        <button class="btn" onclick="closeModal('settingsModal')">✕</button>
+        <h3>Account &amp; Data Settings</h3>
+        <button class="btn" onclick="closeModal('settingsModal')" aria-label="Close">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
       <div class="form-group">
         <label>Starting Account Balance ($)</label>
@@ -816,23 +1094,159 @@
   </div>
 
 <script>
-  // Initialize Telegram WebApp SDK
-  const tg = window.Telegram?.WebApp;
+  // Initialize Telegram WebApp SDK safely (works online & offline)
+  const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
   if (tg) {
-    tg.ready();
-    tg.expand();
+    try {
+      tg.ready();
+      tg.expand();
+    } catch (e) {}
   }
 
-  // State
+  // Per-User Storage Isolation (each Telegram user or local browser profile has its own isolated data & starts empty)
+  const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+  const userScopeId = (tgUser && tgUser.id) ? `tg_${tgUser.id}` : 'local_guest';
+
+  const DB_NAME = `TradeVaultDB_${userScopeId}`;
+  const KEY_START_BAL = `tv_start_bal_${userScopeId}`;
+  const KEY_THEME = `tv_theme_${userScopeId}`;
+  const KEY_SOUND = `tv_sound_${userScopeId}`;
+
+  document.getElementById('userScopeLabel').innerHTML = `
+    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span>${tgUser && tgUser.first_name ? `Private Journal • ${escapeHtml(tgUser.first_name)}` : 'Private Journal • Isolated Local Data'}</span>
+  `;
+
+  // SVG Icon Templates
+  const ICONS = {
+    sun: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`,
+    moon: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
+    soundOn: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>`,
+    soundOff: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`,
+    chartPlaceholder: `<svg class="icon-svg-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`,
+    edit: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`
+  };
+
+  // Motion-Matched Web Audio Synthesizer (100% offline, zero external audio files)
+  const MotionAudio = (() => {
+    let ctx = null;
+    let enabled = localStorage.getItem(KEY_SOUND) !== 'off';
+
+    function ensureCtx() {
+      if (!enabled) return null;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return null;
+        if (!ctx) ctx = new AudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        return ctx;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function sweep({ startFreq, endFreq, duration, type = 'sine', gainPeak = 0.05, delay = 0 }) {
+      const c = ensureCtx();
+      if (!c) return;
+      try {
+        const now = c.currentTime + delay;
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(Math.max(40, startFreq), now);
+        osc.frequency.exponentialRampToValueAtTime(Math.max(40, endFreq), now + duration);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(gainPeak, now + Math.min(0.015, duration * 0.25));
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+        osc.connect(gain);
+        gain.connect(c.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.02);
+      } catch (e) {}
+    }
+
+    return {
+      isEnabled: () => enabled,
+      setEnabled: (val) => {
+        enabled = Boolean(val);
+        localStorage.setItem(KEY_SOUND, enabled ? 'on' : 'off');
+      },
+      // Matches quick button press / pill slide
+      playSlideTick: (direction = 1) => {
+        sweep({
+          startFreq: direction >= 0 ? 440 : 520,
+          endFreq: direction >= 0 ? 580 : 410,
+          duration: 0.09,
+          type: 'triangle',
+          gainPeak: 0.035
+        });
+      },
+      // Matches modal pop-in expansion (260ms)
+      playPanelOpen: () => {
+        sweep({
+          startFreq: 260,
+          endFreq: 540,
+          duration: 0.22,
+          type: 'sine',
+          gainPeak: 0.045
+        });
+      },
+      // Matches modal close/collapse (190ms)
+      playPanelClose: () => {
+        sweep({
+          startFreq: 480,
+          endFreq: 220,
+          duration: 0.17,
+          type: 'sine',
+          gainPeak: 0.035
+        });
+      },
+      // Matches trade card slide-in + confirmation chime
+      playSaveSuccess: () => {
+        sweep({ startFreq: 440, endFreq: 587.33, duration: 0.12, type: 'triangle', gainPeak: 0.045 });
+        sweep({ startFreq: 587.33, endFreq: 880, duration: 0.18, type: 'sine', gainPeak: 0.05, delay: 0.08 });
+      },
+      // Matches trade removal release
+      playDeleteRelease: () => {
+        sweep({ startFreq: 360, endFreq: 150, duration: 0.2, type: 'sawtooth', gainPeak: 0.03 });
+      },
+      // Matches validation shake animation
+      playShakeError: () => {
+        sweep({ startFreq: 190, endFreq: 120, duration: 0.11, type: 'triangle', gainPeak: 0.05 });
+        sweep({ startFreq: 175, endFreq: 105, duration: 0.12, type: 'triangle', gainPeak: 0.045, delay: 0.1 });
+      }
+    };
+  })();
+
+  function syncSoundButtonUI() {
+    const on = MotionAudio.isEnabled();
+    document.getElementById('soundIconWrap').innerHTML = on ? ICONS.soundOn : ICONS.soundOff;
+    document.getElementById('soundBtnText').innerText = on ? 'Sound On' : 'Muted';
+  }
+
+  function toggleSound() {
+    const next = !MotionAudio.isEnabled();
+    MotionAudio.setEnabled(next);
+    syncSoundButtonUI();
+    if (next) MotionAudio.playSlideTick(1);
+  }
+
+  // State (empty journal by default for every user)
   let trades = [];
-  let startingBalance = parseFloat(localStorage.getItem('tv_start_bal')) || 10000;
+  let startingBalance = parseFloat(localStorage.getItem(KEY_START_BAL)) || 10000;
   let currentRange = 'ALL';
   let calDate = new Date();
   let currentBase64Image = '';
 
-  // IndexedDB Setup (Unlimited local storage for trade screenshots + multi-year history)
+  // Per-User IndexedDB Setup
   let db;
-  const request = indexedDB.open('TradeVaultDB', 1);
+  const request = indexedDB.open(DB_NAME, 1);
   request.onupgradeneeded = (e) => {
     db = e.target.result;
     if (!db.objectStoreNames.contains('trades')) {
@@ -843,19 +1257,30 @@
     db = e.target.result;
     loadTrades();
   };
+  request.onerror = () => {
+    trades = [];
+    renderAll();
+  };
 
   function loadTrades() {
+    if (!db) {
+      trades = [];
+      renderAll();
+      return;
+    }
     const tx = db.transaction('trades', 'readonly');
     const store = tx.objectStore('trades');
     const req = store.getAll();
     req.onsuccess = () => {
-      trades = req.result.sort((a, b) => new Date(a.date) - new Date(b.date));
+      const list = Array.isArray(req.result) ? req.result : [];
+      trades = list.sort((a, b) => new Date(a.date) - new Date(b.date));
       renderAll();
     };
   }
 
   function saveTradeToDB(trade) {
     return new Promise((resolve) => {
+      if (!db) return resolve();
       const tx = db.transaction('trades', 'readwrite');
       tx.objectStore('trades').put(trade);
       tx.oncomplete = () => resolve();
@@ -864,21 +1289,39 @@
 
   function deleteTradeFromDB(id) {
     return new Promise((resolve) => {
+      if (!db) return resolve();
       const tx = db.transaction('trades', 'readwrite');
       tx.objectStore('trades').delete(id);
       tx.oncomplete = () => resolve();
     });
   }
 
-  // Theme Toggle
-  function toggleTheme() {
-    const html = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('themeBtn').innerText = isDark ? '🌙 Dark' : '☀️ Light';
-    localStorage.setItem('tv_theme', isDark ? 'light' : 'dark');
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
-  if (localStorage.getItem('tv_theme') === 'light') toggleTheme();
+
+  // Theme Toggle
+  function applyTheme(theme) {
+    const isLight = theme === 'light';
+    document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
+    document.getElementById('themeIconWrap').innerHTML = isLight ? ICONS.moon : ICONS.sun;
+    document.getElementById('themeBtnText').innerText = isLight ? 'Dark' : 'Light';
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem(KEY_THEME, next);
+    MotionAudio.playSlideTick(isDark ? 1 : -1);
+  }
+
+  applyTheme(localStorage.getItem(KEY_THEME) === 'light' ? 'light' : 'dark');
+  syncSoundButtonUI();
 
   // Filter Range
   function setRange(range, el) {
@@ -887,6 +1330,7 @@
     el.classList.add('active');
     const labels = { ALL: 'All Time', YEAR: 'This Year', MONTH: 'This Month', WEEK: 'This Week', DAY: 'Today' };
     document.getElementById('rangeLabel').innerText = labels[range];
+    MotionAudio.playSlideTick(1);
     renderAll();
   }
 
@@ -930,6 +1374,7 @@
         const preview = document.getElementById('imagePreview');
         preview.src = currentBase64Image;
         preview.style.display = 'block';
+        MotionAudio.playSlideTick(1);
       };
       img.src = event.target.result;
     };
@@ -939,6 +1384,7 @@
   // Modals
   function openTradeModal(datePrefill = '', tradeToEdit = null) {
     document.getElementById('tradeForm').reset();
+    document.querySelectorAll('#tradeForm .form-control').forEach(el => el.classList.remove('anim-shake'));
     document.getElementById('imagePreview').style.display = 'none';
     currentBase64Image = '';
     document.getElementById('deleteTradeBtn').style.display = 'none';
@@ -965,27 +1411,61 @@
       document.getElementById('tradeDate').value = datePrefill || new Date().toISOString().slice(0, 10);
     }
     document.getElementById('tradeModal').classList.add('open');
+    MotionAudio.playPanelOpen();
   }
 
   function closeModal(id) {
-    document.getElementById(id).classList.remove('open');
+    const backdrop = document.getElementById(id);
+    if (!backdrop || !backdrop.classList.contains('open')) return;
+    MotionAudio.playPanelClose();
+    backdrop.classList.remove('open');
+  }
+
+  function handleBackdropClick(e, id) {
+    if (e.target.id === id) closeModal(id);
+  }
+
+  function triggerFieldShake(inputEl) {
+    if (!inputEl) return;
+    inputEl.classList.remove('anim-shake');
+    void inputEl.offsetWidth;
+    inputEl.classList.add('anim-shake');
+    setTimeout(() => inputEl.classList.remove('anim-shake'), 360);
   }
 
   async function saveTrade(e) {
     e.preventDefault();
-    const id = document.getElementById('tradeId').value || Date.now().toString();
+    const dateInput = document.getElementById('tradeDate');
+    const pairInput = document.getElementById('tradePair');
+    const pnlInput = document.getElementById('tradePnl');
+
+    const dateVal = dateInput.value;
+    const pairVal = pairInput.value.trim().toUpperCase();
+    const pnlVal = parseFloat(pnlInput.value);
+
+    if (!dateVal || !pairVal || Number.isNaN(pnlVal)) {
+      if (!dateVal) triggerFieldShake(dateInput);
+      if (!pairVal) triggerFieldShake(pairInput);
+      if (Number.isNaN(pnlVal)) triggerFieldShake(pnlInput);
+      MotionAudio.playShakeError();
+      return;
+    }
+
+    const id = document.getElementById('tradeId').value || (Date.now().toString() + '_' + Math.random().toString(36).slice(2, 6));
     const trade = {
       id,
-      date: document.getElementById('tradeDate').value,
-      pair: document.getElementById('tradePair').value.toUpperCase(),
+      date: dateVal,
+      pair: pairVal,
       dir: document.getElementById('tradeDir').value,
-      pnl: parseFloat(document.getElementById('tradePnl').value),
+      pnl: pnlVal,
       setup: document.getElementById('tradeSetup').value,
-      score: parseInt(document.getElementById('tradeScore').value) || 8,
+      score: parseInt(document.getElementById('tradeScore').value, 10) || 8,
       notes: document.getElementById('tradeNotes').value,
       image: currentBase64Image
     };
+
     await saveTradeToDB(trade);
+    MotionAudio.playSaveSuccess();
     closeModal('tradeModal');
     loadTrades();
   }
@@ -994,6 +1474,7 @@
     const id = document.getElementById('tradeId').value;
     if (id && confirm('Delete this trade?')) {
       await deleteTradeFromDB(id);
+      MotionAudio.playDeleteRelease();
       closeModal('tradeModal');
       loadTrades();
     }
@@ -1002,11 +1483,13 @@
   function openSettingsModal() {
     document.getElementById('startingBalanceInput').value = startingBalance;
     document.getElementById('settingsModal').classList.add('open');
+    MotionAudio.playPanelOpen();
   }
 
   function saveSettings() {
     startingBalance = parseFloat(document.getElementById('startingBalanceInput').value) || 10000;
-    localStorage.setItem('tv_start_bal', startingBalance);
+    localStorage.setItem(KEY_START_BAL, startingBalance);
+    MotionAudio.playSaveSuccess();
     closeModal('settingsModal');
     renderAll();
   }
@@ -1018,8 +1501,10 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `TradeVault_Backup_${new Date().toISOString().slice(0,10)}.json`;
+    a.download = `TradeVault_Backup_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
+    URL.revokeObjectURL(url);
+    MotionAudio.playSlideTick(1);
   }
 
   function importBackup(e) {
@@ -1031,17 +1516,19 @@
         const parsed = JSON.parse(ev.target.result);
         if (parsed.startingBalance) {
           startingBalance = parsed.startingBalance;
-          localStorage.setItem('tv_start_bal', startingBalance);
+          localStorage.setItem(KEY_START_BAL, startingBalance);
         }
         if (Array.isArray(parsed.trades)) {
           for (const t of parsed.trades) {
             await saveTradeToDB(t);
           }
           loadTrades();
+          MotionAudio.playSaveSuccess();
           closeModal('settingsModal');
           alert('Backup restored!');
         }
       } catch (err) {
+        MotionAudio.playShakeError();
         alert('Invalid backup file.');
       }
     };
@@ -1152,7 +1639,6 @@
     });
     curT = tempW > 0 ? tempW : tempL;
 
-    // Daily Streaks
     const dayMap = {};
     list.forEach(t => { dayMap[t.date] = (dayMap[t.date] || 0) + t.pnl; });
     const sortedDays = Object.keys(dayMap).sort();
@@ -1189,18 +1675,17 @@
       const y = 48 - ((i + 1) / list.length) * 38;
       return `${x},${y}`;
     }).join(' ');
-    svg.innerHTML = `<polyline fill="none" stroke="#10b981" stroke-width="2.5" points="${pts}" />`;
+    svg.innerHTML = `<polyline fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${pts}" />`;
   }
 
   function drawWinrateGauge(winrate) {
     const svg = document.getElementById('gaugeSvg');
-    const r = 44, cx = 60, cy = 56;
-    const circum = Math.PI * r;
+    const r = 44, circum = Math.PI * r;
     const winLen = (winrate / 100) * circum;
     svg.innerHTML = `
       <path d="M 16 56 A 44 44 0 0 1 104 56" fill="none" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/>
       <path d="M 16 56 A 44 44 0 0 1 104 56" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round"
-            stroke-dasharray="${winLen} ${circum}" />
+            stroke-dasharray="${winLen} ${circum}" style="transition:stroke-dasharray 0.45s cubic-bezier(0.22, 1, 0.36, 1);" />
     `;
   }
 
@@ -1243,7 +1728,7 @@
 
     svg.innerHTML = `
       ${gridHtml}
-      <polygon points="${dataPoly}" fill="rgba(16,185,129,0.22)" stroke="#10b981" stroke-width="2"/>
+      <polygon points="${dataPoly}" fill="rgba(16,185,129,0.22)" stroke="#10b981" stroke-width="2" style="transition:all 0.35s ease;"/>
       ${labelHtml}
       <text x="${cx}" y="${cy + 6}" fill="var(--text-main)" font-size="22" font-weight="800" text-anchor="middle">${overall}</text>
     `;
@@ -1271,13 +1756,14 @@
     const area = `10,195 ${coords.join(' ')} 310,195`;
     svg.innerHTML = `
       <polygon points="${area}" fill="${fill}" />
-      <polyline fill="none" stroke="${stroke}" stroke-width="2.5" points="${coords.join(' ')}" />
+      <polyline fill="none" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${coords.join(' ')}" />
     `;
   }
 
   // Monthly P&L Calendar with Weekly Totals
   function changeMonth(delta) {
     calDate.setMonth(calDate.getMonth() + delta);
+    MotionAudio.playSlideTick(delta);
     renderCalendar();
   }
 
@@ -1306,7 +1792,6 @@
     pctEl.innerText = (mPct >= 0 ? '+' : '') + mPct.toFixed(2) + '%';
     pctEl.className = mPct >= 0 ? 'text-green' : 'text-red';
 
-    // Map daily PnL
     const dailyPnl = {};
     monthTrades.forEach(t => { dailyPnl[t.date] = (dailyPnl[t.date] || 0) + t.pnl; });
 
@@ -1328,7 +1813,7 @@
           html += `<div class="cal-cell empty"></div>`;
         } else {
           const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCounter).padStart(2, '0')}`;
-          const hasTrade = dailyPnl.hasOwnProperty(dateStr);
+          const hasTrade = Object.prototype.hasOwnProperty.call(dailyPnl, dateStr);
           const val = dailyPnl[dateStr] || 0;
           if (hasTrade) {
             weekSum += val;
@@ -1358,7 +1843,6 @@
         }
       }
 
-      // Weekly Total Column
       let wCls = 'cal-cell week-total';
       let wHtml = `<div class="cell-pnl">$0.00</div><div class="cell-pct">0.00%</div>`;
       if (weekHasTrades) {
@@ -1388,25 +1872,28 @@
     }
 
     const reversed = [...list].reverse();
-    container.innerHTML = reversed.map(t => {
+    container.innerHTML = reversed.map((t, idx) => {
       const isWin = t.pnl >= 0;
-      const thumb = t.image ? `<img src="${t.image}" class="trade-thumb" />` : `<div class="trade-thumb" style="display:flex;align-items:center;justify-content:center;font-size:18px;">📊</div>`;
+      const delayMs = Math.min(idx * 35, 280);
+      const thumb = t.image
+        ? `<img src="${t.image}" class="trade-thumb" />`
+        : `<div class="trade-thumb" style="display:flex;align-items:center;justify-content:center;">${ICONS.chartPlaceholder}</div>`;
       return `
-        <div class="trade-item ${isWin ? 'win' : 'loss'}" onclick="viewTradeDetail('${t.id}')">
+        <div class="trade-item ${isWin ? 'win' : 'loss'}" style="animation-delay:${delayMs}ms;" onclick="viewTradeDetail('${t.id}')">
           <div style="display:flex; align-items:center; gap:10px; overflow:hidden;">
             ${thumb}
             <div style="overflow:hidden;">
-              <div style="font-weight:800; font-size:14px;">${t.pair} <span style="font-size:11px; color:var(--text-muted);">(${t.dir} • ${t.date})</span></div>
+              <div style="font-weight:800; font-size:14px;">${escapeHtml(t.pair)} <span style="font-size:11px; color:var(--text-muted);">(${escapeHtml(t.dir)} • ${escapeHtml(t.date)})</span></div>
               <div style="font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:450px;">
-                ${t.notes || 'No experience notes written.'}
+                ${escapeHtml(t.notes || 'No experience notes written.')}
               </div>
             </div>
           </div>
           <div style="text-align:right; flex-shrink:0;">
             <div style="font-weight:800; font-size:15px;" class="${isWin ? 'text-green' : 'text-red'}">
-              ${isWin ? '+' : ''}$${t.pnl.toFixed(2)}
+              ${isWin ? '+' : ''}$${Number(t.pnl).toFixed(2)}
             </div>
-            <div style="font-size:10px; color:var(--text-muted);">${t.setup || 'Standard'}</div>
+            <div style="font-size:10px; color:var(--text-muted);">${escapeHtml(t.setup || 'Standard')}</div>
           </div>
         </div>
       `;
@@ -1420,34 +1907,43 @@
     const content = document.getElementById('viewModalContent');
     content.innerHTML = `
       <div class="card-header">
-        <h3>${t.pair} (${t.dir}) — ${t.date}</h3>
-        <button class="btn" onclick="closeModal('viewModal')">✕</button>
+        <h3>${escapeHtml(t.pair)} (${escapeHtml(t.dir)}) — ${escapeHtml(t.date)}</h3>
+        <button class="btn" onclick="closeModal('viewModal')" aria-label="Close">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:8px; background:var(--bg-input); margin-bottom:12px;">
         <div>
-          <div style="font-size:11px; color:var(--text-muted);">Net P&L</div>
-          <div style="font-size:22px; font-weight:800;" class="${isWin ? 'text-green' : 'text-red'}">${isWin ? '+' : ''}$${t.pnl.toFixed(2)}</div>
+          <div style="font-size:11px; color:var(--text-muted);">Net P&amp;L</div>
+          <div style="font-size:22px; font-weight:800;" class="${isWin ? 'text-green' : 'text-red'}">${isWin ? '+' : ''}$${Number(t.pnl).toFixed(2)}</div>
         </div>
         <div style="text-align:right;">
           <div style="font-size:11px; color:var(--text-muted);">Setup / Discipline</div>
-          <div style="font-weight:700;">${t.setup || 'N/A'} • ${t.score || 8}/10</div>
+          <div style="font-weight:700;">${escapeHtml(t.setup || 'N/A')} • ${escapeHtml(t.score || 8)}/10</div>
         </div>
       </div>
       <div style="margin-bottom:12px;">
-        <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">Trade Experience & Notes:</div>
-        <div style="background:var(--bg-input); padding:12px; border-radius:8px; font-size:13px; line-height:1.5; white-space:pre-wrap;">${t.notes || 'No notes recorded.'}</div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">Trade Experience &amp; Notes:</div>
+        <div style="background:var(--bg-input); padding:12px; border-radius:8px; font-size:13px; line-height:1.5; white-space:pre-wrap;">${escapeHtml(t.notes || 'No notes recorded.')}</div>
       </div>
       ${t.image ? `<div style="margin-bottom:12px;"><img src="${t.image}" style="width:100%; border-radius:8px; border:1px solid var(--border);" /></div>` : ''}
       <div style="display:flex; justify-content:flex-end; gap:8px;">
-        <button class="btn" onclick="closeModal('viewModal'); openTradeModal('', trades.find(x => x.id === '${t.id}'))">✏️ Edit Trade</button>
+        <button class="btn" onclick="closeModal('viewModal'); openTradeModal('', trades.find(x => x.id === '${t.id}'))">
+          ${ICONS.edit}
+          <span>Edit Trade</span>
+        </button>
         <button class="btn btn-primary" onclick="closeModal('viewModal')">Done</button>
       </div>
     `;
     document.getElementById('viewModal').classList.add('open');
+    MotionAudio.playPanelOpen();
   }
 
   function formatMoney(num) {
-    return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return '$' + Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 </script>
 </body>
