@@ -9,20 +9,20 @@
     :root {
       --bg-main: #0b0e14;
       --bg-card: #131822;
-      --bg-card-hover: #1a212e;
-      --bg-input: #0e121a;
-      --border: #222b3a;
+      --bg-card-hover: #1b2332;
+      --bg-input: #0e131c;
+      --border: #283244;
       --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --text-muted: #cbd5e1;
       --green: #10b981;
-      --green-bg: rgba(16, 185, 129, 0.16);
-      --green-border: rgba(16, 185, 129, 0.45);
+      --green-bg: rgba(16, 185, 129, 0.18);
+      --green-border: rgba(16, 185, 129, 0.5);
       --red: #ef4444;
-      --red-bg: rgba(239, 68, 68, 0.16);
-      --red-border: rgba(239, 68, 68, 0.45);
+      --red-bg: rgba(239, 68, 68, 0.18);
+      --red-border: rgba(239, 68, 68, 0.5);
       --neutral: #3b82f6;
-      --neutral-bg: #18202c;
-      --neutral-border: #283447;
+      --neutral-bg: #182232;
+      --neutral-border: #334155;
       --banner-bg: var(--bg-card);
       --banner-text: var(--text-main);
       --banner-muted: var(--text-muted);
@@ -36,20 +36,20 @@
     [data-theme="light"] {
       --bg-main: #eef2f6;
       --bg-card: #ffffff;
-      --bg-card-hover: #f8fafc;
+      --bg-card-hover: #f1f5f9;
       --bg-input: #f8fafc;
-      --border: #cbd5e1;
-      --text-main: #0f172a;
-      --text-muted: #475569;
+      --border: #94a3b8;
+      --text-main: #090d16;
+      --text-muted: #1e293b;
       --green: #047857;
-      --green-bg: rgba(5, 150, 105, 0.14);
-      --green-border: rgba(4, 120, 87, 0.42);
+      --green-bg: rgba(4, 120, 87, 0.16);
+      --green-border: rgba(4, 120, 87, 0.5);
       --red: #b91c1c;
-      --red-bg: rgba(220, 38, 38, 0.13);
-      --red-border: rgba(185, 28, 28, 0.42);
+      --red-bg: rgba(185, 28, 28, 0.15);
+      --red-border: rgba(185, 28, 28, 0.5);
       --neutral: #1d4ed8;
       --neutral-bg: #e2e8f0;
-      --neutral-border: #94a3b8;
+      --neutral-border: #64748b;
       --banner-bg: var(--bg-card);
       --banner-text: var(--text-main);
       --banner-muted: var(--text-muted);
@@ -197,6 +197,7 @@
 
     .user-scope-badge {
       font-size: 11px;
+      font-weight: 600;
       color: var(--text-muted);
       display: inline-flex;
       align-items: center;
@@ -231,7 +232,7 @@
       padding: 8px 11px;
       border-radius: 9px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -361,7 +362,7 @@
       padding: 6px 12px;
       border-radius: 20px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-muted);
@@ -388,7 +389,8 @@
       align-items: center;
       gap: 6px;
       font-size: 11px;
-      color: var(--text-muted);
+      font-weight: 600;
+      color: var(--text-main);
       background: var(--bg-card);
       border: 1px solid var(--border);
       padding: 5px 10px;
@@ -399,7 +401,6 @@
 
     .active-style-chip:hover {
       border-color: var(--neutral);
-      color: var(--text-main);
     }
 
     /* Dashboard Grid & View Templates */
@@ -461,7 +462,7 @@
     .card-title {
       font-size: 12px;
       color: var(--text-muted);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .big-num {
@@ -539,7 +540,11 @@
       color: var(--text-main);
     }
 
-    /* Score / Leaderboard Section */
+    /* Score / Leaderboard Section (Placed at Bottom) */
+    #secLeaderboard {
+      order: 99;
+    }
+
     .leaderboard-list {
       display: flex;
       flex-direction: column;
@@ -555,6 +560,7 @@
       padding: 11px 12px;
       border-radius: 10px;
       background: var(--bg-input);
+      color: var(--text-main);
       border: 1px solid var(--border);
       transition: transform 0.18s var(--ease-spring), border-color 0.2s var(--ease-out);
     }
@@ -565,17 +571,17 @@
     }
 
     .score-row.rank-1 {
-      border-color: rgba(245, 158, 11, 0.65);
+      border-color: rgba(245, 158, 11, 0.7);
       background: color-mix(in srgb, var(--bg-input) 86%, #f59e0b 14%);
     }
 
     .score-row.rank-2 {
-      border-color: rgba(148, 163, 184, 0.65);
+      border-color: rgba(148, 163, 184, 0.7);
       background: color-mix(in srgb, var(--bg-input) 90%, #94a3b8 10%);
     }
 
     .score-row.rank-3 {
-      border-color: rgba(180, 83, 9, 0.6);
+      border-color: rgba(180, 83, 9, 0.65);
       background: color-mix(in srgb, var(--bg-input) 90%, #b45309 10%);
     }
 
@@ -598,22 +604,22 @@
       flex-shrink: 0;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      color: var(--text-muted);
+      color: var(--text-main);
     }
 
     .rank-1 .rank-slot {
-      color: #f59e0b;
-      border-color: rgba(245, 158, 11, 0.55);
+      color: #d97706;
+      border-color: rgba(217, 119, 6, 0.65);
     }
 
     .rank-2 .rank-slot {
-      color: #94a3b8;
-      border-color: rgba(148, 163, 184, 0.55);
+      color: var(--text-muted);
+      border-color: rgba(148, 163, 184, 0.65);
     }
 
     .rank-3 .rank-slot {
-      color: #d97706;
-      border-color: rgba(217, 119, 6, 0.55);
+      color: #b45309;
+      border-color: rgba(180, 83, 9, 0.65);
     }
 
     .scorer-name {
@@ -627,6 +633,7 @@
 
     .scorer-sub {
       font-size: 11px;
+      font-weight: 600;
       color: var(--text-muted);
     }
 
@@ -644,7 +651,7 @@
     .score-label {
       font-size: 10px;
       color: var(--text-muted);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     /* Winstreak */
@@ -688,7 +695,7 @@
       padding: 2px 8px;
       border-radius: 5px;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       text-align: center;
     }
 
@@ -699,18 +706,18 @@
       padding: 2px 8px;
       border-radius: 5px;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       text-align: center;
     }
 
     .badge-lot {
-      background: color-mix(in srgb, var(--neutral) 16%, transparent);
+      background: color-mix(in srgb, var(--neutral) 18%, transparent);
       color: var(--neutral);
-      border: 1px solid color-mix(in srgb, var(--neutral) 40%, transparent);
+      border: 1px solid color-mix(in srgb, var(--neutral) 45%, transparent);
       padding: 1px 6px;
       border-radius: 4px;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     /* Period Returns */
@@ -738,13 +745,15 @@
 
     .period-label {
       font-size: 10px;
+      font-weight: 700;
       color: var(--text-muted);
       margin-bottom: 4px;
     }
 
     .period-val {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
+      color: var(--text-main);
     }
 
     .stat-row {
@@ -781,6 +790,7 @@
       display: flex;
       gap: 12px;
       font-size: 11px;
+      font-weight: 700;
       color: var(--text-muted);
       background: var(--bg-input);
       padding: 6px 10px;
@@ -828,7 +838,7 @@
     .cal-cell:active { transform: scale(0.96); }
 
     .cal-cell.empty {
-      opacity: 0.35;
+      opacity: 0.45;
       cursor: default;
     }
 
@@ -866,7 +876,7 @@
 
     .cell-date {
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-muted);
     }
 
@@ -879,9 +889,9 @@
 
     .cell-pct {
       font-size: 9px;
+      font-weight: 700;
       text-align: center;
       color: var(--text-muted);
-      opacity: 0.9;
     }
 
     .text-green { color: var(--green); }
@@ -1095,35 +1105,11 @@
       padding: 6px 8px;
     }
 
-    .anim-option-card {
-      background: var(--bg-input);
-      color: var(--text-main);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 11px 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: border-color 0.2s var(--ease-out), transform 0.16s var(--ease-spring);
-    }
-
-    .anim-option-card:hover {
-      transform: translateX(2px);
-      border-color: var(--neutral);
-    }
-
-    .anim-option-card.selected {
-      border-color: var(--green-border);
-      background: var(--green-bg);
-    }
-
     .form-group { margin-bottom: 12px; }
     .form-group label {
       display: block;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       margin-bottom: 5px;
     }
@@ -1181,6 +1167,7 @@
       border: 1px solid var(--border);
       margin-bottom: 8px;
       font-size: 13px;
+      font-weight: 600;
     }
 
     /* Footer */
@@ -1189,7 +1176,7 @@
       padding: 14px 10px 6px;
       text-align: center;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       border-top: 1px solid var(--border);
     }
@@ -1323,14 +1310,14 @@
       <div class="pill" onclick="setRange('DAY', this)">Today</div>
     </div>
 
-    <div class="active-style-chip" onclick="openSettingsModal('templates')" title="Open View Templates, Colors & Animations">
+    <div class="active-style-chip" onclick="openSettingsModal('templates')" title="Open View Templates, Colors & Gradient">
       <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="3" width="7" height="7"></rect>
         <rect x="14" y="3" width="7" height="7"></rect>
         <rect x="14" y="14" width="7" height="7"></rect>
         <rect x="3" y="14" width="7" height="7"></rect>
       </svg>
-      <span id="activeStyleSummary">View: Auto • Anim: Slide</span>
+      <span id="activeStyleSummary">View: Auto</span>
     </div>
   </div>
 
@@ -1344,15 +1331,6 @@
         <span class="card-title" id="accountCountLabel">1 Account</span>
       </div>
       <div class="accounts-grid" id="accountsPerfGrid"></div>
-    </div>
-
-    <!-- Live Trader & User Score Leaderboard Section -->
-    <div class="col-12 card" id="secLeaderboard" style="animation-delay:0.05s;">
-      <div class="card-header">
-        <span style="font-weight:800; font-size:15px;">Trader &amp; User Score Leaderboard</span>
-        <span class="card-title" id="leaderboardMeta">Auto-Ranked Live</span>
-      </div>
-      <div class="leaderboard-list" id="leaderboardList"></div>
     </div>
 
     <!-- Left Column: Trade Count, Winrate, Avg Win/Loss, Winstreak -->
@@ -1382,7 +1360,7 @@
             <div id="barWin" style="background:var(--green); width:50%; transition:width 0.35s cubic-bezier(0.22, 1, 0.36, 1);"></div>
             <div id="barLoss" style="background:var(--red); width:50%; transition:width 0.35s cubic-bezier(0.22, 1, 0.36, 1);"></div>
           </div>
-          <div style="display:flex; justify-content:space-between; font-size:10px; margin-top:6px; color:var(--text-muted);">
+          <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:700; margin-top:6px; color:var(--text-muted);">
             <span id="avgWinText" class="text-green">$0</span>
             <span id="avgLossText" class="text-red">$0</span>
           </div>
@@ -1417,7 +1395,7 @@
             </div>
           </div>
         </div>
-        <div style="display:flex; justify-content:space-around; font-size:11px; color:var(--text-muted); margin-top:6px;">
+        <div style="display:flex; justify-content:space-around; font-size:11px; font-weight:700; color:var(--text-muted); margin-top:6px;">
           <span>Days</span>
           <span>Trades</span>
         </div>
@@ -1433,7 +1411,7 @@
       <div style="position:relative; width:100%; max-width:290px; margin:0 auto;">
         <svg id="radarSvg" class="chart-svg" viewBox="0 0 280 260"></svg>
       </div>
-      <div style="text-align:center; font-size:11px; color:var(--text-muted);">
+      <div style="text-align:center; font-size:11px; font-weight:600; color:var(--text-muted);">
         Calculated from Winrate, Risk/Reward, Consistency &amp; Drawdown
       </div>
     </div>
@@ -1529,7 +1507,7 @@
       </div>
 
       <div class="cal-grid" id="calendarGrid"></div>
-      <div style="display:flex; gap:14px; font-size:11px; color:var(--text-muted); margin-top:10px; flex-wrap:wrap;">
+      <div style="display:flex; gap:14px; font-size:11px; font-weight:700; color:var(--text-muted); margin-top:10px; flex-wrap:wrap;">
         <span><b class="text-green">■</b> Win Day</span>
         <span><b class="text-red">■</b> Loss Day</span>
         <span><b class="text-neutral">■</b> No Trade Day</span>
@@ -1544,6 +1522,15 @@
         <span class="card-title" id="logCountLabel">0 entries</span>
       </div>
       <div id="tradeListContainer"></div>
+    </div>
+
+    <!-- Live Trader & User Score Leaderboard Section (At Bottom) -->
+    <div class="col-12 card" id="secLeaderboard" style="animation-delay:0.32s;">
+      <div class="card-header">
+        <span style="font-weight:800; font-size:15px;">Trader &amp; User Score Leaderboard</span>
+        <span class="card-title" id="leaderboardMeta">Auto-Ranked Live</span>
+      </div>
+      <div class="leaderboard-list" id="leaderboardList"></div>
     </div>
 
   </div>
@@ -1653,7 +1640,7 @@
     <div class="modal" id="viewModalContent" onclick="event.stopPropagation()"></div>
   </div>
 
-  <!-- Dedicated Settings Page Modal (Accounts, View Templates, Custom Colors + Gradients, Animations) -->
+  <!-- Dedicated Settings Page Modal (Accounts, View Templates, Custom Colors + Gradients) -->
   <div class="modal-backdrop" id="settingsModal" onclick="handleBackdropClick(event, 'settingsModal')">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="card-header">
@@ -1671,7 +1658,6 @@
         <button type="button" class="settings-tab active" data-stab="accounts" onclick="switchSettingsTab('accounts')">Accounts &amp; Backup</button>
         <button type="button" class="settings-tab" data-stab="templates" onclick="switchSettingsTab('templates')">Screen Templates</button>
         <button type="button" class="settings-tab" data-stab="colors" onclick="switchSettingsTab('colors')">Colors &amp; Gradient</button>
-        <button type="button" class="settings-tab" data-stab="animations" onclick="switchSettingsTab('animations')">Animations</button>
       </div>
 
       <!-- Tab 1: Accounts & Backup -->
@@ -1732,13 +1718,13 @@
           <div class="form-group">
             <label>Visible Sections (Applies when Custom Template is selected)</label>
             <label class="check-row"><span>Account Performance Overview</span><input type="checkbox" id="chkAccounts" checked /></label>
-            <label class="check-row"><span>Trader &amp; User Score Leaderboard</span><input type="checkbox" id="chkLeaderboard" checked /></label>
             <label class="check-row"><span>Trade Count, Winrate &amp; Streaks</span><input type="checkbox" id="chkCoreStats" checked /></label>
             <label class="check-row"><span>EdgeScore Radar</span><input type="checkbox" id="chkRadar" checked /></label>
             <label class="check-row"><span>Balance &amp; Equity Curve</span><input type="checkbox" id="chkEquity" checked /></label>
             <label class="check-row"><span>Performance &amp; Risk Metrics</span><input type="checkbox" id="chkPerfRisk" checked /></label>
             <label class="check-row"><span>Monthly &amp; Weekly P&amp;L Calendar</span><input type="checkbox" id="chkCalendar" checked /></label>
             <label class="check-row"><span>Trade Log &amp; Screenshots</span><input type="checkbox" id="chkTradeLog" checked /></label>
+            <label class="check-row"><span>Trader &amp; User Score Leaderboard</span><input type="checkbox" id="chkLeaderboard" checked /></label>
           </div>
         </div>
 
@@ -1852,60 +1838,6 @@
         </div>
       </div>
 
-      <!-- Tab 4: Calendar & View Animations -->
-      <div class="settings-pane" id="spane-animations">
-        <div class="form-group">
-          <label>Calendar Viewing Animation Style</label>
-          <p style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">
-            Choose how the P&amp;L Calendar animates when viewing or switching months. Selecting an option updates your calendar viewing immediately.
-          </p>
-
-          <div class="anim-option-card" data-anim-opt="slide" onclick="selectCalendarAnimation('slide')">
-            <div>
-              <div style="font-weight:700; font-size:13px;">Smooth Slide (Default)</div>
-              <div style="font-size:11px; color:var(--text-muted);">Clean horizontal slide into the calendar grid</div>
-            </div>
-            <span class="badge-win">Slide</span>
-          </div>
-
-          <div class="anim-option-card" data-anim-opt="flip" onclick="selectCalendarAnimation('flip')">
-            <div>
-              <div style="font-weight:700; font-size:13px;">3D Card Flip</div>
-              <div style="font-size:11px; color:var(--text-muted);">Perspective tile flip across every calendar day</div>
-            </div>
-            <span class="badge-win">Flip</span>
-          </div>
-
-          <div class="anim-option-card" data-anim-opt="cascade" onclick="selectCalendarAnimation('cascade')">
-            <div>
-              <div style="font-weight:700; font-size:13px;">Cascade Wave</div>
-              <div style="font-size:11px; color:var(--text-muted);">Staggered wave entrance day by day</div>
-            </div>
-            <span class="badge-win">Wave</span>
-          </div>
-
-          <div class="anim-option-card" data-anim-opt="zoom" onclick="selectCalendarAnimation('zoom')">
-            <div>
-              <div style="font-weight:700; font-size:13px;">Spring Zoom Pop</div>
-              <div style="font-size:11px; color:var(--text-muted);">Bouncy scale-in pop on calendar cells</div>
-            </div>
-            <span class="badge-win">Zoom</span>
-          </div>
-
-          <div class="anim-option-card" data-anim-opt="none" onclick="selectCalendarAnimation('none')">
-            <div>
-              <div style="font-weight:700; font-size:13px;">Instant / Minimal</div>
-              <div style="font-size:11px; color:var(--text-muted);">No motion transitions for ultra-fast viewing</div>
-            </div>
-            <span class="badge-lot">Off</span>
-          </div>
-        </div>
-
-        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
-          <button type="button" class="btn btn-primary" onclick="closeModal('settingsModal')">Done</button>
-        </div>
-      </div>
-
     </div>
   </div>
 
@@ -1990,7 +1922,7 @@
   let calDate = new Date();
   let currentBase64Image = '';
 
-  // Automatic Contrast & Custom Colors + Multi-Stop Gradient State
+  // Automatic High-Contrast Text & Custom Colors + Multi-Stop Gradient State
   function parseRgb(hexOrRgb) {
     const s = String(hexOrRgb || '').trim();
     const hexMatch = s.replace('#', '');
@@ -2021,12 +1953,52 @@
     return 0.2126 * toLin(r) + 0.7152 * toLin(g) + 0.0722 * toLin(b);
   }
 
-  function getAutoReadableText(bgColorStr) {
-    return getRelativeLuminance(bgColorStr) > 0.36 ? '#0f172a' : '#f8fafc';
+  function getContrastRatio(lumA, lumB) {
+    const lighter = Math.max(lumA, lumB);
+    const darker = Math.min(lumA, lumB);
+    return (lighter + 0.05) / (darker + 0.05);
   }
 
-  function getAutoReadableMuted(bgColorStr) {
-    return getRelativeLuminance(bgColorStr) > 0.36 ? '#334155' : '#cbd5e1';
+  function getBestTextForBackground(bgColorStr) {
+    const bgLum = getRelativeLuminance(bgColorStr);
+    const darkInk = '#090d16';
+    const lightInk = '#f8fafc';
+    const cDark = getContrastRatio(bgLum, getRelativeLuminance(darkInk));
+    const cLight = getContrastRatio(bgLum, getRelativeLuminance(lightInk));
+    return cDark >= cLight ? darkInk : lightInk;
+  }
+
+  function getBestMutedForBackground(bgColorStr) {
+    const bgLum = getRelativeLuminance(bgColorStr);
+    const darkMuted = '#1e293b';
+    const lightMuted = '#e2e8f0';
+    const cDark = getContrastRatio(bgLum, getRelativeLuminance(darkMuted));
+    const cLight = getContrastRatio(bgLum, getRelativeLuminance(lightMuted));
+    return cDark >= cLight ? darkMuted : lightMuted;
+  }
+
+  function ensureReadableAccent(colorHex, bgColorStr) {
+    if (!colorHex) return colorHex;
+    const bgLum = getRelativeLuminance(bgColorStr);
+    let { r, g, b } = parseRgb(colorHex);
+    let ratio = getContrastRatio(bgLum, getRelativeLuminance(colorHex));
+
+    let steps = 0;
+    while (ratio < 2.6 && steps < 18) {
+      if (bgLum > 0.35) {
+        r = Math.max(0, Math.round(r * 0.82));
+        g = Math.max(0, Math.round(g * 0.82));
+        b = Math.max(0, Math.round(b * 0.82));
+      } else {
+        r = Math.min(255, Math.round(r + (255 - r) * 0.22));
+        g = Math.min(255, Math.round(g + (255 - g) * 0.22));
+        b = Math.min(255, Math.round(b + (255 - b) * 0.22));
+      }
+      const candidate = `rgb(${r}, ${g}, ${b})`;
+      ratio = getContrastRatio(bgLum, getRelativeLuminance(candidate));
+      steps++;
+    }
+    return `rgb(${r}, ${g}, ${b})`;
   }
 
   function hexToRgba(hex, alpha) {
@@ -2057,6 +2029,7 @@
   function applyColorsToRoot(cfg) {
     const root = document.documentElement;
     const isLight = root.getAttribute('data-theme') === 'light';
+    const baseSurface = isLight ? '#ffffff' : '#131822';
 
     if (!cfg) {
       root.style.removeProperty('--green');
@@ -2076,27 +2049,14 @@
       return;
     }
 
-    if (cfg.win) {
-      root.style.setProperty('--green', cfg.win);
-      root.style.setProperty('--green-bg', hexToRgba(cfg.win, 0.16));
-      root.style.setProperty('--green-border', hexToRgba(cfg.win, 0.45));
-    }
-    if (cfg.loss) {
-      root.style.setProperty('--red', cfg.loss);
-      root.style.setProperty('--red-bg', hexToRgba(cfg.loss, 0.16));
-      root.style.setProperty('--red-border', hexToRgba(cfg.loss, 0.45));
-    }
-    if (cfg.neutral) {
-      root.style.setProperty('--neutral', cfg.neutral);
-    }
+    const activeSurface = (cfg.cardTint && cfg.useCardTint) ? cfg.cardTint : baseSurface;
+    const surfaceIsLight = getRelativeLuminance(activeSurface) > 0.35;
 
     if (cfg.cardTint && cfg.useCardTint) {
-      const cardLum = getRelativeLuminance(cfg.cardTint);
-      const isCardLight = cardLum > 0.36;
       root.style.setProperty('--bg-card', cfg.cardTint);
-      root.style.setProperty('--bg-input', isCardLight ? 'rgba(15, 23, 42, 0.05)' : 'rgba(255, 255, 255, 0.05)');
-      root.style.setProperty('--text-main', isCardLight ? '#0f172a' : '#f8fafc');
-      root.style.setProperty('--text-muted', isCardLight ? '#334155' : '#cbd5e1');
+      root.style.setProperty('--bg-input', surfaceIsLight ? 'rgba(9, 13, 22, 0.05)' : 'rgba(248, 250, 252, 0.06)');
+      root.style.setProperty('--text-main', getBestTextForBackground(cfg.cardTint));
+      root.style.setProperty('--text-muted', getBestMutedForBackground(cfg.cardTint));
     } else {
       root.style.removeProperty('--bg-card');
       root.style.removeProperty('--bg-input');
@@ -2104,17 +2064,34 @@
       root.style.removeProperty('--text-muted');
     }
 
+    if (cfg.win) {
+      const safeWin = ensureReadableAccent(cfg.win, activeSurface);
+      root.style.setProperty('--green', safeWin);
+      root.style.setProperty('--green-bg', hexToRgba(cfg.win, surfaceIsLight ? 0.16 : 0.2));
+      root.style.setProperty('--green-border', hexToRgba(cfg.win, 0.52));
+    }
+    if (cfg.loss) {
+      const safeLoss = ensureReadableAccent(cfg.loss, activeSurface);
+      root.style.setProperty('--red', safeLoss);
+      root.style.setProperty('--red-bg', hexToRgba(cfg.loss, surfaceIsLight ? 0.15 : 0.2));
+      root.style.setProperty('--red-border', hexToRgba(cfg.loss, 0.52));
+    }
+    if (cfg.neutral) {
+      const safeNeutral = ensureReadableAccent(cfg.neutral, activeSurface);
+      root.style.setProperty('--neutral', safeNeutral);
+    }
+
     if (cfg.useGradient && Array.isArray(cfg.gradientStops) && cfg.gradientStops.length >= 2) {
       const gradCss = buildCssGradientString(cfg.gradientStops, cfg.gradientAngle);
       root.style.setProperty('--banner-bg', gradCss);
       const avgLum = cfg.gradientStops.reduce((s, c) => s + getRelativeLuminance(c), 0) / cfg.gradientStops.length;
-      root.style.setProperty('--banner-text', avgLum > 0.36 ? '#0f172a' : '#f8fafc');
-      root.style.setProperty('--banner-muted', avgLum > 0.36 ? '#334155' : '#e2e8f0');
+      const syntheticBg = avgLum > 0.35 ? '#ffffff' : '#0f172a';
+      root.style.setProperty('--banner-text', getBestTextForBackground(syntheticBg));
+      root.style.setProperty('--banner-muted', getBestMutedForBackground(syntheticBg));
     } else {
-      const activeSurface = (cfg.cardTint && cfg.useCardTint) ? cfg.cardTint : (isLight ? '#ffffff' : '#131822');
       root.style.setProperty('--banner-bg', activeSurface);
-      root.style.setProperty('--banner-text', getAutoReadableText(activeSurface));
-      root.style.setProperty('--banner-muted', getAutoReadableMuted(activeSurface));
+      root.style.setProperty('--banner-text', getBestTextForBackground(activeSurface));
+      root.style.setProperty('--banner-muted', getBestMutedForBackground(activeSurface));
     }
   }
 
@@ -2139,7 +2116,7 @@
       const cssGrad = buildCssGradientString(draftGradientStops, angleVal);
       previewEl.style.background = cssGrad;
       const avgLum = draftGradientStops.reduce((s, c) => s + getRelativeLuminance(c), 0) / draftGradientStops.length;
-      previewEl.style.color = avgLum > 0.36 ? '#0f172a' : '#f8fafc';
+      previewEl.style.color = avgLum > 0.35 ? '#090d16' : '#f8fafc';
     }
   }
 
@@ -2224,8 +2201,8 @@
     renderAll();
   }
 
-  // Calendar & Motion Animation State
-  let calendarAnimation = localStorage.getItem(KEY_CAL_ANIM) || 'slide';
+  // Calendar Animation State (Without Animation Settings Page)
+  const calendarAnimation = localStorage.getItem(KEY_CAL_ANIM) || 'slide';
 
   function updateStyleSummaryChip() {
     const tplNames = {
@@ -2236,35 +2213,13 @@
       journal: 'Journal',
       custom: 'Custom'
     };
-    const animNames = {
-      slide: 'Slide',
-      flip: 'Flip',
-      cascade: 'Wave',
-      zoom: 'Zoom',
-      none: 'Off'
-    };
     const chip = document.getElementById('activeStyleSummary');
     if (chip) {
-      chip.innerText = `View: ${tplNames[viewTemplate] || 'Auto'} • Anim: ${animNames[calendarAnimation] || 'Slide'}`;
+      chip.innerText = `View: ${tplNames[viewTemplate] || 'Auto'}`;
     }
   }
 
-  function applyCalendarAnimation(anim, reanimateNow = false) {
-    calendarAnimation = anim || 'slide';
-    document.body.setAttribute('data-cal-anim', calendarAnimation);
-    document.querySelectorAll('.anim-option-card').forEach(card => {
-      card.classList.toggle('selected', card.getAttribute('data-anim-opt') === calendarAnimation);
-    });
-    updateStyleSummaryChip();
-    if (reanimateNow) {
-      renderCalendar(getAccountScopedTrades(), getActiveStartingBalance());
-    }
-  }
-
-  function selectCalendarAnimation(anim) {
-    localStorage.setItem(KEY_CAL_ANIM, anim);
-    applyCalendarAnimation(anim, true);
-  }
+  document.body.setAttribute('data-cal-anim', calendarAnimation);
 
   // View Template State (Auto + Presets + Custom inside Settings)
   let viewTemplate = localStorage.getItem(KEY_TEMPLATE) || 'auto';
@@ -2304,7 +2259,7 @@
       : (resolved === 'compact' ? 'compact' : 'cozy');
     document.body.setAttribute('data-density', density);
 
-    const allSections = ['secAccounts', 'secLeaderboard', 'secCoreStats', 'secRadar', 'secEquity', 'secPerfRisk', 'secCalendar', 'secTradeLog'];
+    const allSections = ['secAccounts', 'secCoreStats', 'secRadar', 'secEquity', 'secPerfRisk', 'secCalendar', 'secTradeLog', 'secLeaderboard'];
     allSections.forEach(secId => {
       const el = document.getElementById(secId);
       if (!el) return;
@@ -2332,13 +2287,13 @@
     customTemplateCfg = {
       density: document.getElementById('customDensitySelect').value,
       secAccounts: document.getElementById('chkAccounts').checked,
-      secLeaderboard: document.getElementById('chkLeaderboard').checked,
       secCoreStats: document.getElementById('chkCoreStats').checked,
       secRadar: document.getElementById('chkRadar').checked,
       secEquity: document.getElementById('chkEquity').checked,
       secPerfRisk: document.getElementById('chkPerfRisk').checked,
       secCalendar: document.getElementById('chkCalendar').checked,
-      secTradeLog: document.getElementById('chkTradeLog').checked
+      secTradeLog: document.getElementById('chkTradeLog').checked,
+      secLeaderboard: document.getElementById('chkLeaderboard').checked
     };
     localStorage.setItem(KEY_TEMPLATE, viewTemplate);
     localStorage.setItem(KEY_CUSTOM_CFG, JSON.stringify(customTemplateCfg));
@@ -2418,11 +2373,11 @@
     const next = isDark ? 'light' : 'dark';
     applyTheme(next);
     localStorage.setItem(KEY_THEME, next);
+    renderAll();
   }
 
   applyTheme(localStorage.getItem(KEY_THEME) === 'light' ? 'light' : 'dark');
   applyViewTemplate();
-  applyCalendarAnimation(calendarAnimation, false);
 
   // Account Helpers (Logged / Active Account Scoped)
   function getAccountName(accId) {
@@ -2750,13 +2705,13 @@
     document.getElementById('templateSelect').value = viewTemplate;
     document.getElementById('customDensitySelect').value = customTemplateCfg.density || 'cozy';
     document.getElementById('chkAccounts').checked = customTemplateCfg.secAccounts !== false;
-    document.getElementById('chkLeaderboard').checked = customTemplateCfg.secLeaderboard !== false;
     document.getElementById('chkCoreStats').checked = customTemplateCfg.secCoreStats !== false;
     document.getElementById('chkRadar').checked = customTemplateCfg.secRadar !== false;
     document.getElementById('chkEquity').checked = customTemplateCfg.secEquity !== false;
     document.getElementById('chkPerfRisk').checked = customTemplateCfg.secPerfRisk !== false;
     document.getElementById('chkCalendar').checked = customTemplateCfg.secCalendar !== false;
     document.getElementById('chkTradeLog').checked = customTemplateCfg.secTradeLog !== false;
+    document.getElementById('chkLeaderboard').checked = customTemplateCfg.secLeaderboard !== false;
 
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     document.getElementById('clrWin').value = (customColors && customColors.win) || (isLight ? '#047857' : '#10b981');
@@ -2772,8 +2727,6 @@
     document.getElementById('chkUseGradient').checked = Boolean(customColors && customColors.useGradient);
     document.getElementById('gradAngle').value = (customColors && customColors.gradientAngle !== undefined) ? customColors.gradientAngle : 135;
     renderGradientStopsUI();
-
-    applyCalendarAnimation(calendarAnimation, false);
 
     switchSettingsTab(initialTab);
     document.getElementById('settingsModal').classList.add('open');
@@ -3146,7 +3099,7 @@
       const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
       const lx = cx + Math.cos(angle) * (maxR + 24);
       const ly = cy + Math.sin(angle) * (maxR + 18);
-      return `<text x="${lx}" y="${ly}" fill="var(--text-muted)" font-size="11" font-weight="600" text-anchor="middle">${lbl}</text>`;
+      return `<text x="${lx}" y="${ly}" fill="var(--text-muted)" font-size="11" font-weight="700" text-anchor="middle">${lbl}</text>`;
     }).join('');
 
     svg.innerHTML = `
@@ -3330,7 +3283,7 @@
             <div style="font-weight:800; font-size:15px;" class="${isWin ? 'text-green' : 'text-red'}">
               ${isWin ? '+' : ''}$${Number(t.pnl).toFixed(2)}
             </div>
-            <div style="font-size:10px; color:var(--text-muted);">${escapeHtml(accLabel)} • ${escapeHtml(t.setup || 'Standard')}</div>
+            <div style="font-size:10px; font-weight:700; color:var(--text-muted);">${escapeHtml(accLabel)} • ${escapeHtml(t.setup || 'Standard')}</div>
           </div>
         </div>
       `;
