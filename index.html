@@ -1736,7 +1736,7 @@
       <!-- Tab 3: Custom Colors, Palettes & Multi-Stop Gradient Builder -->
       <div class="settings-pane" id="spane-colors">
         <div class="form-group">
-          <label>Quick Color Palettes (Text Contrast Auto-Adjusted)</label>
+          <label>Quick Color Palettes (Text Auto-Adapts to Surface)</label>
           <div class="preset-swatches">
             <button type="button" class="swatch-btn" onclick="applyColorPreset('#10b981','#ef4444','#3b82f6')">
               <span class="swatch-dots"><i style="background:#10b981"></i><i style="background:#ef4444"></i><i style="background:#3b82f6"></i></span>
@@ -1801,7 +1801,7 @@
           <div class="color-card">
             <div>
               <div style="font-size:12px; font-weight:700;">Card Surface Color</div>
-              <div style="font-size:10px; color:var(--text-muted);">Auto-readable text</div>
+              <div style="font-size:10px; color:var(--text-muted);">Text auto-adjusts</div>
             </div>
             <input type="color" id="clrCardTint" value="#131822" oninput="livePreviewColors()" />
           </div>
@@ -1922,7 +1922,7 @@
   let calDate = new Date();
   let currentBase64Image = '';
 
-  // Automatic High-Contrast Text & Custom Colors + Multi-Stop Gradient State
+  // Page Background strictly follows Light/Dark mode; Text Color automatically adapts to surface
   function parseRgb(hexOrRgb) {
     const s = String(hexOrRgb || '').trim();
     const hexMatch = s.replace('#', '');
@@ -1959,40 +1959,43 @@
     return (lighter + 0.05) / (darker + 0.05);
   }
 
-  function getBestTextForBackground(bgColorStr) {
-    const bgLum = getRelativeLuminance(bgColorStr);
-    const darkInk = '#090d16';
-    const lightInk = '#f8fafc';
-    const cDark = getContrastRatio(bgLum, getRelativeLuminance(darkInk));
-    const cLight = getContrastRatio(bgLum, getRelativeLuminance(lightInk));
-    return cDark >= cLight ? darkInk : lightInk;
+  // Controls TEXT color only based on surface brightness (never changes page background)
+  function autoReadableTextColor(surfaceColorStr) {
+    const bgLum = getRelativeLuminance(surfaceColorStr);
+    const darkText = '#090d16';
+    const lightText = '#f8fafc';
+    return getContrastRatio(bgLum, getRelativeLuminance(darkText)) >= getContrastRatio(bgLum, getRelativeLuminance(lightText))
+      ? darkText
+      : lightText;
   }
 
-  function getBestMutedForBackground(bgColorStr) {
-    const bgLum = getRelativeLuminance(bgColorStr);
+  // Controls MUTED TEXT color only based on surface brightness
+  function autoReadableMutedColor(surfaceColorStr) {
+    const bgLum = getRelativeLuminance(surfaceColorStr);
     const darkMuted = '#1e293b';
     const lightMuted = '#e2e8f0';
-    const cDark = getContrastRatio(bgLum, getRelativeLuminance(darkMuted));
-    const cLight = getContrastRatio(bgLum, getRelativeLuminance(lightMuted));
-    return cDark >= cLight ? darkMuted : lightMuted;
+    return getContrastRatio(bgLum, getRelativeLuminance(darkMuted)) >= getContrastRatio(bgLum, getRelativeLuminance(lightMuted))
+      ? darkMuted
+      : lightMuted;
   }
 
-  function ensureReadableAccent(colorHex, bgColorStr) {
+  // Ensures accent text colors stay legible against the surface
+  function autoReadableAccentText(colorHex, surfaceColorStr) {
     if (!colorHex) return colorHex;
-    const bgLum = getRelativeLuminance(bgColorStr);
+    const bgLum = getRelativeLuminance(surfaceColorStr);
     let { r, g, b } = parseRgb(colorHex);
     let ratio = getContrastRatio(bgLum, getRelativeLuminance(colorHex));
 
     let steps = 0;
-    while (ratio < 2.6 && steps < 18) {
+    while (ratio < 2.8 && steps < 20) {
       if (bgLum > 0.35) {
-        r = Math.max(0, Math.round(r * 0.82));
-        g = Math.max(0, Math.round(g * 0.82));
-        b = Math.max(0, Math.round(b * 0.82));
+        r = Math.max(0, Math.round(r * 0.8));
+        g = Math.max(0, Math.round(g * 0.8));
+        b = Math.max(0, Math.round(b * 0.8));
       } else {
-        r = Math.min(255, Math.round(r + (255 - r) * 0.22));
-        g = Math.min(255, Math.round(g + (255 - g) * 0.22));
-        b = Math.min(255, Math.round(b + (255 - b) * 0.22));
+        r = Math.min(255, Math.round(r + (255 - r) * 0.24));
+        g = Math.min(255, Math.round(g + (255 - g) * 0.24));
+        b = Math.min(255, Math.round(b + (255 - b) * 0.24));
       }
       const candidate = `rgb(${r}, ${g}, ${b})`;
       ratio = getContrastRatio(bgLum, getRelativeLuminance(candidate));
@@ -2029,7 +2032,11 @@
   function applyColorsToRoot(cfg) {
     const root = document.documentElement;
     const isLight = root.getAttribute('data-theme') === 'light';
-    const baseSurface = isLight ? '#ffffff' : '#131822';
+
+    // Page background (--bg-main) always follows Light or Dark mode
+    const pageBg = isLight ? '#eef2f6' : '#0b0e14';
+    const defaultSurface = isLight ? '#ffffff' : '#131822';
+    root.style.setProperty('--bg-main', pageBg);
 
     if (!cfg) {
       root.style.removeProperty('--green');
@@ -2041,57 +2048,54 @@
       root.style.removeProperty('--neutral');
       root.style.removeProperty('--bg-card');
       root.style.removeProperty('--bg-input');
-      root.style.removeProperty('--text-main');
-      root.style.removeProperty('--text-muted');
-      root.style.removeProperty('--banner-bg');
-      root.style.removeProperty('--banner-text');
-      root.style.removeProperty('--banner-muted');
+      root.style.setProperty('--text-main', autoReadableTextColor(defaultSurface));
+      root.style.setProperty('--text-muted', autoReadableMutedColor(defaultSurface));
+      root.style.setProperty('--banner-bg', defaultSurface);
+      root.style.setProperty('--banner-text', autoReadableTextColor(defaultSurface));
+      root.style.setProperty('--banner-muted', autoReadableMutedColor(defaultSurface));
       return;
     }
 
-    const activeSurface = (cfg.cardTint && cfg.useCardTint) ? cfg.cardTint : baseSurface;
+    const activeSurface = (cfg.cardTint && cfg.useCardTint) ? cfg.cardTint : defaultSurface;
     const surfaceIsLight = getRelativeLuminance(activeSurface) > 0.35;
 
     if (cfg.cardTint && cfg.useCardTint) {
       root.style.setProperty('--bg-card', cfg.cardTint);
       root.style.setProperty('--bg-input', surfaceIsLight ? 'rgba(9, 13, 22, 0.05)' : 'rgba(248, 250, 252, 0.06)');
-      root.style.setProperty('--text-main', getBestTextForBackground(cfg.cardTint));
-      root.style.setProperty('--text-muted', getBestMutedForBackground(cfg.cardTint));
     } else {
       root.style.removeProperty('--bg-card');
       root.style.removeProperty('--bg-input');
-      root.style.removeProperty('--text-main');
-      root.style.removeProperty('--text-muted');
     }
 
+    // Text colors automatically adapt to the active surface color
+    root.style.setProperty('--text-main', autoReadableTextColor(activeSurface));
+    root.style.setProperty('--text-muted', autoReadableMutedColor(activeSurface));
+
     if (cfg.win) {
-      const safeWin = ensureReadableAccent(cfg.win, activeSurface);
-      root.style.setProperty('--green', safeWin);
+      root.style.setProperty('--green', autoReadableAccentText(cfg.win, activeSurface));
       root.style.setProperty('--green-bg', hexToRgba(cfg.win, surfaceIsLight ? 0.16 : 0.2));
       root.style.setProperty('--green-border', hexToRgba(cfg.win, 0.52));
     }
     if (cfg.loss) {
-      const safeLoss = ensureReadableAccent(cfg.loss, activeSurface);
-      root.style.setProperty('--red', safeLoss);
+      root.style.setProperty('--red', autoReadableAccentText(cfg.loss, activeSurface));
       root.style.setProperty('--red-bg', hexToRgba(cfg.loss, surfaceIsLight ? 0.15 : 0.2));
       root.style.setProperty('--red-border', hexToRgba(cfg.loss, 0.52));
     }
     if (cfg.neutral) {
-      const safeNeutral = ensureReadableAccent(cfg.neutral, activeSurface);
-      root.style.setProperty('--neutral', safeNeutral);
+      root.style.setProperty('--neutral', autoReadableAccentText(cfg.neutral, activeSurface));
     }
 
     if (cfg.useGradient && Array.isArray(cfg.gradientStops) && cfg.gradientStops.length >= 2) {
       const gradCss = buildCssGradientString(cfg.gradientStops, cfg.gradientAngle);
       root.style.setProperty('--banner-bg', gradCss);
       const avgLum = cfg.gradientStops.reduce((s, c) => s + getRelativeLuminance(c), 0) / cfg.gradientStops.length;
-      const syntheticBg = avgLum > 0.35 ? '#ffffff' : '#0f172a';
-      root.style.setProperty('--banner-text', getBestTextForBackground(syntheticBg));
-      root.style.setProperty('--banner-muted', getBestMutedForBackground(syntheticBg));
+      const sampleSurface = avgLum > 0.35 ? '#ffffff' : '#0f172a';
+      root.style.setProperty('--banner-text', autoReadableTextColor(sampleSurface));
+      root.style.setProperty('--banner-muted', autoReadableMutedColor(sampleSurface));
     } else {
       root.style.setProperty('--banner-bg', activeSurface);
-      root.style.setProperty('--banner-text', getBestTextForBackground(activeSurface));
-      root.style.setProperty('--banner-muted', getBestMutedForBackground(activeSurface));
+      root.style.setProperty('--banner-text', autoReadableTextColor(activeSurface));
+      root.style.setProperty('--banner-muted', autoReadableMutedColor(activeSurface));
     }
   }
 
@@ -2116,7 +2120,8 @@
       const cssGrad = buildCssGradientString(draftGradientStops, angleVal);
       previewEl.style.background = cssGrad;
       const avgLum = draftGradientStops.reduce((s, c) => s + getRelativeLuminance(c), 0) / draftGradientStops.length;
-      previewEl.style.color = avgLum > 0.35 ? '#090d16' : '#f8fafc';
+      const sampleSurface = avgLum > 0.35 ? '#ffffff' : '#0f172a';
+      previewEl.style.color = autoReadableTextColor(sampleSurface);
     }
   }
 
@@ -2359,7 +2364,7 @@
     });
   }
 
-  // Theme Toggle
+  // Theme Toggle (Controls page background & default surface for Light vs Dark)
   function applyTheme(theme) {
     const isLight = theme === 'light';
     document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
