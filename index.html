@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>TradeVault — Telegram Trading Journal</title>
+  <title>Trading journal by BIRUK</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -97,8 +97,52 @@
     }
 
     @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.35); }
-      50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      0%, 100% { box-shadow: 0 0 0 0 var(--green-border); }
+      50% { box-shadow: 0 0 0 8px transparent; }
+    }
+
+    /* Calendar Viewing Animations */
+    @keyframes calAnimSlide {
+      from { opacity: 0; transform: translateX(16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes calAnimFlip {
+      from { opacity: 0; transform: perspective(500px) rotateY(-24deg) scale(0.92); }
+      to { opacity: 1; transform: perspective(500px) rotateY(0deg) scale(1); }
+    }
+
+    @keyframes calAnimCascade {
+      from { opacity: 0; transform: translateY(14px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes calAnimZoom {
+      from { opacity: 0; transform: scale(0.76); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    body[data-cal-anim="slide"] .cal-cell {
+      animation: calAnimSlide 0.34s var(--ease-out) both;
+    }
+
+    body[data-cal-anim="flip"] .cal-cell {
+      animation: calAnimFlip 0.42s var(--ease-spring) both;
+    }
+
+    body[data-cal-anim="cascade"] .cal-cell {
+      animation: calAnimCascade 0.38s var(--ease-spring) both;
+    }
+
+    body[data-cal-anim="zoom"] .cal-cell {
+      animation: calAnimZoom 0.32s var(--ease-spring) both;
+    }
+
+    body[data-cal-anim="none"] .cal-cell,
+    body[data-cal-anim="none"] .card,
+    body[data-cal-anim="none"] .trade-item {
+      animation: none !important;
+      transition: none !important;
     }
 
     .anim-shake {
@@ -282,7 +326,7 @@
       min-width: 165px;
     }
 
-    /* Toolbar Row: Timeframe + Screen Templates */
+    /* Toolbar Row: Timeframe + Quick Settings Indicator */
     .controls-strip {
       display: flex;
       justify-content: space-between;
@@ -326,22 +370,23 @@
       border-color: var(--green-border);
     }
 
-    .template-bar {
-      display: flex;
+    .active-style-chip {
+      display: inline-flex;
       align-items: center;
       gap: 6px;
-      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: border-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
     }
 
-    .template-select {
-      background: var(--bg-card);
+    .active-style-chip:hover {
+      border-color: var(--neutral);
       color: var(--text-main);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 6px 10px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
     }
 
     /* Dashboard Grid & View Templates */
@@ -529,9 +574,9 @@
     }
 
     .badge-lot {
-      background: rgba(59, 130, 246, 0.14);
-      color: #60a5fa;
-      border: 1px solid rgba(59, 130, 246, 0.35);
+      background: color-mix(in srgb, var(--neutral) 16%, transparent);
+      color: var(--neutral);
+      border: 1px solid color-mix(in srgb, var(--neutral) 40%, transparent);
       padding: 1px 6px;
       border-radius: 4px;
       font-size: 10px;
@@ -743,7 +788,7 @@
       color: var(--text-muted);
     }
 
-    /* Modals */
+    /* Modals & Settings Page Tabs */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -768,12 +813,129 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 18px;
       box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
       animation: modalPopIn 0.26s var(--ease-spring) both;
+    }
+
+    .settings-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      overflow-x: auto;
+    }
+
+    .settings-tab {
+      padding: 7px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .settings-tab.active {
+      background: var(--green-bg);
+      color: var(--green);
+      border-color: var(--green-border);
+    }
+
+    .settings-pane { display: none; }
+    .settings-pane.active { display: block; animation: cardEnter 0.24s var(--ease-out) both; }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .color-card {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .color-card input[type="color"] {
+      width: 36px;
+      height: 30px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .preset-swatches {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .swatch-btn {
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch-dots {
+      display: inline-flex;
+      gap: 3px;
+    }
+
+    .swatch-dots i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .anim-option-card {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s var(--ease-out), transform 0.16s var(--ease-spring);
+    }
+
+    .anim-option-card:hover {
+      transform: translateX(2px);
+      border-color: var(--neutral);
+    }
+
+    .anim-option-card.selected {
+      border-color: var(--green-border);
+      background: var(--green-bg);
     }
 
     .form-group { margin-bottom: 12px; }
@@ -799,7 +961,7 @@
     .form-control:focus {
       outline: none;
       border-color: var(--neutral);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--neutral) 22%, transparent);
     }
 
     .form-row {
@@ -815,7 +977,7 @@
     }
 
     @media (max-width: 520px) {
-      .form-row-3 { grid-template-columns: 1fr; }
+      .form-row-3, .color-grid { grid-template-columns: 1fr; }
     }
 
     .preview-img {
@@ -844,14 +1006,14 @@
       position: fixed;
       bottom: 18px;
       right: 18px;
-      background: linear-gradient(135deg, var(--green), #059669);
+      background: linear-gradient(135deg, var(--green), color-mix(in srgb, var(--green) 75%, #000 25%));
       color: #fff;
       border: none;
       border-radius: 50px;
       padding: 14px 20px;
       font-size: 14px;
       font-weight: 800;
-      box-shadow: 0 8px 26px rgba(16, 185, 129, 0.42);
+      box-shadow: 0 8px 26px var(--green-border);
       cursor: pointer;
       z-index: 900;
       display: inline-flex;
@@ -860,11 +1022,7 @@
       transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-out);
     }
 
-    .fab:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5);
-    }
-
+    .fab:hover { transform: translateY(-2px) scale(1.02); }
     .fab:active { transform: scale(0.94); }
 
     svg.chart-svg { width: 100%; display: block; }
@@ -878,14 +1036,14 @@
     }
   </style>
 </head>
-<body>
+<body data-cal-anim="slide">
 
   <!-- Top Navigation -->
   <div class="topbar">
     <div class="brand-wrap">
       <div class="brand">
         <div class="brand-dot"></div>
-        <span>TradeVault Journal</span>
+        <span>Trading journal by BIRUK</span>
       </div>
       <div class="user-scope-badge" id="userScopeLabel">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -897,12 +1055,12 @@
     </div>
 
     <div class="topbar-actions">
-      <button class="btn" onclick="openSettingsModal()">
+      <button class="btn" onclick="openSettingsModal('accounts')">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-          <line x1="2" y1="10" x2="22" y2="10"></line>
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
         </svg>
-        <span>Accounts</span>
+        <span>Settings</span>
       </button>
 
       <button class="btn" onclick="exportBackup()">
@@ -952,7 +1110,7 @@
 
     <div class="account-switcher-wrap">
       <select id="accountFilterSelect" class="account-select" onchange="selectAccountFilter(this.value)" aria-label="Select Trading Account"></select>
-      <button class="btn" onclick="openSettingsModal()" title="Manage Accounts">
+      <button class="btn" onclick="openSettingsModal('accounts')" title="Manage Accounts">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -962,7 +1120,7 @@
     </div>
   </div>
 
-  <!-- Timeframe Range & Screen View Template Controls -->
+  <!-- Timeframe Range & Settings Shortcut Strip -->
   <div class="controls-strip">
     <div class="filter-bar">
       <div class="pill active" onclick="setRange('ALL', this)">All Time</div>
@@ -972,22 +1130,14 @@
       <div class="pill" onclick="setRange('DAY', this)">Today</div>
     </div>
 
-    <div class="template-bar">
+    <div class="active-style-chip" onclick="openSettingsModal('templates')" title="Open View Templates, Colors & Animations">
       <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="3" width="7" height="7"></rect>
         <rect x="14" y="3" width="7" height="7"></rect>
         <rect x="14" y="14" width="7" height="7"></rect>
         <rect x="3" y="14" width="7" height="7"></rect>
       </svg>
-      <select id="templateSelect" class="template-select" onchange="setViewTemplate(this.value)" aria-label="Screen View Template">
-        <option value="auto">View: Auto (Smart)</option>
-        <option value="pro">View: Pro Dashboard</option>
-        <option value="compact">View: Compact Mobile</option>
-        <option value="calendar">View: Calendar Focus</option>
-        <option value="journal">View: Journal &amp; Charts</option>
-        <option value="custom">View: Custom Layout</option>
-      </select>
-      <button class="btn" onclick="openTemplateModal()">Customize View</button>
+      <span id="activeStyleSummary">View: Auto • Anim: Slide</span>
     </div>
   </div>
 
@@ -1296,11 +1446,11 @@
     <div class="modal" id="viewModalContent" onclick="event.stopPropagation()"></div>
   </div>
 
-  <!-- Accounts & Data Settings Modal -->
+  <!-- Dedicated Settings Page Modal (Accounts, View Templates, Custom Colors, Animations) -->
   <div class="modal-backdrop" id="settingsModal" onclick="handleBackdropClick(event, 'settingsModal')">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="card-header">
-        <h3>Trading Accounts &amp; Backup</h3>
+        <h3>Settings — Trading journal by BIRUK</h3>
         <button class="btn" onclick="closeModal('settingsModal')" aria-label="Close">
           <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -1309,73 +1459,204 @@
         </button>
       </div>
 
-      <div class="form-group">
-        <label>Your Trading Accounts &amp; Starting Capital ($)</label>
-        <div id="accountsManageList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
+      <!-- Settings Navigation Tabs -->
+      <div class="settings-tabs">
+        <button type="button" class="settings-tab active" data-stab="accounts" onclick="switchSettingsTab('accounts')">Accounts &amp; Backup</button>
+        <button type="button" class="settings-tab" data-stab="templates" onclick="switchSettingsTab('templates')">Screen Templates</button>
+        <button type="button" class="settings-tab" data-stab="colors" onclick="switchSettingsTab('colors')">Colors</button>
+        <button type="button" class="settings-tab" data-stab="animations" onclick="switchSettingsTab('animations')">Animations</button>
       </div>
 
-      <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:12px; font-weight:700; margin-bottom:8px;">Add Another Trading Account</div>
-        <div class="form-row">
-          <div class="form-group" style="margin-bottom:0;">
-            <label>Account Name</label>
-            <input type="text" id="newAccName" class="form-control" placeholder="e.g. Prop Funded, Scalping" />
+      <!-- Tab 1: Accounts & Backup -->
+      <div class="settings-pane active" id="spane-accounts">
+        <div class="form-group">
+          <label>Your Trading Accounts &amp; Starting Capital ($)</label>
+          <div id="accountsManageList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
+        </div>
+
+        <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div style="font-size:12px; font-weight:700; margin-bottom:8px;">Add Another Trading Account</div>
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Account Name</label>
+              <input type="text" id="newAccName" class="form-control" placeholder="e.g. Prop Funded, Scalping" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Starting Balance ($)</label>
+              <input type="number" step="0.01" id="newAccBal" class="form-control" placeholder="5000" />
+            </div>
           </div>
-          <div class="form-group" style="margin-bottom:0;">
-            <label>Starting Balance ($)</label>
-            <input type="number" step="0.01" id="newAccBal" class="form-control" placeholder="5000" />
+          <button type="button" class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="addTradingAccount()">+ Add Account</button>
+        </div>
+
+        <div class="form-group">
+          <label>Restore Backup (.json file)</label>
+          <input type="file" accept=".json" class="form-control" onchange="importBackup(event)" />
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+          <button type="button" class="btn btn-primary" onclick="saveAccountSettings()">Save Accounts</button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Screen View Templates (Auto + Presets + Custom) -->
+      <div class="settings-pane" id="spane-templates">
+        <div class="form-group">
+          <label>Active Screen View Template</label>
+          <select id="templateSelect" class="form-control" onchange="onTemplateSelectChange(this.value)">
+            <option value="auto">Auto Template (Adapts to Phone / Desktop)</option>
+            <option value="pro">Pro Dashboard Template (Full 12-Column)</option>
+            <option value="compact">Compact Mobile Template (Single Column)</option>
+            <option value="calendar">Calendar Focus Template (P&amp;L Calendar First)</option>
+            <option value="journal">Journal &amp; Charts Template (Trade Feed First)</option>
+            <option value="custom">Custom Template (Choose Sections Below)</option>
+          </select>
+        </div>
+
+        <div id="customTemplateBuilder" style="margin-top:10px;">
+          <div class="form-group">
+            <label>Card Spacing Density</label>
+            <select id="customDensitySelect" class="form-control">
+              <option value="cozy">Cozy (Spacious cards)</option>
+              <option value="compact">Compact (Tighter screen fit)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Visible Sections (Applies when Custom Template is selected)</label>
+            <label class="check-row"><span>Account Performance Overview</span><input type="checkbox" id="chkAccounts" checked /></label>
+            <label class="check-row"><span>Trade Count, Winrate &amp; Streaks</span><input type="checkbox" id="chkCoreStats" checked /></label>
+            <label class="check-row"><span>EdgeScore Radar</span><input type="checkbox" id="chkRadar" checked /></label>
+            <label class="check-row"><span>Balance &amp; Equity Curve</span><input type="checkbox" id="chkEquity" checked /></label>
+            <label class="check-row"><span>Performance &amp; Risk Metrics</span><input type="checkbox" id="chkPerfRisk" checked /></label>
+            <label class="check-row"><span>Monthly &amp; Weekly P&amp;L Calendar</span><input type="checkbox" id="chkCalendar" checked /></label>
+            <label class="check-row"><span>Trade Log &amp; Screenshots</span><input type="checkbox" id="chkTradeLog" checked /></label>
           </div>
         </div>
-        <button type="button" class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="addTradingAccount()">+ Add Account</button>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+          <button type="button" class="btn btn-primary" onclick="saveTemplateSettings()">Apply Template</button>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Restore Backup (.json file)</label>
-        <input type="file" accept=".json" class="form-control" onchange="importBackup(event)" />
+      <!-- Tab 3: Custom Colors -->
+      <div class="settings-pane" id="spane-colors">
+        <div class="form-group">
+          <label>Quick Color Palettes</label>
+          <div class="preset-swatches">
+            <button type="button" class="swatch-btn" onclick="applyColorPreset('#10b981','#ef4444','#3b82f6')">
+              <span class="swatch-dots"><i style="background:#10b981"></i><i style="background:#ef4444"></i><i style="background:#3b82f6"></i></span>
+              Emerald &amp; Crimson
+            </button>
+            <button type="button" class="swatch-btn" onclick="applyColorPreset('#06b6d4','#f43f5e','#8b5cf6')">
+              <span class="swatch-dots"><i style="background:#06b6d4"></i><i style="background:#f43f5e"></i><i style="background:#8b5cf6"></i></span>
+              Cyber Cyan &amp; Rose
+            </button>
+            <button type="button" class="swatch-btn" onclick="applyColorPreset('#f59e0b','#ec4899','#6366f1')">
+              <span class="swatch-dots"><i style="background:#f59e0b"></i><i style="background:#ec4899"></i><i style="background:#6366f1"></i></span>
+              Gold &amp; Magenta
+            </button>
+            <button type="button" class="swatch-btn" onclick="applyColorPreset('#22c55e','#f97316','#0ea5e9')">
+              <span class="swatch-dots"><i style="background:#22c55e"></i><i style="background:#f97316"></i><i style="background:#0ea5e9"></i></span>
+              Lime &amp; Amber
+            </button>
+          </div>
+        </div>
+
+        <div class="color-grid">
+          <div class="color-card">
+            <div>
+              <div style="font-size:12px; font-weight:700;">Win / Primary Accent</div>
+              <div style="font-size:10px; color:var(--text-muted);">Profits, buttons &amp; badges</div>
+            </div>
+            <input type="color" id="clrWin" value="#10b981" oninput="livePreviewColors()" />
+          </div>
+
+          <div class="color-card">
+            <div>
+              <div style="font-size:12px; font-weight:700;">Loss Accent</div>
+              <div style="font-size:10px; color:var(--text-muted);">Loss days &amp; drawdown</div>
+            </div>
+            <input type="color" id="clrLoss" value="#ef4444" oninput="livePreviewColors()" />
+          </div>
+
+          <div class="color-card">
+            <div>
+              <div style="font-size:12px; font-weight:700;">Neutral / Highlight</div>
+              <div style="font-size:10px; color:var(--text-muted);">Lots &amp; focus rings</div>
+            </div>
+            <input type="color" id="clrNeutral" value="#3b82f6" oninput="livePreviewColors()" />
+          </div>
+
+          <div class="color-card">
+            <div>
+              <div style="font-size:12px; font-weight:700;">Card Tint Accent</div>
+              <div style="font-size:10px; color:var(--text-muted);">Subtle card surface tint</div>
+            </div>
+            <input type="color" id="clrCardTint" value="#131822" oninput="livePreviewColors()" />
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; gap:8px; margin-top:12px;">
+          <button type="button" class="btn" onclick="resetCustomColors()">Reset Default Colors</button>
+          <button type="button" class="btn btn-primary" onclick="saveCustomColors()">Save Colors</button>
+        </div>
       </div>
 
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
-        <button class="btn btn-primary" onclick="saveAccountSettings()">Save Changes</button>
-      </div>
-    </div>
-  </div>
+      <!-- Tab 4: Calendar & View Animations -->
+      <div class="settings-pane" id="spane-animations">
+        <div class="form-group">
+          <label>Calendar Viewing Animation Style</label>
+          <p style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">
+            Choose how the P&amp;L Calendar animates when viewing or switching months. Selecting an option updates your calendar viewing immediately.
+          </p>
 
-  <!-- Custom Screen View Template Modal -->
-  <div class="modal-backdrop" id="templateModal" onclick="handleBackdropClick(event, 'templateModal')">
-    <div class="modal" onclick="event.stopPropagation()">
-      <div class="card-header">
-        <h3>Customize Screen View Template</h3>
-        <button class="btn" onclick="closeModal('templateModal')" aria-label="Close">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
+          <div class="anim-option-card" data-anim-opt="slide" onclick="selectCalendarAnimation('slide')">
+            <div>
+              <div style="font-weight:700; font-size:13px;">Smooth Slide (Default)</div>
+              <div style="font-size:11px; color:var(--text-muted);">Clean horizontal slide into the calendar grid</div>
+            </div>
+            <span class="badge-win">Slide</span>
+          </div>
+
+          <div class="anim-option-card" data-anim-opt="flip" onclick="selectCalendarAnimation('flip')">
+            <div>
+              <div style="font-weight:700; font-size:13px;">3D Card Flip</div>
+              <div style="font-size:11px; color:var(--text-muted);">Perspective tile flip across every calendar day</div>
+            </div>
+            <span class="badge-win">Flip</span>
+          </div>
+
+          <div class="anim-option-card" data-anim-opt="cascade" onclick="selectCalendarAnimation('cascade')">
+            <div>
+              <div style="font-weight:700; font-size:13px;">Cascade Wave</div>
+              <div style="font-size:11px; color:var(--text-muted);">Staggered wave entrance day by day</div>
+            </div>
+            <span class="badge-win">Wave</span>
+          </div>
+
+          <div class="anim-option-card" data-anim-opt="zoom" onclick="selectCalendarAnimation('zoom')">
+            <div>
+              <div style="font-weight:700; font-size:13px;">Spring Zoom Pop</div>
+              <div style="font-size:11px; color:var(--text-muted);">Bouncy scale-in pop on calendar cells</div>
+            </div>
+            <span class="badge-win">Zoom</span>
+          </div>
+
+          <div class="anim-option-card" data-anim-opt="none" onclick="selectCalendarAnimation('none')">
+            <div>
+              <div style="font-weight:700; font-size:13px;">Instant / Minimal</div>
+              <div style="font-size:11px; color:var(--text-muted);">No motion transitions for ultra-fast viewing</div>
+            </div>
+            <span class="badge-lot">Off</span>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+          <button type="button" class="btn btn-primary" onclick="closeModal('settingsModal')">Done</button>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Layout Density</label>
-        <select id="customDensitySelect" class="form-control">
-          <option value="cozy">Cozy (Spacious cards)</option>
-          <option value="compact">Compact (Tighter screen fit)</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Visible Sections in Custom Template</label>
-        <label class="check-row"><span>Account Performance Overview</span><input type="checkbox" id="chkAccounts" checked /></label>
-        <label class="check-row"><span>Trade Count, Winrate &amp; Streaks</span><input type="checkbox" id="chkCoreStats" checked /></label>
-        <label class="check-row"><span>EdgeScore Radar</span><input type="checkbox" id="chkRadar" checked /></label>
-        <label class="check-row"><span>Balance &amp; Equity Curve</span><input type="checkbox" id="chkEquity" checked /></label>
-        <label class="check-row"><span>Performance &amp; Risk Metrics</span><input type="checkbox" id="chkPerfRisk" checked /></label>
-        <label class="check-row"><span>Monthly &amp; Weekly P&amp;L Calendar</span><input type="checkbox" id="chkCalendar" checked /></label>
-        <label class="check-row"><span>Trade Log &amp; Screenshots</span><input type="checkbox" id="chkTradeLog" checked /></label>
-      </div>
-
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
-        <button type="button" class="btn" onclick="closeModal('templateModal')">Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="saveCustomTemplate()">Apply Custom Template</button>
-      </div>
     </div>
   </div>
 
@@ -1400,6 +1681,8 @@
   const KEY_THEME = `tv_theme_${userScopeId}`;
   const KEY_TEMPLATE = `tv_template_${userScopeId}`;
   const KEY_CUSTOM_CFG = `tv_custom_cfg_${userScopeId}`;
+  const KEY_CUSTOM_COLORS = `tv_custom_colors_${userScopeId}`;
+  const KEY_CAL_ANIM = `tv_cal_anim_${userScopeId}`;
 
   function escapeHtml(str) {
     return String(str || '')
@@ -1425,7 +1708,7 @@
     edit: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`
   };
 
-  // Multi-Account State (migrates legacy startingBalance automatically if present)
+  // Multi-Account State
   function loadAccountsState() {
     try {
       const raw = localStorage.getItem(KEY_ACCOUNTS);
@@ -1451,7 +1734,147 @@
   let calDate = new Date();
   let currentBase64Image = '';
 
-  // View Template State (Auto + Presets + Custom)
+  // Custom Colors State
+  function hexToRgba(hex, alpha) {
+    const clean = String(hex || '').replace('#', '');
+    if (clean.length !== 6) return `rgba(16, 185, 129, ${alpha})`;
+    const r = parseInt(clean.slice(0, 2), 16);
+    const g = parseInt(clean.slice(2, 4), 16);
+    const b = parseInt(clean.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  let customColors = (() => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY_CUSTOM_COLORS) || 'null');
+    } catch (e) {
+      return null;
+    }
+  })();
+
+  function applyColorsToRoot(cfg) {
+    const root = document.documentElement;
+    if (!cfg) {
+      root.style.removeProperty('--green');
+      root.style.removeProperty('--green-bg');
+      root.style.removeProperty('--green-border');
+      root.style.removeProperty('--red');
+      root.style.removeProperty('--red-bg');
+      root.style.removeProperty('--red-border');
+      root.style.removeProperty('--neutral');
+      root.style.removeProperty('--bg-card');
+      return;
+    }
+    if (cfg.win) {
+      root.style.setProperty('--green', cfg.win);
+      root.style.setProperty('--green-bg', hexToRgba(cfg.win, 0.16));
+      root.style.setProperty('--green-border', hexToRgba(cfg.win, 0.45));
+    }
+    if (cfg.loss) {
+      root.style.setProperty('--red', cfg.loss);
+      root.style.setProperty('--red-bg', hexToRgba(cfg.loss, 0.16));
+      root.style.setProperty('--red-border', hexToRgba(cfg.loss, 0.45));
+    }
+    if (cfg.neutral) {
+      root.style.setProperty('--neutral', cfg.neutral);
+    }
+    if (cfg.cardTint && cfg.useCardTint) {
+      root.style.setProperty('--bg-card', cfg.cardTint);
+    } else {
+      root.style.removeProperty('--bg-card');
+    }
+  }
+
+  function livePreviewColors() {
+    const preview = {
+      win: document.getElementById('clrWin').value,
+      loss: document.getElementById('clrLoss').value,
+      neutral: document.getElementById('clrNeutral').value,
+      cardTint: document.getElementById('clrCardTint').value,
+      useCardTint: true
+    };
+    applyColorsToRoot(preview);
+    if (trades) renderAll();
+  }
+
+  function applyColorPreset(win, loss, neutral) {
+    document.getElementById('clrWin').value = win;
+    document.getElementById('clrLoss').value = loss;
+    document.getElementById('clrNeutral').value = neutral;
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    document.getElementById('clrCardTint').value = isLight ? '#ffffff' : '#131822';
+    livePreviewColors();
+  }
+
+  function saveCustomColors() {
+    customColors = {
+      win: document.getElementById('clrWin').value,
+      loss: document.getElementById('clrLoss').value,
+      neutral: document.getElementById('clrNeutral').value,
+      cardTint: document.getElementById('clrCardTint').value,
+      useCardTint: true
+    };
+    localStorage.setItem(KEY_CUSTOM_COLORS, JSON.stringify(customColors));
+    applyColorsToRoot(customColors);
+    closeModal('settingsModal');
+    renderAll();
+  }
+
+  function resetCustomColors() {
+    customColors = null;
+    localStorage.removeItem(KEY_CUSTOM_COLORS);
+    applyColorsToRoot(null);
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    document.getElementById('clrWin').value = isLight ? '#059669' : '#10b981';
+    document.getElementById('clrLoss').value = isLight ? '#dc2626' : '#ef4444';
+    document.getElementById('clrNeutral').value = isLight ? '#2563eb' : '#3b82f6';
+    document.getElementById('clrCardTint').value = isLight ? '#ffffff' : '#131822';
+    renderAll();
+  }
+
+  // Calendar & Motion Animation State
+  let calendarAnimation = localStorage.getItem(KEY_CAL_ANIM) || 'slide';
+
+  function updateStyleSummaryChip() {
+    const tplNames = {
+      auto: 'Auto',
+      pro: 'Pro',
+      compact: 'Compact',
+      calendar: 'Calendar',
+      journal: 'Journal',
+      custom: 'Custom'
+    };
+    const animNames = {
+      slide: 'Slide',
+      flip: 'Flip',
+      cascade: 'Wave',
+      zoom: 'Zoom',
+      none: 'Off'
+    };
+    const chip = document.getElementById('activeStyleSummary');
+    if (chip) {
+      chip.innerText = `View: ${tplNames[viewTemplate] || 'Auto'} • Anim: ${animNames[calendarAnimation] || 'Slide'}`;
+    }
+  }
+
+  function applyCalendarAnimation(anim, reanimateNow = false) {
+    calendarAnimation = anim || 'slide';
+    document.body.setAttribute('data-cal-anim', calendarAnimation);
+    document.querySelectorAll('.anim-option-card').forEach(card => {
+      card.classList.toggle('selected', card.getAttribute('data-anim-opt') === calendarAnimation);
+    });
+    updateStyleSummaryChip();
+    if (reanimateNow) {
+      renderCalendar(getAccountScopedTrades(), getActiveStartingBalance());
+    }
+  }
+
+  function selectCalendarAnimation(anim) {
+    localStorage.setItem(KEY_CAL_ANIM, anim);
+    applyCalendarAnimation(anim, true);
+  }
+
+  // View Template State (Auto + Presets + Custom inside Settings)
   let viewTemplate = localStorage.getItem(KEY_TEMPLATE) || 'auto';
   const defaultCustomCfg = {
     density: 'cozy',
@@ -1498,10 +1921,11 @@
         el.classList.remove('hidden-section');
       }
     });
+    updateStyleSummaryChip();
   }
 
-  function setViewTemplate(tpl) {
-    viewTemplate = tpl;
+  function onTemplateSelectChange(val) {
+    viewTemplate = val;
     localStorage.setItem(KEY_TEMPLATE, viewTemplate);
     applyViewTemplate();
   }
@@ -1510,19 +1934,8 @@
     if (viewTemplate === 'auto') applyViewTemplate();
   });
 
-  function openTemplateModal() {
-    document.getElementById('customDensitySelect').value = customTemplateCfg.density || 'cozy';
-    document.getElementById('chkAccounts').checked = customTemplateCfg.secAccounts !== false;
-    document.getElementById('chkCoreStats').checked = customTemplateCfg.secCoreStats !== false;
-    document.getElementById('chkRadar').checked = customTemplateCfg.secRadar !== false;
-    document.getElementById('chkEquity').checked = customTemplateCfg.secEquity !== false;
-    document.getElementById('chkPerfRisk').checked = customTemplateCfg.secPerfRisk !== false;
-    document.getElementById('chkCalendar').checked = customTemplateCfg.secCalendar !== false;
-    document.getElementById('chkTradeLog').checked = customTemplateCfg.secTradeLog !== false;
-    document.getElementById('templateModal').classList.add('open');
-  }
-
-  function saveCustomTemplate() {
+  function saveTemplateSettings() {
+    viewTemplate = document.getElementById('templateSelect').value;
     customTemplateCfg = {
       density: document.getElementById('customDensitySelect').value,
       secAccounts: document.getElementById('chkAccounts').checked,
@@ -1533,11 +1946,10 @@
       secCalendar: document.getElementById('chkCalendar').checked,
       secTradeLog: document.getElementById('chkTradeLog').checked
     };
+    localStorage.setItem(KEY_TEMPLATE, viewTemplate);
     localStorage.setItem(KEY_CUSTOM_CFG, JSON.stringify(customTemplateCfg));
-    viewTemplate = 'custom';
-    localStorage.setItem(KEY_TEMPLATE, 'custom');
     applyViewTemplate();
-    closeModal('templateModal');
+    closeModal('settingsModal');
   }
 
   // Per-User IndexedDB Setup
@@ -1604,6 +2016,9 @@
     document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
     document.getElementById('themeIconWrap').innerHTML = isLight ? ICONS.moon : ICONS.sun;
     document.getElementById('themeBtnText').innerText = isLight ? 'Dark' : 'Light';
+    if (!customColors || !customColors.useCardTint) {
+      document.documentElement.style.removeProperty('--bg-card');
+    }
   }
 
   function toggleTheme() {
@@ -1614,7 +2029,9 @@
   }
 
   applyTheme(localStorage.getItem(KEY_THEME) === 'light' ? 'light' : 'dark');
+  applyColorsToRoot(customColors);
   applyViewTemplate();
+  applyCalendarAnimation(calendarAnimation, false);
 
   // Account Helpers
   function getAccountName(accId) {
@@ -1751,6 +2168,10 @@
     const backdrop = document.getElementById(id);
     if (!backdrop) return;
     backdrop.classList.remove('open');
+    if (id === 'settingsModal') {
+      applyColorsToRoot(customColors);
+      renderAll();
+    }
   }
 
   function handleBackdropClick(e, id) {
@@ -1814,10 +2235,19 @@
     }
   }
 
-  // Multi-Account Settings Modal
+  // Settings Page Navigation & Controls
+  function switchSettingsTab(tabName) {
+    document.querySelectorAll('.settings-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-stab') === tabName);
+    });
+    document.querySelectorAll('.settings-pane').forEach(pane => {
+      pane.classList.toggle('active', pane.id === `spane-${tabName}`);
+    });
+  }
+
   function renderAccountsManageList() {
     const listEl = document.getElementById('accountsManageList');
-    listEl.innerHTML = accounts.map((acc, index) => `
+    listEl.innerHTML = accounts.map((acc) => `
       <div style="display:grid; grid-template-columns:1.3fr 1fr auto; gap:8px; align-items:center;">
         <input type="text" class="form-control" data-acc-name="${escapeHtml(acc.id)}" value="${escapeHtml(acc.name)}" />
         <input type="number" step="0.01" class="form-control" data-acc-bal="${escapeHtml(acc.id)}" value="${Number(acc.startingBalance)}" />
@@ -1828,10 +2258,33 @@
     `).join('');
   }
 
-  function openSettingsModal() {
+  function openSettingsModal(initialTab = 'accounts') {
     renderAccountsManageList();
     document.getElementById('newAccName').value = '';
     document.getElementById('newAccBal').value = '';
+
+    // Populate Template tab controls
+    document.getElementById('templateSelect').value = viewTemplate;
+    document.getElementById('customDensitySelect').value = customTemplateCfg.density || 'cozy';
+    document.getElementById('chkAccounts').checked = customTemplateCfg.secAccounts !== false;
+    document.getElementById('chkCoreStats').checked = customTemplateCfg.secCoreStats !== false;
+    document.getElementById('chkRadar').checked = customTemplateCfg.secRadar !== false;
+    document.getElementById('chkEquity').checked = customTemplateCfg.secEquity !== false;
+    document.getElementById('chkPerfRisk').checked = customTemplateCfg.secPerfRisk !== false;
+    document.getElementById('chkCalendar').checked = customTemplateCfg.secCalendar !== false;
+    document.getElementById('chkTradeLog').checked = customTemplateCfg.secTradeLog !== false;
+
+    // Populate Color tab inputs
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    document.getElementById('clrWin').value = (customColors && customColors.win) || (isLight ? '#059669' : '#10b981');
+    document.getElementById('clrLoss').value = (customColors && customColors.loss) || (isLight ? '#dc2626' : '#ef4444');
+    document.getElementById('clrNeutral').value = (customColors && customColors.neutral) || (isLight ? '#2563eb' : '#3b82f6');
+    document.getElementById('clrCardTint').value = (customColors && customColors.cardTint) || (isLight ? '#ffffff' : '#131822');
+
+    // Sync Animation selection highlight
+    applyCalendarAnimation(calendarAnimation, false);
+
+    switchSettingsTab(initialTab);
     document.getElementById('settingsModal').classList.add('open');
   }
 
@@ -1907,7 +2360,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `TradeVault_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `Trading_journal_by_BIRUK_Backup_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -1949,7 +2402,6 @@
   function renderTopAndAccountCards() {
     populateAccountSelects();
 
-    // Portfolio-wide totals across ALL accounts
     const allStart = accounts.reduce((sum, a) => sum + (Number(a.startingBalance) || 0), 0);
     const allNetPnl = trades.reduce((sum, t) => sum + (Number(t.pnl) || 0), 0);
     const allCurrent = allStart + allNetPnl;
@@ -1969,7 +2421,6 @@
     topBadge.innerText = (allGainPct >= 0 ? '+' : '') + allGainPct.toFixed(2) + '%';
     topBadge.className = allGainPct >= 0 ? 'badge-win' : 'badge-loss';
 
-    // Individual Account Performance Cards
     document.getElementById('accountCountLabel').innerText = `${accounts.length} ${accounts.length === 1 ? 'Account' : 'Accounts'}`;
     const grid = document.getElementById('accountsPerfGrid');
     grid.innerHTML = accounts.map(acc => {
@@ -2020,7 +2471,6 @@
     const ratio = avgLoss > 0 ? avgWin / avgLoss : (avgWin > 0 ? avgWin : 0);
     const avgLot = total ? filtered.reduce((s, t) => s + (Number(t.lot) || 0), 0) / total : 0;
 
-    // Balance & Equity Curve for Active Account Scope
     let runningBal = startingBalance;
     let highBal = startingBalance;
     let maxDD = 0;
@@ -2037,7 +2487,6 @@
     const netPnlFiltered = filtered.reduce((s, t) => s + t.pnl, 0);
     const gainPctFiltered = startingBalance > 0 ? (netPnlFiltered / startingBalance) * 100 : 0;
 
-    // Update DOM numbers
     document.getElementById('statTradeCount').innerText = total;
     document.getElementById('statWinrate').innerText = winrate.toFixed(2) + '%';
     document.getElementById('statRatio').innerText = ratio.toFixed(2);
@@ -2050,7 +2499,6 @@
     document.getElementById('barWin').style.width = winBarPct + '%';
     document.getElementById('barLoss').style.width = (100 - winBarPct) + '%';
 
-    // Balance & Risk
     document.getElementById('equityScopeLabel').innerText = activeAccountId === 'ALL' ? 'Combined Balance' : `${getAccountName(activeAccountId)} Balance`;
     document.getElementById('statBalance').innerText = formatMoney(runningBal);
     document.getElementById('statCurBal').innerText = formatMoney(runningBal);
@@ -2071,22 +2519,18 @@
     gainBadge.innerText = (totalGain >= 0 ? '+' : '') + totalGain.toFixed(2) + '%';
     gainBadge.className = totalGain >= 0 ? 'badge-win' : 'badge-loss';
 
-    // Period Returns
     updatePeriodReturn('retDaily', 1, scopedTrades, startingBalance);
     updatePeriodReturn('retWeekly', 7, scopedTrades, startingBalance);
     updatePeriodReturn('retMonthly', 30, scopedTrades, startingBalance);
     updatePeriodReturn('retYearly', 365, scopedTrades, startingBalance);
 
-    // Streaks
     computeStreaks(filtered);
 
-    // Draw Charts
     drawSparkline(filtered);
     drawWinrateGauge(winrate);
     drawRadar(winrate, ratio, maxDD, filtered);
     drawBalanceCurve(equityPoints);
 
-    // Render Calendar & Trade Feed
     renderCalendar(scopedTrades, startingBalance);
     renderTradeList(filtered);
   }
@@ -2138,11 +2582,17 @@
     document.getElementById('maxLossDays').innerText = maxLD;
   }
 
+  function getThemeCssColor(varName, fallback) {
+    const val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    return val || fallback;
+  }
+
   // SVG Charts
   function drawSparkline(list) {
     const svg = document.getElementById('sparklineSvg');
+    const winColor = getThemeCssColor('--green', '#10b981');
     if (list.length < 2) {
-      svg.innerHTML = `<line x1="0" y1="45" x2="260" y2="45" stroke="#10b981" stroke-width="2" stroke-dasharray="4"/>`;
+      svg.innerHTML = `<line x1="0" y1="45" x2="260" y2="45" stroke="${winColor}" stroke-width="2" stroke-dasharray="4"/>`;
       return;
     }
     const pts = list.map((_, i) => {
@@ -2150,22 +2600,26 @@
       const y = 48 - ((i + 1) / list.length) * 38;
       return `${x},${y}`;
     }).join(' ');
-    svg.innerHTML = `<polyline fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${pts}" />`;
+    svg.innerHTML = `<polyline fill="none" stroke="${winColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${pts}" />`;
   }
 
   function drawWinrateGauge(winrate) {
     const svg = document.getElementById('gaugeSvg');
+    const winColor = getThemeCssColor('--green', '#10b981');
+    const lossColor = getThemeCssColor('--red', '#ef4444');
     const r = 44, circum = Math.PI * r;
     const winLen = (winrate / 100) * circum;
     svg.innerHTML = `
-      <path d="M 16 56 A 44 44 0 0 1 104 56" fill="none" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/>
-      <path d="M 16 56 A 44 44 0 0 1 104 56" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round"
+      <path d="M 16 56 A 44 44 0 0 1 104 56" fill="none" stroke="${lossColor}" stroke-width="10" stroke-linecap="round"/>
+      <path d="M 16 56 A 44 44 0 0 1 104 56" fill="none" stroke="${winColor}" stroke-width="10" stroke-linecap="round"
             stroke-dasharray="${winLen} ${circum}" style="transition:stroke-dasharray 0.45s cubic-bezier(0.22, 1, 0.36, 1);" />
     `;
   }
 
   function drawRadar(winrate, ratio, maxDD, list) {
     const svg = document.getElementById('radarSvg');
+    const winColor = getThemeCssColor('--green', '#10b981');
+    const winFill = getThemeCssColor('--green-bg', 'rgba(16,185,129,0.22)');
     const cx = 140, cy = 135, maxR = 82;
     const avgDiscipline = list.length ? (list.reduce((s, t) => s + (t.score || 8), 0) / list.length) * 10 : 50;
 
@@ -2203,7 +2657,7 @@
 
     svg.innerHTML = `
       ${gridHtml}
-      <polygon points="${dataPoly}" fill="rgba(16,185,129,0.22)" stroke="#10b981" stroke-width="2" style="transition:all 0.35s ease;"/>
+      <polygon points="${dataPoly}" fill="${winFill}" stroke="${winColor}" stroke-width="2" style="transition:all 0.35s ease;"/>
       ${labelHtml}
       <text x="${cx}" y="${cy + 6}" fill="var(--text-main)" font-size="22" font-weight="800" text-anchor="middle">${overall}</text>
     `;
@@ -2211,16 +2665,20 @@
 
   function drawBalanceCurve(points) {
     const svg = document.getElementById('balanceSvg');
+    const winColor = getThemeCssColor('--green', '#10b981');
+    const lossColor = getThemeCssColor('--red', '#ef4444');
     if (points.length < 2) {
-      svg.innerHTML = `<line x1="10" y1="105" x2="310" y2="105" stroke="#10b981" stroke-width="2.5"/>`;
+      svg.innerHTML = `<line x1="10" y1="105" x2="310" y2="105" stroke="${winColor}" stroke-width="2.5"/>`;
       return;
     }
     const min = Math.min(...points);
     const max = Math.max(...points);
     const span = max - min || 1;
     const isProfit = points[points.length - 1] >= points[0];
-    const stroke = isProfit ? '#10b981' : '#ef4444';
-    const fill = isProfit ? 'rgba(16,185,129,0.18)' : 'rgba(239,68,68,0.18)';
+    const stroke = isProfit ? winColor : lossColor;
+    const fill = isProfit
+      ? getThemeCssColor('--green-bg', 'rgba(16,185,129,0.18)')
+      : getThemeCssColor('--red-bg', 'rgba(239,68,68,0.18)');
 
     const coords = points.map((val, i) => {
       const x = 10 + (i / (points.length - 1)) * 300;
@@ -2235,7 +2693,7 @@
     `;
   }
 
-  // Monthly P&L Calendar with Weekly Totals
+  // Monthly P&L Calendar with Weekly Totals & Staggered Cell Animations
   function changeMonth(delta) {
     calDate.setMonth(calDate.getMonth() + delta);
     renderCalendar(getAccountScopedTrades(), getActiveStartingBalance());
@@ -2277,14 +2735,17 @@
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     let dayCounter = 1;
+    let cellIdx = 0;
     for (let row = 0; row < 6; row++) {
       if (dayCounter > daysInMonth) break;
       let weekSum = 0;
       let weekHasTrades = false;
 
       for (let col = 0; col < 7; col++) {
+        const delayMs = Math.min(cellIdx * 10, 320);
+        cellIdx++;
         if ((row === 0 && col < firstDay) || dayCounter > daysInMonth) {
-          html += `<div class="cal-cell empty"></div>`;
+          html += `<div class="cal-cell empty" style="animation-delay:${delayMs}ms;"></div>`;
         } else {
           const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCounter).padStart(2, '0')}`;
           const hasTrade = Object.prototype.hasOwnProperty.call(dailyPnl, dateStr);
@@ -2308,7 +2769,7 @@
           }
 
           html += `
-            <div class="${cls}" onclick="openTradeModal('${dateStr}')">
+            <div class="${cls}" style="animation-delay:${delayMs}ms;" onclick="openTradeModal('${dateStr}')">
               <div class="cell-date">${dayCounter}</div>
               ${pnlHtml}
             </div>
@@ -2317,6 +2778,8 @@
         }
       }
 
+      const wDelay = Math.min(cellIdx * 10, 340);
+      cellIdx++;
       let wCls = 'cal-cell week-total';
       let wHtml = `<div class="cell-pnl">$0.00</div><div class="cell-pct">0.00%</div>`;
       if (weekHasTrades) {
@@ -2329,7 +2792,7 @@
           wHtml = `<div class="cell-pnl text-red">-$${Math.abs(weekSum).toFixed(2)}</div><div class="cell-pct text-red">${wPct.toFixed(2)}%</div>`;
         }
       }
-      html += `<div class="${wCls}"><div class="cell-date">W${row + 1}</div>${wHtml}</div>`;
+      html += `<div class="${wCls}" style="animation-delay:${wDelay}ms;"><div class="cell-date">W${row + 1}</div>${wHtml}</div>`;
     }
 
     grid.innerHTML = html;
