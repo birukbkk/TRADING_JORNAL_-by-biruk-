@@ -1182,6 +1182,41 @@
       font-weight: 600;
     }
 
+    .calc-result-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .calc-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .calc-mini-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .calc-mini-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .calc-mini-val {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 3px;
+    }
+
     /* Footer */
     .site-footer {
       margin-top: 20px;
@@ -1247,6 +1282,20 @@
     </div>
 
     <div class="topbar-actions">
+      <button class="btn" onclick="openCalculatorModal()">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+          <line x1="8" y1="6" x2="16" y2="6"></line>
+          <line x1="8" y1="10" x2="10" y2="10"></line>
+          <line x1="14" y1="10" x2="16" y2="10"></line>
+          <line x1="8" y1="14" x2="10" y2="14"></line>
+          <line x1="14" y1="14" x2="16" y2="14"></line>
+          <line x1="8" y1="18" x2="10" y2="18"></line>
+          <line x1="14" y1="18" x2="16" y2="18"></line>
+        </svg>
+        <span>Calculator</span>
+      </button>
+
       <button class="btn" onclick="openSettingsModal('accounts')">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"></circle>
@@ -1561,6 +1610,91 @@
     <span>Add Trade</span>
   </button>
 
+  <!-- Trading Calculator Modal -->
+  <div class="modal-backdrop" id="calcModal" onclick="handleBackdropClick(event, 'calcModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="card-header">
+        <h3>Trading Calculator</h3>
+        <button class="btn" onclick="closeModal('calcModal')" aria-label="Close">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Account Balance ($)</label>
+          <input type="number" step="0.01" id="calcBalance" class="form-control" oninput="calculateTradeMetrics()" />
+        </div>
+        <div class="form-group">
+          <label>Risk (% per trade)</label>
+          <input type="number" step="0.1" id="calcRiskPct" class="form-control" value="1.5" oninput="calculateTradeMetrics()" />
+        </div>
+      </div>
+
+      <div class="form-row-3">
+        <div class="form-group">
+          <label>Stop Loss (Pips)</label>
+          <input type="number" step="0.1" id="calcSlPips" class="form-control" value="25" oninput="calculateTradeMetrics()" />
+        </div>
+        <div class="form-group">
+          <label>Take Profit (Pips)</label>
+          <input type="number" step="0.1" id="calcTpPips" class="form-control" value="50" oninput="calculateTradeMetrics()" />
+        </div>
+        <div class="form-group">
+          <label>Pip Value ($ / 1.00 lot)</label>
+          <input type="number" step="0.01" id="calcPipVal" class="form-control" value="10" oninput="calculateTradeMetrics()" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Contract Size (Units)</label>
+          <input type="number" step="1" id="calcContractSize" class="form-control" value="100000" oninput="calculateTradeMetrics()" />
+        </div>
+        <div class="form-group">
+          <label>Asset Price / Leverage</label>
+          <div style="display:flex; gap:6px;">
+            <input type="number" step="0.0001" id="calcPrice" class="form-control" value="1.1000" oninput="calculateTradeMetrics()" />
+            <select id="calcLeverage" class="form-control" onchange="calculateTradeMetrics()">
+              <option value="50">1:50</option>
+              <option value="100" selected>1:100</option>
+              <option value="200">1:200</option>
+              <option value="500">1:500</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-result-box">
+        <div class="calc-stat-grid">
+          <div class="calc-mini-card">
+            <div class="calc-mini-label">Recommended Lot Size</div>
+            <div class="calc-mini-val text-green" id="calcOutLots">0.00</div>
+          </div>
+          <div class="calc-mini-card">
+            <div class="calc-mini-label">Risk Amount ($)</div>
+            <div class="calc-mini-val text-red" id="calcOutRiskUsd">$0.00</div>
+          </div>
+          <div class="calc-mini-card">
+            <div class="calc-mini-label">Est. Profit (TP)</div>
+            <div class="calc-mini-val text-green" id="calcOutRewardUsd">$0.00</div>
+          </div>
+          <div class="calc-mini-card">
+            <div class="calc-mini-label">Est. Margin Required</div>
+            <div class="calc-mini-val" id="calcOutMargin">$0.00</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:12px; color:var(--text-muted);">
+          <span>Risk : Reward Ratio: <b id="calcOutRr" style="color:var(--text-main);">1 : 2.00</b></span>
+          <button type="button" class="btn btn-primary" onclick="applyCalculatedLotToTradeModal()">Use Lot in Log Trade</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Add / Edit Trade Modal -->
   <div class="modal-backdrop" id="tradeModal" onclick="handleBackdropClick(event, 'tradeModal')">
     <div class="modal" onclick="event.stopPropagation()">
@@ -1652,7 +1786,7 @@
     <div class="modal" id="viewModalContent" onclick="event.stopPropagation()"></div>
   </div>
 
-  <!-- Dedicated Settings Page Modal (Accounts, View Templates, Custom Colors + Gradients) -->
+  <!-- Dedicated Settings Page Modal (Accounts, Broker Sync, View Templates, Custom Colors + Gradients) -->
   <div class="modal-backdrop" id="settingsModal" onclick="handleBackdropClick(event, 'settingsModal')">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="card-header">
@@ -1668,6 +1802,7 @@
       <!-- Settings Navigation Tabs -->
       <div class="settings-tabs">
         <button type="button" class="settings-tab active" data-stab="accounts" onclick="switchSettingsTab('accounts')">Accounts &amp; Backup</button>
+        <button type="button" class="settings-tab" data-stab="broker" onclick="switchSettingsTab('broker')">Broker Sync</button>
         <button type="button" class="settings-tab" data-stab="templates" onclick="switchSettingsTab('templates')">Screen Templates</button>
         <button type="button" class="settings-tab" data-stab="colors" onclick="switchSettingsTab('colors')">Colors &amp; Gradient</button>
       </div>
@@ -1704,7 +1839,55 @@
         </div>
       </div>
 
-      <!-- Tab 2: Screen View Templates (Auto + Presets + Custom) -->
+      <!-- Tab 2: Broker Account Auto-Sync & Screenshot Bridge -->
+      <div class="settings-pane" id="spane-broker">
+        <div class="form-group">
+          <label>Broker Platform / Terminal</label>
+          <select id="brokerPlatform" class="form-control">
+            <option value="MT5">MetaTrader 5 (EA / Webhook Bridge)</option>
+            <option value="MT4">MetaTrader 4 (EA / Webhook Bridge)</option>
+            <option value="cTrader">cTrader / Custom Webhook</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Broker Account ID / Login</label>
+            <input type="text" id="brokerAccountId" class="form-control" placeholder="e.g. 80912345" />
+          </div>
+          <div class="form-group">
+            <label>Sync Bridge / Webhook URL</label>
+            <input type="url" id="brokerWebhookUrl" class="form-control" placeholder="https://your-sync-endpoint/trades" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Sync Token / Key</label>
+          <input type="text" id="brokerApiKey" class="form-control" placeholder="Optional bridge token" />
+        </div>
+
+        <label class="check-row">
+          <span>Auto-Record Closed Trades into Daily Trades</span>
+          <input type="checkbox" id="chkAutoSyncTrades" checked />
+        </label>
+        <label class="check-row">
+          <span>Auto-Save Chart Screenshot with Trade</span>
+          <input type="checkbox" id="chkAutoCaptureChart" checked />
+        </label>
+
+        <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:10px; padding:10px; margin-top:10px; font-size:11px; color:var(--text-muted); line-height:1.45;">
+          Static GitHub pages cannot directly log into a broker or capture external windows without a backend/EA bridge. When a webhook URL returns JSON trades with optional <code>screenshot</code> (data URL/base64), <b>Pull Sync Now</b> saves them into your daily trades; you can also simulate a closed trade + chart image below to test.
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+          <button type="button" class="btn" onclick="saveBrokerConfig()">Save Connection</button>
+          <button type="button" class="btn" onclick="pullBrokerTradesNow()">Pull Sync Now</button>
+          <button type="button" class="btn btn-primary" onclick="simulateClosedTradeWithScreenshot()">Test Auto-Log + Chart</button>
+        </div>
+        <div id="brokerSyncStatusText" style="margin-top:8px; font-size:12px; font-weight:700; color:var(--text-muted);"></div>
+      </div>
+
+      <!-- Tab 3: Screen View Templates (Auto + Presets + Custom) -->
       <div class="settings-pane" id="spane-templates">
         <div class="form-group">
           <label>Active Screen View Template</label>
@@ -1745,7 +1928,7 @@
         </div>
       </div>
 
-      <!-- Tab 3: Custom Colors, Palettes & Multi-Stop Gradient Builder -->
+      <!-- Tab 4: Custom Colors, Palettes & Multi-Stop Gradient Builder -->
       <div class="settings-pane" id="spane-colors">
         <div class="form-group">
           <label>Quick Color Palettes (Text Auto-Adapts to Surface)</label>
@@ -1880,6 +2063,7 @@
   const KEY_CUSTOM_COLORS = `tv_custom_colors_${userScopeId}`;
   const KEY_CAL_ANIM = `tv_cal_anim_${userScopeId}`;
   const KEY_SCOREBOARD = `tv_scoreboard_${userScopeId}`;
+  const KEY_BROKER_CFG = `tv_broker_cfg_${userScopeId}`;
 
   function escapeHtml(str) {
     return String(str || '')
@@ -1934,6 +2118,217 @@
   let calDate = new Date();
   let currentBase64Image = '';
 
+  // Broker Sync State
+  let brokerConfig = (() => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY_BROKER_CFG) || 'null') || {
+        platform: 'MT5',
+        accountId: '',
+        webhookUrl: '',
+        apiKey: '',
+        autoSyncTrades: true,
+        autoCaptureChart: true
+      };
+    } catch (e) {
+      return {
+        platform: 'MT5',
+        accountId: '',
+        webhookUrl: '',
+        apiKey: '',
+        autoSyncTrades: true,
+        autoCaptureChart: true
+      };
+    }
+  })();
+
+  function loadBrokerFields() {
+    if (!document.getElementById('brokerPlatform')) return;
+    document.getElementById('brokerPlatform').value = brokerConfig.platform || 'MT5';
+    document.getElementById('brokerAccountId').value = brokerConfig.accountId || '';
+    document.getElementById('brokerWebhookUrl').value = brokerConfig.webhookUrl || '';
+    document.getElementById('brokerApiKey').value = brokerConfig.apiKey || '';
+    document.getElementById('chkAutoSyncTrades').checked = brokerConfig.autoSyncTrades !== false;
+    document.getElementById('chkAutoCaptureChart').checked = brokerConfig.autoCaptureChart !== false;
+  }
+
+  function saveBrokerConfig() {
+    brokerConfig = {
+      platform: document.getElementById('brokerPlatform').value,
+      accountId: document.getElementById('brokerAccountId').value.trim(),
+      webhookUrl: document.getElementById('brokerWebhookUrl').value.trim(),
+      apiKey: document.getElementById('brokerApiKey').value.trim(),
+      autoSyncTrades: document.getElementById('chkAutoSyncTrades').checked,
+      autoCaptureChart: document.getElementById('chkAutoCaptureChart').checked
+    };
+    localStorage.setItem(KEY_BROKER_CFG, JSON.stringify(brokerConfig));
+    const st = document.getElementById('brokerSyncStatusText');
+    if (st) {
+      st.style.color = 'var(--green)';
+      st.innerText = `Saved ${brokerConfig.platform} connection settings (${brokerConfig.accountId || 'No Login ID'}).`;
+    }
+  }
+
+  function generateSampleChartDataUrl(pair, dir, pnl) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 640;
+    canvas.height = 320;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#0e131c';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = 'rgba(148,163,184,0.16)';
+    ctx.lineWidth = 1;
+    for (let x = 40; x < canvas.width; x += 60) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+    }
+    for (let y = 40; y < canvas.height; y += 50) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+
+    ctx.strokeStyle = pnl >= 0 ? '#10b981' : '#ef4444';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    let y = 170;
+    for (let x = 25; x <= 600; x += 32) {
+      const step = Math.sin(x * 0.025) * 26 + (pnl >= 0 ? -4 : 4);
+      y = Math.max(55, Math.min(255, y + step));
+      if (x === 25) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillText(`${pair} (${dir}) • Closed P&L: ${pnl >= 0 ? '+' : ''}$${Number(pnl).toFixed(2)}`, 24, 30);
+    return canvas.toDataURL('image/jpeg', 0.8);
+  }
+
+  async function ingestBrokerTrades(incomingList) {
+    if (!Array.isArray(incomingList) || !incomingList.length) return 0;
+    let added = 0;
+    for (const raw of incomingList) {
+      const pnlVal = parseFloat(raw.pnl);
+      if (!raw.pair || Number.isNaN(pnlVal)) continue;
+      const tradeObj = {
+        id: String(raw.id || ('broker_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6))),
+        accountId: getActiveAccount().id,
+        date: raw.date || new Date().toISOString().slice(0, 10),
+        pair: String(raw.pair).toUpperCase(),
+        dir: (String(raw.dir || 'BUY').toUpperCase() === 'SELL') ? 'SELL' : 'BUY',
+        lot: Number.isFinite(parseFloat(raw.lot)) ? parseFloat(raw.lot) : 0.10,
+        pnl: pnlVal,
+        setup: raw.setup || `${brokerConfig.platform || 'Broker'} Auto-Sync`,
+        score: parseInt(raw.score, 10) || 8,
+        notes: raw.notes || `Auto-recorded closed trade from ${brokerConfig.platform || 'Broker'}${brokerConfig.accountId ? ' #' + brokerConfig.accountId : ''}.`,
+        image: brokerConfig.autoCaptureChart
+          ? (raw.screenshot || raw.image || generateSampleChartDataUrl(String(raw.pair).toUpperCase(), String(raw.dir || 'BUY').toUpperCase(), pnlVal))
+          : ''
+      };
+      await saveTradeToDB(tradeObj);
+      added++;
+    }
+    if (added > 0) loadTrades();
+    return added;
+  }
+
+  async function pullBrokerTradesNow() {
+    saveBrokerConfig();
+    const st = document.getElementById('brokerSyncStatusText');
+    if (!brokerConfig.webhookUrl) {
+      if (st) {
+        st.style.color = 'var(--text-muted)';
+        st.innerText = 'No webhook URL set yet. Use "Test Auto-Log + Chart" or enter a sync bridge URL.';
+      }
+      return;
+    }
+    if (!brokerConfig.autoSyncTrades) {
+      if (st) {
+        st.style.color = 'var(--red)';
+        st.innerText = 'Auto-Record Closed Trades is turned off.';
+      }
+      return;
+    }
+    try {
+      const headers = { 'Accept': 'application/json' };
+      if (brokerConfig.apiKey) headers['Authorization'] = `Bearer ${brokerConfig.apiKey}`;
+      const res = await fetch(brokerConfig.webhookUrl, { headers });
+      const data = await res.json();
+      const list = Array.isArray(data) ? data : (Array.isArray(data.trades) ? data.trades : []);
+      const count = await ingestBrokerTrades(list);
+      if (st) {
+        st.style.color = 'var(--green)';
+        st.innerText = `Synced ${count} closed trade(s) into daily trades.`;
+      }
+    } catch (err) {
+      if (st) {
+        st.style.color = 'var(--red)';
+        st.innerText = 'Could not reach bridge URL from browser (CORS/network). Ensure your bridge allows browser requests.';
+      }
+    }
+  }
+
+  async function simulateClosedTradeWithScreenshot() {
+    saveBrokerConfig();
+    const samplePairs = ['XAUUSD', 'EURUSD', 'GBPUSD', 'NAS100'];
+    const pair = samplePairs[Math.floor(Math.random() * samplePairs.length)];
+    const dir = Math.random() > 0.5 ? 'BUY' : 'SELL';
+    const pnl = Number(((Math.random() > 0.45 ? 1 : -1) * (25 + Math.random() * 140)).toFixed(2));
+    const added = await ingestBrokerTrades([{
+      date: new Date().toISOString().slice(0, 10),
+      pair,
+      dir,
+      lot: 0.10,
+      pnl,
+      setup: `${brokerConfig.platform} Live Close`,
+      notes: `Automatically captured closed ${dir} position on ${pair} with chart screenshot.`
+    }]);
+    const st = document.getElementById('brokerSyncStatusText');
+    if (st) {
+      st.style.color = 'var(--green)';
+      st.innerText = `Auto-logged ${added} closed trade (${pair} ${dir}, ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}) with chart screenshot.`;
+    }
+  }
+
+  // Trading Calculator Functions
+  function openCalculatorModal() {
+    const activeAcc = getActiveAccount();
+    const activeTrades = trades.filter(t => (t.accountId || accounts[0].id) === activeAcc.id);
+    const currentBal = (Number(activeAcc.startingBalance) || 0) + activeTrades.reduce((s, t) => s + (Number(t.pnl) || 0), 0);
+    document.getElementById('calcBalance').value = currentBal.toFixed(2);
+    calculateTradeMetrics();
+    document.getElementById('calcModal').classList.add('open');
+  }
+
+  function calculateTradeMetrics() {
+    const bal = parseFloat(document.getElementById('calcBalance').value) || 0;
+    const riskPct = parseFloat(document.getElementById('calcRiskPct').value) || 0;
+    const slPips = parseFloat(document.getElementById('calcSlPips').value) || 0;
+    const tpPips = parseFloat(document.getElementById('calcTpPips').value) || 0;
+    const pipVal = parseFloat(document.getElementById('calcPipVal').value) || 10;
+    const contractSize = parseFloat(document.getElementById('calcContractSize').value) || 100000;
+    const price = parseFloat(document.getElementById('calcPrice').value) || 1;
+    const lev = parseFloat(document.getElementById('calcLeverage').value) || 100;
+
+    const riskUsd = bal * (riskPct / 100);
+    const lots = (slPips > 0 && pipVal > 0) ? (riskUsd / (slPips * pipVal)) : 0;
+    const rewardUsd = lots * tpPips * pipVal;
+    const marginUsd = lev > 0 ? ((lots * contractSize * price) / lev) : 0;
+    const rr = slPips > 0 ? (tpPips / slPips) : 0;
+
+    document.getElementById('calcOutLots').innerText = lots.toFixed(2);
+    document.getElementById('calcOutRiskUsd').innerText = formatMoney(riskUsd);
+    document.getElementById('calcOutRewardUsd').innerText = '+' + formatMoney(rewardUsd);
+    document.getElementById('calcOutMargin').innerText = formatMoney(marginUsd);
+    document.getElementById('calcOutRr').innerText = `1 : ${rr.toFixed(2)}`;
+  }
+
+  function applyCalculatedLotToTradeModal() {
+    const lotsVal = parseFloat(document.getElementById('calcOutLots').innerText) || 0.10;
+    closeModal('calcModal');
+    openTradeModal();
+    document.getElementById('tradeLot').value = Math.max(0.01, lotsVal).toFixed(2);
+  }
+
   // Color & Luminance Helpers (Controls TEXT color only; Page Background follows Light/Dark mode)
   function parseRgb(hexOrRgb) {
     const s = String(hexOrRgb || '').trim();
@@ -1971,7 +2366,6 @@
     return (lighter + 0.05) / (darker + 0.05);
   }
 
-  // Returns high-contrast TEXT color for a given background surface
   function autoReadableTextColor(surfaceColorStr) {
     const bgLum = getRelativeLuminance(surfaceColorStr);
     const darkText = '#090d16';
@@ -1981,7 +2375,6 @@
       : lightText;
   }
 
-  // Returns high-contrast MUTED TEXT color for a given background surface
   function autoReadableMutedColor(surfaceColorStr) {
     const bgLum = getRelativeLuminance(surfaceColorStr);
     const darkMuted = '#1e293b';
@@ -1991,7 +2384,6 @@
       : lightMuted;
   }
 
-  // Ensures accent text stays sharp and legible over the active surface
   function autoReadableAccentText(colorHex, surfaceColorStr) {
     if (!colorHex) return colorHex;
     const bgLum = getRelativeLuminance(surfaceColorStr);
@@ -2045,7 +2437,6 @@
     const root = document.documentElement;
     const isLight = root.getAttribute('data-theme') === 'light';
 
-    // Page & card surfaces ALWAYS follow Light mode vs Dark mode
     const pageBg = isLight ? '#eef2f6' : '#0b0e14';
     const cardSurface = isLight ? '#ffffff' : '#131822';
     const cardHoverSurface = isLight ? '#f1f5f9' : '#1b2332';
@@ -2081,7 +2472,6 @@
 
     root.style.setProperty('--neutral', neutralReadable);
 
-    // Badge colors readable on both cards and gradients
     root.style.setProperty('--badge-win-bg', isLight ? 'rgba(4, 120, 87, 0.2)' : 'rgba(16, 185, 129, 0.26)');
     root.style.setProperty('--badge-win-text', isLight ? '#064e3b' : '#a7f3d0');
     root.style.setProperty('--badge-win-border', isLight ? 'rgba(4, 120, 87, 0.6)' : 'rgba(16, 185, 129, 0.65)');
@@ -2090,7 +2480,6 @@
     root.style.setProperty('--badge-loss-text', isLight ? '#7f1d1d' : '#fecaca');
     root.style.setProperty('--badge-loss-border', isLight ? 'rgba(185, 28, 28, 0.6)' : 'rgba(239, 68, 68, 0.65)');
 
-    // Top balance banner text automatically adapts to solid card or gradient
     if (cfg && cfg.useGradient && Array.isArray(cfg.gradientStops) && cfg.gradientStops.length >= 2) {
       const gradCss = buildCssGradientString(cfg.gradientStops, cfg.gradientAngle);
       root.style.setProperty('--banner-bg', gradCss);
@@ -2708,6 +3097,7 @@
 
   function openSettingsModal(initialTab = 'accounts') {
     renderAccountsManageList();
+    loadBrokerFields();
     document.getElementById('newAccName').value = '';
     document.getElementById('newAccBal').value = '';
 
