@@ -974,7 +974,7 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       width: 100%;
-      max-width: 550px;
+      max-width: 560px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 18px;
@@ -1015,6 +1015,24 @@
 
     .settings-pane { display: none; }
     .settings-pane.active { display: block; animation: cardEnter 0.24s var(--ease-out) both; }
+
+    .wizard-step-card {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .wizard-step-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
     .color-grid {
       display: grid;
@@ -1156,7 +1174,7 @@
     }
 
     @media (max-width: 520px) {
-      .form-row-3, .color-grid { grid-template-columns: 1fr; }
+      .form-row-3, .color-grid, .form-row { grid-template-columns: 1fr; }
     }
 
     .preview-img {
@@ -1282,6 +1300,14 @@
     </div>
 
     <div class="topbar-actions">
+      <button class="btn" onclick="openSettingsModal('broker')">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        </svg>
+        <span>Connect Broker</span>
+      </button>
+
       <button class="btn" onclick="openCalculatorModal()">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="4" y="2" width="16" height="20" rx="2"></rect>
@@ -1580,7 +1606,10 @@
     <div class="col-12 card" id="secTradeLog" style="animation-delay:0.28s;">
       <div class="card-header">
         <span style="font-weight:800; font-size:15px;">Trade Log, Lot Sizes, Screenshots &amp; Experience</span>
-        <span class="card-title" id="logCountLabel">0 entries</span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button class="btn" onclick="attachChartImagesToAllTrades()" title="Attach chart image to any trade missing one">Attach Missing Charts</button>
+          <span class="card-title" id="logCountLabel">0 entries</span>
+        </div>
       </div>
       <div id="tradeListContainer"></div>
     </div>
@@ -1759,8 +1788,11 @@
         </div>
 
         <div class="form-group">
-          <label>Upload Trade Chart Screenshot</label>
-          <input type="file" id="tradeImageInput" accept="image/*" class="form-control" onchange="previewImage(event)" />
+          <label>Upload or Attach Trade Chart Screenshot</label>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            <input type="file" id="tradeImageInput" accept="image/*" class="form-control" style="flex:1;" onchange="previewImage(event)" />
+            <button type="button" class="btn" onclick="autoGenerateImageForCurrentTrade()">Auto-Chart Image</button>
+          </div>
           <img id="imagePreview" class="preview-img" style="display:none;" />
         </div>
 
@@ -1786,7 +1818,7 @@
     <div class="modal" id="viewModalContent" onclick="event.stopPropagation()"></div>
   </div>
 
-  <!-- Dedicated Settings Page Modal (Accounts, Broker Sync, View Templates, Custom Colors + Gradients) -->
+  <!-- Dedicated Settings Page Modal -->
   <div class="modal-backdrop" id="settingsModal" onclick="handleBackdropClick(event, 'settingsModal')">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="card-header">
@@ -1801,14 +1833,81 @@
 
       <!-- Settings Navigation Tabs -->
       <div class="settings-tabs">
-        <button type="button" class="settings-tab active" data-stab="accounts" onclick="switchSettingsTab('accounts')">Accounts &amp; Backup</button>
-        <button type="button" class="settings-tab" data-stab="broker" onclick="switchSettingsTab('broker')">Broker Sync</button>
+        <button type="button" class="settings-tab active" data-stab="broker" onclick="switchSettingsTab('broker')">Broker Connect</button>
+        <button type="button" class="settings-tab" data-stab="accounts" onclick="switchSettingsTab('accounts')">Accounts &amp; Backup</button>
         <button type="button" class="settings-tab" data-stab="templates" onclick="switchSettingsTab('templates')">Screen Templates</button>
         <button type="button" class="settings-tab" data-stab="colors" onclick="switchSettingsTab('colors')">Colors &amp; Gradient</button>
       </div>
 
-      <!-- Tab 1: Accounts & Backup -->
-      <div class="settings-pane active" id="spane-accounts">
+      <!-- Tab 1: Guided Broker Connect & Trade/Chart Sync -->
+      <div class="settings-pane active" id="spane-broker">
+        <div class="wizard-step-card">
+          <div class="wizard-step-title">Q1. Which broker &amp; platform are you connecting?</div>
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Broker Name</label>
+              <input type="text" id="brokerNameInput" class="form-control" placeholder="e.g. Exness, Vantage, IC Markets" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Platform</label>
+              <select id="brokerPlatform" class="form-control">
+                <option value="MT5">MetaTrader 5</option>
+                <option value="MT4">MetaTrader 4</option>
+                <option value="cTrader">cTrader</option>
+                <option value="Other">Other / Custom</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-step-card">
+          <div class="wizard-step-title">Q2. What is your Account ID / Label &amp; Starting Balance?</div>
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Account ID or Name</label>
+              <input type="text" id="brokerAccountId" class="form-control" placeholder="e.g. Exness Real #102938" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Starting / Base Balance ($)</label>
+              <input type="number" step="0.01" id="brokerStartingBalance" class="form-control" placeholder="10000" />
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-step-card">
+          <div class="wizard-step-title">Q3. How should trades &amp; chart images be recorded?</div>
+          <label class="check-row">
+            <span>Write every synced trade into Daily Trades &amp; update Graph</span>
+            <input type="checkbox" id="chkAutoSyncTrades" checked />
+          </label>
+          <label class="check-row" style="margin-bottom:8px;">
+            <span>Attach a chart image to every single trade</span>
+            <input type="checkbox" id="chkAutoCaptureChart" checked />
+          </label>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Optional Sync Webhook URL (if using a bridge/EA)</label>
+            <input type="url" id="brokerWebhookUrl" class="form-control" placeholder="https://your-sync-endpoint/trades" />
+          </div>
+        </div>
+
+        <div class="wizard-step-card">
+          <div class="wizard-step-title">Q4. Paste or Import Trades JSON to Write to Graph &amp; Attach Images</div>
+          <div class="form-group" style="margin-bottom:8px;">
+            <label>Paste JSON Array of Trades (e.g. [{"date":"2026-11-23","pair":"XAUUSD","dir":"BUY","lot":0.2,"pnl":85,"notes":"Breakout"}])</label>
+            <textarea id="brokerJsonPaste" rows="3" class="form-control" placeholder='[{"date":"2026-11-23","pair":"EURUSD","dir":"SELL","lot":0.5,"pnl":45,"notes":"NY session"}]'></textarea>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary" onclick="connectAndSyncAccount()">Connect Account &amp; Write to Graph</button>
+            <button type="button" class="btn" onclick="importJsonTradesNow()">Import JSON Trades</button>
+            <button type="button" class="btn" onclick="pullBrokerTradesNow()">Pull Webhook Now</button>
+          </div>
+        </div>
+
+        <div id="brokerSyncStatusText" style="margin-top:8px; font-size:12px; font-weight:700; color:var(--text-muted);"></div>
+      </div>
+
+      <!-- Tab 2: Accounts & Backup -->
+      <div class="settings-pane" id="spane-accounts">
         <div class="form-group">
           <label>Your Trading Accounts &amp; Starting Capital ($)</label>
           <div id="accountsManageList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
@@ -1839,55 +1938,7 @@
         </div>
       </div>
 
-      <!-- Tab 2: Broker Account Auto-Sync & Screenshot Bridge -->
-      <div class="settings-pane" id="spane-broker">
-        <div class="form-group">
-          <label>Broker Platform / Terminal</label>
-          <select id="brokerPlatform" class="form-control">
-            <option value="MT5">MetaTrader 5 (EA / Webhook Bridge)</option>
-            <option value="MT4">MetaTrader 4 (EA / Webhook Bridge)</option>
-            <option value="cTrader">cTrader / Custom Webhook</option>
-          </select>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Broker Account ID / Login</label>
-            <input type="text" id="brokerAccountId" class="form-control" placeholder="e.g. 80912345" />
-          </div>
-          <div class="form-group">
-            <label>Sync Bridge / Webhook URL</label>
-            <input type="url" id="brokerWebhookUrl" class="form-control" placeholder="https://your-sync-endpoint/trades" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Sync Token / Key</label>
-          <input type="text" id="brokerApiKey" class="form-control" placeholder="Optional bridge token" />
-        </div>
-
-        <label class="check-row">
-          <span>Auto-Record Closed Trades into Daily Trades</span>
-          <input type="checkbox" id="chkAutoSyncTrades" checked />
-        </label>
-        <label class="check-row">
-          <span>Auto-Save Chart Screenshot with Trade</span>
-          <input type="checkbox" id="chkAutoCaptureChart" checked />
-        </label>
-
-        <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:10px; padding:10px; margin-top:10px; font-size:11px; color:var(--text-muted); line-height:1.45;">
-          Static GitHub pages cannot directly log into a broker or capture external windows without a backend/EA bridge. When a webhook URL returns JSON trades with optional <code>screenshot</code> (data URL/base64), <b>Pull Sync Now</b> saves them into your daily trades; you can also simulate a closed trade + chart image below to test.
-        </div>
-
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
-          <button type="button" class="btn" onclick="saveBrokerConfig()">Save Connection</button>
-          <button type="button" class="btn" onclick="pullBrokerTradesNow()">Pull Sync Now</button>
-          <button type="button" class="btn btn-primary" onclick="simulateClosedTradeWithScreenshot()">Test Auto-Log + Chart</button>
-        </div>
-        <div id="brokerSyncStatusText" style="margin-top:8px; font-size:12px; font-weight:700; color:var(--text-muted);"></div>
-      </div>
-
-      <!-- Tab 3: Screen View Templates (Auto + Presets + Custom) -->
+      <!-- Tab 3: Screen View Templates -->
       <div class="settings-pane" id="spane-templates">
         <div class="form-group">
           <label>Active Screen View Template</label>
@@ -2081,7 +2132,6 @@
     <span>${tgUser && tgUser.first_name ? `Private Journal • ${escapeHtml(tgUser.first_name)}` : 'Private Journal • Isolated Local Data'}</span>
   `;
 
-  // SVG Icons (Rank icons only for #1, #2, #3; none for #4+)
   const ICONS = {
     sun: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`,
     moon: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
@@ -2092,7 +2142,6 @@
     rank3: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>`
   };
 
-  // Multi-Account State
   function loadAccountsState() {
     try {
       const raw = localStorage.getItem(KEY_ACCOUNTS);
@@ -2118,23 +2167,24 @@
   let calDate = new Date();
   let currentBase64Image = '';
 
-  // Broker Sync State
   let brokerConfig = (() => {
     try {
       return JSON.parse(localStorage.getItem(KEY_BROKER_CFG) || 'null') || {
+        brokerName: '',
         platform: 'MT5',
         accountId: '',
+        startingBalance: '',
         webhookUrl: '',
-        apiKey: '',
         autoSyncTrades: true,
         autoCaptureChart: true
       };
     } catch (e) {
       return {
+        brokerName: '',
         platform: 'MT5',
         accountId: '',
+        startingBalance: '',
         webhookUrl: '',
-        apiKey: '',
         autoSyncTrades: true,
         autoCaptureChart: true
       };
@@ -2143,32 +2193,20 @@
 
   function loadBrokerFields() {
     if (!document.getElementById('brokerPlatform')) return;
+    const activeAcc = getActiveAccount();
+    document.getElementById('brokerNameInput').value = brokerConfig.brokerName || '';
     document.getElementById('brokerPlatform').value = brokerConfig.platform || 'MT5';
-    document.getElementById('brokerAccountId').value = brokerConfig.accountId || '';
+    document.getElementById('brokerAccountId').value = brokerConfig.accountId || activeAcc.name || '';
+    document.getElementById('brokerStartingBalance').value =
+      brokerConfig.startingBalance !== '' && brokerConfig.startingBalance !== undefined
+        ? brokerConfig.startingBalance
+        : activeAcc.startingBalance;
     document.getElementById('brokerWebhookUrl').value = brokerConfig.webhookUrl || '';
-    document.getElementById('brokerApiKey').value = brokerConfig.apiKey || '';
     document.getElementById('chkAutoSyncTrades').checked = brokerConfig.autoSyncTrades !== false;
     document.getElementById('chkAutoCaptureChart').checked = brokerConfig.autoCaptureChart !== false;
   }
 
-  function saveBrokerConfig() {
-    brokerConfig = {
-      platform: document.getElementById('brokerPlatform').value,
-      accountId: document.getElementById('brokerAccountId').value.trim(),
-      webhookUrl: document.getElementById('brokerWebhookUrl').value.trim(),
-      apiKey: document.getElementById('brokerApiKey').value.trim(),
-      autoSyncTrades: document.getElementById('chkAutoSyncTrades').checked,
-      autoCaptureChart: document.getElementById('chkAutoCaptureChart').checked
-    };
-    localStorage.setItem(KEY_BROKER_CFG, JSON.stringify(brokerConfig));
-    const st = document.getElementById('brokerSyncStatusText');
-    if (st) {
-      st.style.color = 'var(--green)';
-      st.innerText = `Saved ${brokerConfig.platform} connection settings (${brokerConfig.accountId || 'No Login ID'}).`;
-    }
-  }
-
-  function generateSampleChartDataUrl(pair, dir, pnl) {
+  function generateChartDataUrl(pair, dir, pnl) {
     const canvas = document.createElement('canvas');
     canvas.width = 640;
     canvas.height = 320;
@@ -2199,30 +2237,57 @@
 
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 16px sans-serif';
-    ctx.fillText(`${pair} (${dir}) • Closed P&L: ${pnl >= 0 ? '+' : ''}$${Number(pnl).toFixed(2)}`, 24, 30);
+    ctx.fillText(`${pair} (${dir}) • P&L: ${pnl >= 0 ? '+' : ''}$${Number(pnl).toFixed(2)}`, 24, 30);
     return canvas.toDataURL('image/jpeg', 0.8);
+  }
+
+  function autoGenerateImageForCurrentTrade() {
+    const pair = (document.getElementById('tradePair').value || 'XAUUSD').toUpperCase();
+    const dir = document.getElementById('tradeDir').value || 'BUY';
+    const pnl = parseFloat(document.getElementById('tradePnl').value) || 0;
+    currentBase64Image = generateChartDataUrl(pair, dir, pnl);
+    const preview = document.getElementById('imagePreview');
+    preview.src = currentBase64Image;
+    preview.style.display = 'block';
+  }
+
+  async function attachChartImagesToAllTrades() {
+    let updated = 0;
+    for (const t of trades) {
+      if (!t.image) {
+        t.image = generateChartDataUrl(t.pair || 'XAUUSD', t.dir || 'BUY', Number(t.pnl) || 0);
+        await saveTradeToDB(t);
+        updated++;
+      }
+    }
+    if (updated > 0) loadTrades();
+    alert(updated > 0 ? `Attached chart images to ${updated} trade(s).` : 'All trades already have chart images attached.');
   }
 
   async function ingestBrokerTrades(incomingList) {
     if (!Array.isArray(incomingList) || !incomingList.length) return 0;
+    const attachImg = document.getElementById('chkAutoCaptureChart')
+      ? document.getElementById('chkAutoCaptureChart').checked
+      : (brokerConfig.autoCaptureChart !== false);
+
     let added = 0;
     for (const raw of incomingList) {
       const pnlVal = parseFloat(raw.pnl);
       if (!raw.pair || Number.isNaN(pnlVal)) continue;
+      const pair = String(raw.pair).toUpperCase();
+      const dir = (String(raw.dir || 'BUY').toUpperCase() === 'SELL') ? 'SELL' : 'BUY';
       const tradeObj = {
         id: String(raw.id || ('broker_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6))),
         accountId: getActiveAccount().id,
         date: raw.date || new Date().toISOString().slice(0, 10),
-        pair: String(raw.pair).toUpperCase(),
-        dir: (String(raw.dir || 'BUY').toUpperCase() === 'SELL') ? 'SELL' : 'BUY',
+        pair,
+        dir,
         lot: Number.isFinite(parseFloat(raw.lot)) ? parseFloat(raw.lot) : 0.10,
         pnl: pnlVal,
-        setup: raw.setup || `${brokerConfig.platform || 'Broker'} Auto-Sync`,
+        setup: raw.setup || `${brokerConfig.brokerName || brokerConfig.platform || 'Broker'} Sync`,
         score: parseInt(raw.score, 10) || 8,
-        notes: raw.notes || `Auto-recorded closed trade from ${brokerConfig.platform || 'Broker'}${brokerConfig.accountId ? ' #' + brokerConfig.accountId : ''}.`,
-        image: brokerConfig.autoCaptureChart
-          ? (raw.screenshot || raw.image || generateSampleChartDataUrl(String(raw.pair).toUpperCase(), String(raw.dir || 'BUY').toUpperCase(), pnlVal))
-          : ''
+        notes: raw.notes || `Synced trade from ${brokerConfig.brokerName || brokerConfig.platform || 'Broker'}${brokerConfig.accountId ? ' (' + brokerConfig.accountId + ')' : ''}.`,
+        image: attachImg ? (raw.screenshot || raw.image || generateChartDataUrl(pair, dir, pnlVal)) : ''
       };
       await saveTradeToDB(tradeObj);
       added++;
@@ -2231,61 +2296,109 @@
     return added;
   }
 
-  async function pullBrokerTradesNow() {
-    saveBrokerConfig();
-    const st = document.getElementById('brokerSyncStatusText');
-    if (!brokerConfig.webhookUrl) {
-      if (st) {
-        st.style.color = 'var(--text-muted)';
-        st.innerText = 'No webhook URL set yet. Use "Test Auto-Log + Chart" or enter a sync bridge URL.';
-      }
-      return;
+  async function connectAndSyncAccount() {
+    const brokerName = document.getElementById('brokerNameInput').value.trim();
+    const platform = document.getElementById('brokerPlatform').value;
+    const accLabel = document.getElementById('brokerAccountId').value.trim();
+    const startBalVal = parseFloat(document.getElementById('brokerStartingBalance').value);
+    const webhookUrl = document.getElementById('brokerWebhookUrl').value.trim();
+    const autoSyncTrades = document.getElementById('chkAutoSyncTrades').checked;
+    const autoCaptureChart = document.getElementById('chkAutoCaptureChart').checked;
+
+    brokerConfig = {
+      brokerName,
+      platform,
+      accountId: accLabel,
+      startingBalance: Number.isNaN(startBalVal) ? '' : startBalVal,
+      webhookUrl,
+      autoSyncTrades,
+      autoCaptureChart
+    };
+    localStorage.setItem(KEY_BROKER_CFG, JSON.stringify(brokerConfig));
+
+    const activeAcc = getActiveAccount();
+    if (accLabel) activeAcc.name = accLabel;
+    if (!Number.isNaN(startBalVal) && startBalVal >= 0) {
+      activeAcc.startingBalance = startBalVal;
     }
-    if (!brokerConfig.autoSyncTrades) {
+    localStorage.setItem(KEY_ACCOUNTS, JSON.stringify(accounts));
+
+    const jsonText = (document.getElementById('brokerJsonPaste').value || '').trim();
+    let importedCount = 0;
+    if (jsonText) {
+      try {
+        const parsed = JSON.parse(jsonText);
+        const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.trades) ? parsed.trades : []);
+        importedCount = await ingestBrokerTrades(list);
+      } catch (e) {
+        const st = document.getElementById('brokerSyncStatusText');
+        if (st) {
+          st.style.color = 'var(--red)';
+          st.innerText = 'Account updated, but JSON trade format was invalid.';
+        }
+        renderAll();
+        return;
+      }
+    }
+
+    renderAll();
+    const st = document.getElementById('brokerSyncStatusText');
+    if (st) {
+      st.style.color = 'var(--green)';
+      st.innerText = `Connected "${activeAcc.name}" (${platform}) • Starting Balance ${formatMoney(activeAcc.startingBalance)} • ${importedCount} trade(s) written to graph.`;
+    }
+  }
+
+  async function importJsonTradesNow() {
+    const rawText = (document.getElementById('brokerJsonPaste').value || '').trim();
+    const st = document.getElementById('brokerSyncStatusText');
+    if (!rawText) {
       if (st) {
         st.style.color = 'var(--red)';
-        st.innerText = 'Auto-Record Closed Trades is turned off.';
+        st.innerText = 'Paste a JSON array of trades first.';
       }
       return;
     }
     try {
-      const headers = { 'Accept': 'application/json' };
-      if (brokerConfig.apiKey) headers['Authorization'] = `Bearer ${brokerConfig.apiKey}`;
-      const res = await fetch(brokerConfig.webhookUrl, { headers });
+      const parsed = JSON.parse(rawText);
+      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.trades) ? parsed.trades : []);
+      const count = await ingestBrokerTrades(list);
+      if (st) {
+        st.style.color = 'var(--green)';
+        st.innerText = `Wrote ${count} trade(s) into daily trades and updated graph.`;
+      }
+    } catch (e) {
+      if (st) {
+        st.style.color = 'var(--red)';
+        st.innerText = 'Invalid JSON. Please check commas and quotes.';
+      }
+    }
+  }
+
+  async function pullBrokerTradesNow() {
+    const webhookUrl = document.getElementById('brokerWebhookUrl').value.trim();
+    const st = document.getElementById('brokerSyncStatusText');
+    if (!webhookUrl) {
+      if (st) {
+        st.style.color = 'var(--text-muted)';
+        st.innerText = 'Enter a Sync Webhook URL or paste JSON trades above to write trades to the graph.';
+      }
+      return;
+    }
+    try {
+      const res = await fetch(webhookUrl, { headers: { 'Accept': 'application/json' } });
       const data = await res.json();
       const list = Array.isArray(data) ? data : (Array.isArray(data.trades) ? data.trades : []);
       const count = await ingestBrokerTrades(list);
       if (st) {
         st.style.color = 'var(--green)';
-        st.innerText = `Synced ${count} closed trade(s) into daily trades.`;
+        st.innerText = `Synced ${count} trade(s) from webhook into daily trades and graph.`;
       }
     } catch (err) {
       if (st) {
         st.style.color = 'var(--red)';
-        st.innerText = 'Could not reach bridge URL from browser (CORS/network). Ensure your bridge allows browser requests.';
+        st.innerText = 'Could not reach webhook URL from browser. Paste JSON trades above to sync immediately.';
       }
-    }
-  }
-
-  async function simulateClosedTradeWithScreenshot() {
-    saveBrokerConfig();
-    const samplePairs = ['XAUUSD', 'EURUSD', 'GBPUSD', 'NAS100'];
-    const pair = samplePairs[Math.floor(Math.random() * samplePairs.length)];
-    const dir = Math.random() > 0.5 ? 'BUY' : 'SELL';
-    const pnl = Number(((Math.random() > 0.45 ? 1 : -1) * (25 + Math.random() * 140)).toFixed(2));
-    const added = await ingestBrokerTrades([{
-      date: new Date().toISOString().slice(0, 10),
-      pair,
-      dir,
-      lot: 0.10,
-      pnl,
-      setup: `${brokerConfig.platform} Live Close`,
-      notes: `Automatically captured closed ${dir} position on ${pair} with chart screenshot.`
-    }]);
-    const st = document.getElementById('brokerSyncStatusText');
-    if (st) {
-      st.style.color = 'var(--green)';
-      st.innerText = `Auto-logged ${added} closed trade (${pair} ${dir}, ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}) with chart screenshot.`;
     }
   }
 
@@ -2329,7 +2442,7 @@
     document.getElementById('tradeLot').value = Math.max(0.01, lotsVal).toFixed(2);
   }
 
-  // Color & Luminance Helpers (Controls TEXT color only; Page Background follows Light/Dark mode)
+  // Color & Luminance Helpers
   function parseRgb(hexOrRgb) {
     const s = String(hexOrRgb || '').trim();
     const hexMatch = s.replace('#', '');
@@ -2599,7 +2712,6 @@
     renderAll();
   }
 
-  // Calendar Animation State (Without Animation Settings Page)
   const calendarAnimation = localStorage.getItem(KEY_CAL_ANIM) || 'slide';
 
   function updateStyleSummaryChip() {
@@ -2619,7 +2731,6 @@
 
   document.body.setAttribute('data-cal-anim', calendarAnimation);
 
-  // View Template State (Auto + Presets + Custom inside Settings)
   let viewTemplate = localStorage.getItem(KEY_TEMPLATE) || 'auto';
   const defaultCustomCfg = {
     density: 'cozy',
@@ -2757,7 +2868,6 @@
     });
   }
 
-  // Theme Toggle (Controls page background & card surfaces for Light vs Dark)
   function applyTheme(theme) {
     const isLight = theme === 'light';
     document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
@@ -2777,7 +2887,6 @@
   applyTheme(localStorage.getItem(KEY_THEME) === 'light' ? 'light' : 'dark');
   applyViewTemplate();
 
-  // Account Helpers (Logged / Active Account Scoped)
   function getAccountName(accId) {
     const found = accounts.find(a => a.id === accId);
     return found ? found.name : (accounts[0] ? accounts[0].name : 'Main Account');
@@ -2817,7 +2926,6 @@
     }
   }
 
-  // Filter Range
   function setRange(range, el) {
     currentRange = range;
     document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
@@ -2849,7 +2957,6 @@
     });
   }
 
-  // Score Calculation & Live Leaderboard (Top 1, 2, 3 get icons; others have no icon)
   function computeTraderScore(traderTrades, startingBal) {
     const count = traderTrades.length;
     if (!count) {
@@ -2936,7 +3043,6 @@
     }).join('');
   }
 
-  // Image Compression before saving
   function previewImage(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -2961,7 +3067,6 @@
     reader.readAsDataURL(file);
   }
 
-  // Modals
   function openTradeModal(datePrefill = '', tradeToEdit = null) {
     populateAccountSelects();
     document.getElementById('tradeForm').reset();
@@ -3043,19 +3148,22 @@
       return;
     }
 
+    const dirVal = document.getElementById('tradeDir').value;
+    const finalImage = currentBase64Image || (brokerConfig.autoCaptureChart ? generateChartDataUrl(pairVal, dirVal, pnlVal) : '');
+
     const id = document.getElementById('tradeId').value || (Date.now().toString() + '_' + Math.random().toString(36).slice(2, 6));
     const trade = {
       id,
       accountId: document.getElementById('tradeAccount').value || accounts[0].id,
       date: dateVal,
       pair: pairVal,
-      dir: document.getElementById('tradeDir').value,
+      dir: dirVal,
       lot: lotVal,
       pnl: pnlVal,
       setup: document.getElementById('tradeSetup').value,
       score: parseInt(document.getElementById('tradeScore').value, 10) || 8,
       notes: document.getElementById('tradeNotes').value,
-      image: currentBase64Image
+      image: finalImage
     };
 
     await saveTradeToDB(trade);
@@ -3072,7 +3180,6 @@
     }
   }
 
-  // Settings Page Navigation & Controls
   function switchSettingsTab(tabName) {
     document.querySelectorAll('.settings-tab').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-stab') === tabName);
@@ -3095,7 +3202,7 @@
     `).join('');
   }
 
-  function openSettingsModal(initialTab = 'accounts') {
+  function openSettingsModal(initialTab = 'broker') {
     renderAccountsManageList();
     loadBrokerFields();
     document.getElementById('newAccName').value = '';
@@ -3192,7 +3299,6 @@
     renderAll();
   }
 
-  // Backup Export / Import
   function exportBackup() {
     const dataStr = JSON.stringify({
       startingBalance: accounts[0].startingBalance,
@@ -3241,7 +3347,6 @@
     reader.readAsText(file);
   }
 
-  // Render Top Logged Account Balance & Per-Account Performance Cards
   function renderTopAndAccountCards() {
     populateAccountSelects();
 
@@ -3299,7 +3404,6 @@
     }).join('');
   }
 
-  // Render Dashboard & Charts
   function renderAll() {
     renderTopAndAccountCards();
     renderLeaderboard();
@@ -3433,7 +3537,6 @@
     return val || fallback;
   }
 
-  // SVG Charts
   function drawSparkline(list) {
     const svg = document.getElementById('sparklineSvg');
     const winColor = getThemeCssColor('--green', '#10b981');
@@ -3539,7 +3642,6 @@
     `;
   }
 
-  // Monthly P&L Calendar with Weekly Totals & Staggered Cell Animations
   function changeMonth(delta) {
     calDate.setMonth(calDate.getMonth() + delta);
     renderCalendar(getAccountScopedTrades(), getActiveStartingBalance());
@@ -3644,7 +3746,6 @@
     grid.innerHTML = html;
   }
 
-  // Trade List & Experience Viewer
   function renderTradeList(list) {
     const container = document.getElementById('tradeListContainer');
     document.getElementById('logCountLabel').innerText = `${list.length} entries`;
