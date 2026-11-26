@@ -214,6 +214,17 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .repeated-handle-pill {
+      color: var(--green);
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      padding: 1px 7px;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 10px;
     }
 
     .topbar-actions {
@@ -308,6 +319,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .total-bal-amount {
@@ -438,11 +450,13 @@
     }
 
     .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
     .col-8 { grid-column: span 8; }
     .col-12 { grid-column: span 12; }
 
     /* Template Overrides */
     body[data-view-template="compact"] .col-4,
+    body[data-view-template="compact"] .col-6,
     body[data-view-template="compact"] .col-8,
     body[data-view-template="compact"] .col-12 {
       grid-column: span 12;
@@ -456,11 +470,11 @@
 
     @media (max-width: 960px) {
       .col-4 { grid-column: span 6; }
-      .col-8 { grid-column: span 12; }
+      .col-6, .col-8 { grid-column: span 12; }
     }
 
     @media (max-width: 640px) {
-      .col-4, .col-8, .col-12 { grid-column: span 12; }
+      .col-4, .col-6, .col-8, .col-12 { grid-column: span 12; }
     }
 
     .card-header {
@@ -469,6 +483,7 @@
       align-items: center;
       margin-bottom: 8px;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .card-title {
@@ -550,6 +565,166 @@
 
     .acc-perf-meta b {
       color: var(--text-main);
+    }
+
+    /* Multi-file attachment chips & gallery */
+    .multi-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .multi-thumb-box {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .multi-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .multi-file-chip {
+      padding: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      word-break: break-word;
+      color: var(--text-main);
+    }
+
+    .multi-remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0, 0, 0, 0.72);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Social Hub: Follow, Chat & Daily Chat Streak */
+    .social-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 820px) {
+      .social-grid { grid-template-columns: 1fr; }
+    }
+
+    .social-panel {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .streak-banner-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .follow-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      gap: 8px;
+    }
+
+    .chat-box {
+      max-height: 250px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 2px;
+    }
+
+    .chat-msg {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 9px 11px;
+      font-size: 12px;
+    }
+
+    .chat-msg.own {
+      border-color: var(--green-border);
+      background: color-mix(in srgb, var(--bg-card) 90%, var(--green) 10%);
+    }
+
+    .chat-msg-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .chat-shared-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      margin-top: 6px;
+      margin-right: 6px;
+    }
+
+    /* Share Graphic Canvas Preview */
+    .share-canvas-wrap {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    #shareReportCanvas {
+      width: 100%;
+      max-width: 440px;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      display: block;
+      margin: 0 auto;
     }
 
     /* Score / Leaderboard Section (Placed at Bottom) */
@@ -974,7 +1149,7 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       width: 100%;
-      max-width: 550px;
+      max-width: 580px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 18px;
@@ -1247,6 +1422,17 @@
     </div>
 
     <div class="topbar-actions">
+      <button class="btn" onclick="openShareModal('DAILY')">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        <span>Share Report</span>
+      </button>
+
       <button class="btn" onclick="openSettingsModal('accounts')">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"></circle>
@@ -1288,6 +1474,7 @@
           <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
         </svg>
         <span id="topBalanceTitle">Active Account Balance</span>
+        <span class="repeated-handle-pill" id="bannerRepeatedUsername">@trader</span>
       </div>
       <div class="total-bal-amount">
         <span id="topTotalBalance">$10,000.00</span>
@@ -1322,14 +1509,25 @@
       <div class="pill" onclick="setRange('DAY', this)">Today</div>
     </div>
 
-    <div class="active-style-chip" onclick="openSettingsModal('templates')" title="Open View Templates, Colors & Gradient">
-      <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      <span id="activeStyleSummary">View: Auto</span>
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <div class="active-style-chip" onclick="openShareModal('DAILY')" title="Share Daily, Weekly, Monthly or Yearly Graphic Report">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <span>Share Graphic Card</span>
+      </div>
+
+      <div class="active-style-chip" onclick="openSettingsModal('templates')" title="Open View Templates, Colors & Gradient">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span id="activeStyleSummary">View: Auto</span>
+      </div>
     </div>
   </div>
 
@@ -1530,10 +1728,66 @@
     <!-- Trade Log & Experience Feed -->
     <div class="col-12 card" id="secTradeLog" style="animation-delay:0.28s;">
       <div class="card-header">
-        <span style="font-weight:800; font-size:15px;">Trade Log, Lot Sizes, Screenshots &amp; Experience</span>
+        <span style="font-weight:800; font-size:15px;">Trade Log, Lot Sizes, Multi-Files &amp; Experience</span>
         <span class="card-title" id="logCountLabel">0 entries</span>
       </div>
       <div id="tradeListContainer"></div>
+    </div>
+
+    <!-- Social Hub: Username, Follow System, Chat & Daily Chat Streak -->
+    <div class="col-12 card" id="secSocialHub" style="animation-delay:0.3s;">
+      <div class="card-header">
+        <div>
+          <span style="font-weight:800; font-size:15px;">Trader Circle, Follow &amp; Daily Streak Chat</span>
+          <span class="repeated-handle-pill" id="socialRepeatedHandle" style="margin-left:6px;">@trader</span>
+        </div>
+        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+          <span class="badge-win" id="dailyChatStreakBadge">Chat Streak: 0d</span>
+          <span class="card-title" id="followingCountLabel">Following: 0</span>
+        </div>
+      </div>
+
+      <div class="social-grid">
+        <!-- Left: Profile Handle, Daily Streak & Follow List -->
+        <div class="social-panel">
+          <div class="streak-banner-box">
+            <div>
+              <div style="font-size:11px; font-weight:700; color:var(--text-muted);">YOUR USERNAME / HANDLE</div>
+              <div style="font-size:14px; font-weight:900;" id="profileDisplayRepeated">@trader</div>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <input type="text" id="customHandleInput" class="form-control" style="width:130px; padding:6px 8px; font-size:12px;" placeholder="@your_handle" />
+              <button type="button" class="btn" style="padding:6px 9px;" onclick="saveCustomHandle()">Save</button>
+            </div>
+          </div>
+
+          <div class="streak-banner-box">
+            <div>
+              <div style="font-size:11px; font-weight:700; color:var(--text-muted);">DAILY CHAT STREAK</div>
+              <div style="font-size:13px; font-weight:800;" id="streakStatusText">Send a message today to keep/start your streak</div>
+            </div>
+            <div class="big-num" id="dailyChatStreakNum" style="font-size:20px; color:#f59e0b;">0d</div>
+          </div>
+
+          <div style="font-size:12px; font-weight:800; color:var(--text-muted);">Follow Traders</div>
+          <div id="followListContainer" style="display:flex; flex-direction:column; gap:7px;"></div>
+        </div>
+
+        <!-- Right: Daily Streak Chat & Shared Reports -->
+        <div class="social-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:12px; font-weight:800; color:var(--text-muted);">Live Chat &amp; Shared Snapshots</span>
+            <button type="button" class="btn" style="padding:5px 9px; font-size:11px;" onclick="shareCurrentPeriodToChat()">+ Share Period to Chat</button>
+          </div>
+
+          <div class="chat-box" id="chatMessagesContainer"></div>
+
+          <form onsubmit="sendChatMessage(event)" style="display:flex; gap:7px; margin-top:2px;">
+            <input type="text" id="chatInput" class="form-control" style="padding:8px 10px; font-size:12px;" placeholder="Message as your username to build daily streak..." />
+            <button type="submit" class="btn btn-primary" style="padding:8px 13px;">Send</button>
+          </form>
+        </div>
+      </div>
     </div>
 
     <!-- Live Trader & User Score Leaderboard Section (At Bottom) -->
@@ -1549,7 +1803,7 @@
 
   <!-- Copyright Footer -->
   <footer class="site-footer">
-    All rights reserved by BIRUK MELKU
+    All rights reserved by BIRUK MELKU • <span id="footerRepeatedHandle">@trader</span>
   </footer>
 
   <!-- Floating Action Button -->
@@ -1561,7 +1815,7 @@
     <span>Add Trade</span>
   </button>
 
-  <!-- Add / Edit Trade Modal -->
+  <!-- Add / Edit Trade Modal (Now Supports Multiple Files) -->
   <div class="modal-backdrop" id="tradeModal" onclick="handleBackdropClick(event, 'tradeModal')">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="card-header">
@@ -1625,8 +1879,9 @@
         </div>
 
         <div class="form-group">
-          <label>Upload Trade Chart Screenshot</label>
-          <input type="file" id="tradeImageInput" accept="image/*" class="form-control" onchange="previewImage(event)" />
+          <label>Upload Multiple Files / Trade Screenshots (Images &amp; Attachments)</label>
+          <input type="file" id="tradeImageInput" accept="image/*,.pdf,.csv,.txt,.json" multiple class="form-control" onchange="previewImage(event)" />
+          <div id="multiFilesPreviewGrid" class="multi-preview-grid"></div>
           <img id="imagePreview" class="preview-img" style="display:none;" />
         </div>
 
@@ -1644,6 +1899,47 @@
           <button type="submit" class="btn btn-primary">Save Trade</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- High-Graphic Share Report Modal (Daily / Weekly / Monthly / Yearly) -->
+  <div class="modal-backdrop" id="shareModal" onclick="handleBackdropClick(event, 'shareModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="card-header">
+        <h3>Share High-Graphic Report</h3>
+        <button class="btn" onclick="closeModal('shareModal')" aria-label="Close">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Select Timeframe to Share</label>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;" id="sharePeriodPills">
+          <button type="button" class="pill active" data-speriod="DAILY" onclick="selectSharePeriod('DAILY', this)">Daily</button>
+          <button type="button" class="pill" data-speriod="WEEKLY" onclick="selectSharePeriod('WEEKLY', this)">Weekly</button>
+          <button type="button" class="pill" data-speriod="MONTHLY" onclick="selectSharePeriod('MONTHLY', this)">Monthly</button>
+          <button type="button" class="pill" data-speriod="YEARLY" onclick="selectSharePeriod('YEARLY', this)">Yearly</button>
+        </div>
+      </div>
+
+      <div class="share-canvas-wrap">
+        <canvas id="shareReportCanvas" width="1080" height="1350"></canvas>
+      </div>
+
+      <div class="form-group">
+        <label>Formatted Text Data (Included with Share)</label>
+        <textarea id="shareFormattedText" rows="4" class="form-control" readonly></textarea>
+      </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:space-between;">
+        <button type="button" class="btn" onclick="downloadShareGraphicPng()">Download PNG</button>
+        <button type="button" class="btn" onclick="copyShareText()">Copy Text</button>
+        <button type="button" class="btn" onclick="shareToTelegramApp()">Telegram</button>
+        <button type="button" class="btn btn-primary" onclick="shareGraphicAndText()">Share Graphic &amp; Text</button>
+      </div>
     </div>
   </div>
 
@@ -1735,7 +2031,8 @@
             <label class="check-row"><span>Balance &amp; Equity Curve</span><input type="checkbox" id="chkEquity" checked /></label>
             <label class="check-row"><span>Performance &amp; Risk Metrics</span><input type="checkbox" id="chkPerfRisk" checked /></label>
             <label class="check-row"><span>Monthly &amp; Weekly P&amp;L Calendar</span><input type="checkbox" id="chkCalendar" checked /></label>
-            <label class="check-row"><span>Trade Log &amp; Screenshots</span><input type="checkbox" id="chkTradeLog" checked /></label>
+            <label class="check-row"><span>Trade Log &amp; Multi-Files</span><input type="checkbox" id="chkTradeLog" checked /></label>
+            <label class="check-row"><span>Trader Circle, Follow &amp; Daily Streak Chat</span><input type="checkbox" id="chkSocialHub" checked /></label>
             <label class="check-row"><span>Trader &amp; User Score Leaderboard</span><input type="checkbox" id="chkLeaderboard" checked /></label>
           </div>
         </div>
@@ -1863,7 +2160,7 @@
     } catch (e) {}
   }
 
-  // Per-User Storage Isolation
+  // Per-User Storage Isolation & Repeated Username
   const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
   const userScopeId = (tgUser && tgUser.id) ? `tg_${tgUser.id}` : 'local_guest';
   const currentUserDisplayName = (tgUser && (tgUser.first_name || tgUser.username))
@@ -1880,6 +2177,10 @@
   const KEY_CUSTOM_COLORS = `tv_custom_colors_${userScopeId}`;
   const KEY_CAL_ANIM = `tv_cal_anim_${userScopeId}`;
   const KEY_SCOREBOARD = `tv_scoreboard_${userScopeId}`;
+  const KEY_CUSTOM_HANDLE = `tv_custom_handle_${userScopeId}`;
+  const KEY_FOLLOWING = `tv_following_${userScopeId}`;
+  const KEY_CHAT_MSGS = `tv_chat_msgs_${userScopeId}`;
+  const KEY_CHAT_STREAK = `tv_chat_streak_${userScopeId}`;
 
   function escapeHtml(str) {
     return String(str || '')
@@ -1889,13 +2190,54 @@
       .replace(/"/g, '&quot;');
   }
 
-  document.getElementById('userScopeLabel').innerHTML = `
-    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-    </svg>
-    <span>${tgUser && tgUser.first_name ? `Private Journal • ${escapeHtml(tgUser.first_name)}` : 'Private Journal • Isolated Local Data'}</span>
-  `;
+  function getRepeatedHandle() {
+    const saved = (localStorage.getItem(KEY_CUSTOM_HANDLE) || '').trim();
+    if (saved) return saved.startsWith('@') ? saved : `@${saved}`;
+    if (tgUser && tgUser.username) return `@${tgUser.username}`;
+    if (tgUser && tgUser.first_name) return `@${tgUser.first_name.replace(/\s+/g, '_').toLowerCase()}`;
+    return '@biruk_trader';
+  }
+
+  function syncRepeatedUsernameEverywhere() {
+    const handle = getRepeatedHandle();
+    const scopeEl = document.getElementById('userScopeLabel');
+    if (scopeEl) {
+      scopeEl.innerHTML = `
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>${tgUser && tgUser.first_name ? `Private Journal • ${escapeHtml(tgUser.first_name)}` : 'Private Journal • Isolated Local Data'}</span>
+        <span class="repeated-handle-pill">${escapeHtml(handle)}</span>
+      `;
+    }
+    const bannerHandle = document.getElementById('bannerRepeatedUsername');
+    if (bannerHandle) bannerHandle.innerText = handle;
+    const socialHandle = document.getElementById('socialRepeatedHandle');
+    if (socialHandle) socialHandle.innerText = handle;
+    const profileHandle = document.getElementById('profileDisplayRepeated');
+    if (profileHandle) profileHandle.innerText = handle;
+    const footerHandle = document.getElementById('footerRepeatedHandle');
+    if (footerHandle) footerHandle.innerText = handle;
+    const handleInput = document.getElementById('customHandleInput');
+    if (handleInput && !handleInput.value) handleInput.value = handle;
+  }
+
+  function saveCustomHandle() {
+    const input = document.getElementById('customHandleInput');
+    if (!input) return;
+    const cleaned = input.value.trim().replace(/\s+/g, '_');
+    if (!cleaned) {
+      triggerFieldShake(input);
+      return;
+    }
+    const formatted = cleaned.startsWith('@') ? cleaned : `@${cleaned}`;
+    localStorage.setItem(KEY_CUSTOM_HANDLE, formatted);
+    input.value = formatted;
+    syncRepeatedUsernameEverywhere();
+    renderChatMessages();
+    renderShareReportGraphic();
+  }
 
   // SVG Icons (Rank icons only for #1, #2, #3; none for #4+)
   const ICONS = {
@@ -1933,8 +2275,9 @@
   let currentRange = 'ALL';
   let calDate = new Date();
   let currentBase64Image = '';
+  let draftTradeFiles = []; // Array of { id, name, type, size, isImage, dataUrl }
 
-  // Color & Luminance Helpers (Controls TEXT color only; Page Background follows Light/Dark mode)
+  // Color & Luminance Helpers
   function parseRgb(hexOrRgb) {
     const s = String(hexOrRgb || '').trim();
     const hexMatch = s.replace('#', '');
@@ -1971,7 +2314,6 @@
     return (lighter + 0.05) / (darker + 0.05);
   }
 
-  // Returns high-contrast TEXT color for a given background surface
   function autoReadableTextColor(surfaceColorStr) {
     const bgLum = getRelativeLuminance(surfaceColorStr);
     const darkText = '#090d16';
@@ -1981,7 +2323,6 @@
       : lightText;
   }
 
-  // Returns high-contrast MUTED TEXT color for a given background surface
   function autoReadableMutedColor(surfaceColorStr) {
     const bgLum = getRelativeLuminance(surfaceColorStr);
     const darkMuted = '#1e293b';
@@ -1991,7 +2332,6 @@
       : lightMuted;
   }
 
-  // Ensures accent text stays sharp and legible over the active surface
   function autoReadableAccentText(colorHex, surfaceColorStr) {
     if (!colorHex) return colorHex;
     const bgLum = getRelativeLuminance(surfaceColorStr);
@@ -2045,7 +2385,6 @@
     const root = document.documentElement;
     const isLight = root.getAttribute('data-theme') === 'light';
 
-    // Page & card surfaces ALWAYS follow Light mode vs Dark mode
     const pageBg = isLight ? '#eef2f6' : '#0b0e14';
     const cardSurface = isLight ? '#ffffff' : '#131822';
     const cardHoverSurface = isLight ? '#f1f5f9' : '#1b2332';
@@ -2081,7 +2420,6 @@
 
     root.style.setProperty('--neutral', neutralReadable);
 
-    // Badge colors readable on both cards and gradients
     root.style.setProperty('--badge-win-bg', isLight ? 'rgba(4, 120, 87, 0.2)' : 'rgba(16, 185, 129, 0.26)');
     root.style.setProperty('--badge-win-text', isLight ? '#064e3b' : '#a7f3d0');
     root.style.setProperty('--badge-win-border', isLight ? 'rgba(4, 120, 87, 0.6)' : 'rgba(16, 185, 129, 0.65)');
@@ -2090,7 +2428,6 @@
     root.style.setProperty('--badge-loss-text', isLight ? '#7f1d1d' : '#fecaca');
     root.style.setProperty('--badge-loss-border', isLight ? 'rgba(185, 28, 28, 0.6)' : 'rgba(239, 68, 68, 0.65)');
 
-    // Top balance banner text automatically adapts to solid card or gradient
     if (cfg && cfg.useGradient && Array.isArray(cfg.gradientStops) && cfg.gradientStops.length >= 2) {
       const gradCss = buildCssGradientString(cfg.gradientStops, cfg.gradientAngle);
       root.style.setProperty('--banner-bg', gradCss);
@@ -2210,7 +2547,7 @@
     renderAll();
   }
 
-  // Calendar Animation State (Without Animation Settings Page)
+  // Calendar Animation State
   const calendarAnimation = localStorage.getItem(KEY_CAL_ANIM) || 'slide';
 
   function updateStyleSummaryChip() {
@@ -2230,7 +2567,7 @@
 
   document.body.setAttribute('data-cal-anim', calendarAnimation);
 
-  // View Template State (Auto + Presets + Custom inside Settings)
+  // View Template State
   let viewTemplate = localStorage.getItem(KEY_TEMPLATE) || 'auto';
   const defaultCustomCfg = {
     density: 'cozy',
@@ -2241,7 +2578,8 @@
     secEquity: true,
     secPerfRisk: true,
     secCalendar: true,
-    secTradeLog: true
+    secTradeLog: true,
+    secSocialHub: true
   };
   let customTemplateCfg = (() => {
     try {
@@ -2268,7 +2606,7 @@
       : (resolved === 'compact' ? 'compact' : 'cozy');
     document.body.setAttribute('data-density', density);
 
-    const allSections = ['secAccounts', 'secCoreStats', 'secRadar', 'secEquity', 'secPerfRisk', 'secCalendar', 'secTradeLog', 'secLeaderboard'];
+    const allSections = ['secAccounts', 'secCoreStats', 'secRadar', 'secEquity', 'secPerfRisk', 'secCalendar', 'secTradeLog', 'secSocialHub', 'secLeaderboard'];
     allSections.forEach(secId => {
       const el = document.getElementById(secId);
       if (!el) return;
@@ -2302,6 +2640,7 @@
       secPerfRisk: document.getElementById('chkPerfRisk').checked,
       secCalendar: document.getElementById('chkCalendar').checked,
       secTradeLog: document.getElementById('chkTradeLog').checked,
+      secSocialHub: document.getElementById('chkSocialHub').checked,
       secLeaderboard: document.getElementById('chkLeaderboard').checked
     };
     localStorage.setItem(KEY_TEMPLATE, viewTemplate);
@@ -2328,6 +2667,28 @@
     renderAll();
   };
 
+  function normalizeTradeRecord(t) {
+    const files = Array.isArray(t.files) ? [...t.files] : [];
+    if (!files.length && t.image) {
+      files.push({
+        id: 'legacy_img_' + (t.id || Date.now()),
+        name: 'chart_screenshot.jpg',
+        type: 'image/jpeg',
+        size: 0,
+        isImage: true,
+        dataUrl: t.image
+      });
+    }
+    const firstImg = files.find(f => f && f.isImage && f.dataUrl);
+    return {
+      ...t,
+      accountId: t.accountId || accounts[0].id,
+      lot: Number.isFinite(parseFloat(t.lot)) ? parseFloat(t.lot) : 0,
+      files,
+      image: firstImg ? firstImg.dataUrl : (t.image || '')
+    };
+  }
+
   function loadTrades() {
     if (!db) {
       trades = [];
@@ -2340,11 +2701,7 @@
     req.onsuccess = () => {
       const list = Array.isArray(req.result) ? req.result : [];
       trades = list
-        .map(t => ({
-          ...t,
-          accountId: t.accountId || accounts[0].id,
-          lot: Number.isFinite(parseFloat(t.lot)) ? parseFloat(t.lot) : 0
-        }))
+        .map(normalizeTradeRecord)
         .sort((a, b) => new Date(a.date) - new Date(b.date));
       renderAll();
     };
@@ -2354,7 +2711,7 @@
     return new Promise((resolve) => {
       if (!db) return resolve();
       const tx = db.transaction('trades', 'readwrite');
-      tx.objectStore('trades').put(trade);
+      tx.objectStore('trades').put(normalizeTradeRecord(trade));
       tx.oncomplete = () => resolve();
     });
   }
@@ -2368,7 +2725,7 @@
     });
   }
 
-  // Theme Toggle (Controls page background & card surfaces for Light vs Dark)
+  // Theme Toggle
   function applyTheme(theme) {
     const isLight = theme === 'light';
     document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
@@ -2387,8 +2744,9 @@
 
   applyTheme(localStorage.getItem(KEY_THEME) === 'light' ? 'light' : 'dark');
   applyViewTemplate();
+  syncRepeatedUsernameEverywhere();
 
-  // Account Helpers (Logged / Active Account Scoped)
+  // Account Helpers
   function getAccountName(accId) {
     const found = accounts.find(a => a.id === accId);
     return found ? found.name : (accounts[0] ? accounts[0].name : 'Main Account');
@@ -2460,7 +2818,7 @@
     });
   }
 
-  // Score Calculation & Live Leaderboard (Top 1, 2, 3 get icons; others have no icon)
+  // Score Calculation & Live Leaderboard
   function computeTraderScore(traderTrades, startingBal) {
     const count = traderTrades.length;
     if (!count) {
@@ -2499,7 +2857,7 @@
     const currentMetrics = computeTraderScore(trades, accounts.reduce((s, a) => s + (Number(a.startingBalance) || 0), 0));
     const currentEntry = {
       id: userScopeId,
-      name: currentUserDisplayName,
+      name: `${currentUserDisplayName} (${getRepeatedHandle()})`,
       score: currentMetrics.score,
       winrate: currentMetrics.winrate,
       netPnl: currentMetrics.netPnl,
@@ -2547,29 +2905,89 @@
     }).join('');
   }
 
-  // Image Compression before saving
+  // Multi-File Upload & Image Compression
+  function renderDraftFilesPreview() {
+    const grid = document.getElementById('multiFilesPreviewGrid');
+    const singlePreview = document.getElementById('imagePreview');
+    if (!grid) return;
+
+    if (!draftTradeFiles.length) {
+      grid.innerHTML = '';
+      if (singlePreview) singlePreview.style.display = 'none';
+      return;
+    }
+
+    grid.innerHTML = draftTradeFiles.map((f, idx) => `
+      <div class="multi-thumb-box" title="${escapeHtml(f.name)}">
+        ${f.isImage
+          ? `<img src="${f.dataUrl}" alt="${escapeHtml(f.name)}" />`
+          : `<div class="multi-file-chip">${escapeHtml(f.name)}</div>`}
+        <button type="button" class="multi-remove-btn" onclick="removeDraftFile(${idx})" aria-label="Remove file">✕</button>
+      </div>
+    `).join('');
+
+    const firstImg = draftTradeFiles.find(f => f.isImage);
+    currentBase64Image = firstImg ? firstImg.dataUrl : '';
+    if (singlePreview) {
+      if (currentBase64Image) {
+        singlePreview.src = currentBase64Image;
+        singlePreview.style.display = 'block';
+      } else {
+        singlePreview.style.display = 'none';
+      }
+    }
+  }
+
+  function removeDraftFile(idx) {
+    draftTradeFiles.splice(idx, 1);
+    renderDraftFilesPreview();
+  }
+
   function previewImage(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const maxW = 1000;
-        const scale = Math.min(1, maxW / img.width);
-        canvas.width = img.width * scale;
-        canvas.height = img.height * scale;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        currentBase64Image = canvas.toDataURL('image/jpeg', 0.78);
-        const preview = document.getElementById('imagePreview');
-        preview.src = currentBase64Image;
-        preview.style.display = 'block';
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const rawUrl = event.target.result;
+        const isImg = file.type.startsWith('image/');
+        if (isImg) {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxW = 1000;
+            const scale = Math.min(1, maxW / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const compressed = canvas.toDataURL('image/jpeg', 0.78);
+            draftTradeFiles.push({
+              id: 'file_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+              name: file.name,
+              type: 'image/jpeg',
+              size: file.size,
+              isImage: true,
+              dataUrl: compressed
+            });
+            renderDraftFilesPreview();
+          };
+          img.src = rawUrl;
+        } else {
+          draftTradeFiles.push({
+            id: 'file_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+            name: file.name,
+            type: file.type || 'application/octet-stream',
+            size: file.size,
+            isImage: false,
+            dataUrl: rawUrl
+          });
+          renderDraftFilesPreview();
+        }
       };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+    });
   }
 
   // Modals
@@ -2579,25 +2997,24 @@
     document.querySelectorAll('#tradeForm .form-control').forEach(el => el.classList.remove('anim-shake'));
     document.getElementById('imagePreview').style.display = 'none';
     currentBase64Image = '';
+    draftTradeFiles = [];
     document.getElementById('deleteTradeBtn').style.display = 'none';
 
     if (tradeToEdit) {
+      const norm = normalizeTradeRecord(tradeToEdit);
       document.getElementById('modalTitle').innerText = 'Edit Trade';
-      document.getElementById('tradeId').value = tradeToEdit.id;
-      document.getElementById('tradeAccount').value = tradeToEdit.accountId || accounts[0].id;
-      document.getElementById('tradeDate').value = tradeToEdit.date;
-      document.getElementById('tradePair').value = tradeToEdit.pair;
-      document.getElementById('tradeDir').value = tradeToEdit.dir;
-      document.getElementById('tradeLot').value = tradeToEdit.lot !== undefined ? tradeToEdit.lot : 0.10;
-      document.getElementById('tradePnl').value = tradeToEdit.pnl;
-      document.getElementById('tradeSetup').value = tradeToEdit.setup || '';
-      document.getElementById('tradeScore').value = tradeToEdit.score || 8;
-      document.getElementById('tradeNotes').value = tradeToEdit.notes || '';
-      if (tradeToEdit.image) {
-        currentBase64Image = tradeToEdit.image;
-        document.getElementById('imagePreview').src = tradeToEdit.image;
-        document.getElementById('imagePreview').style.display = 'block';
-      }
+      document.getElementById('tradeId').value = norm.id;
+      document.getElementById('tradeAccount').value = norm.accountId || accounts[0].id;
+      document.getElementById('tradeDate').value = norm.date;
+      document.getElementById('tradePair').value = norm.pair;
+      document.getElementById('tradeDir').value = norm.dir;
+      document.getElementById('tradeLot').value = norm.lot !== undefined ? norm.lot : 0.10;
+      document.getElementById('tradePnl').value = norm.pnl;
+      document.getElementById('tradeSetup').value = norm.setup || '';
+      document.getElementById('tradeScore').value = norm.score || 8;
+      document.getElementById('tradeNotes').value = norm.notes || '';
+      draftTradeFiles = [...norm.files];
+      renderDraftFilesPreview();
       document.getElementById('deleteTradeBtn').style.display = 'inline-flex';
     } else {
       document.getElementById('modalTitle').innerText = 'Log New Trade';
@@ -2605,6 +3022,7 @@
       document.getElementById('tradeAccount').value = getActiveAccount().id;
       document.getElementById('tradeDate').value = datePrefill || new Date().toISOString().slice(0, 10);
       document.getElementById('tradeLot').value = '0.10';
+      renderDraftFilesPreview();
     }
     document.getElementById('tradeModal').classList.add('open');
   }
@@ -2654,6 +3072,7 @@
       return;
     }
 
+    const firstImg = draftTradeFiles.find(f => f.isImage && f.dataUrl);
     const id = document.getElementById('tradeId').value || (Date.now().toString() + '_' + Math.random().toString(36).slice(2, 6));
     const trade = {
       id,
@@ -2666,7 +3085,8 @@
       setup: document.getElementById('tradeSetup').value,
       score: parseInt(document.getElementById('tradeScore').value, 10) || 8,
       notes: document.getElementById('tradeNotes').value,
-      image: currentBase64Image
+      files: [...draftTradeFiles],
+      image: firstImg ? firstImg.dataUrl : currentBase64Image
     };
 
     await saveTradeToDB(trade);
@@ -2681,6 +3101,474 @@
       closeModal('tradeModal');
       loadTrades();
     }
+  }
+
+  // High-Graphic Share Report Studio (Daily / Weekly / Monthly / Yearly)
+  let activeSharePeriod = 'DAILY';
+
+  function openShareModal(period = 'DAILY') {
+    activeSharePeriod = period;
+    document.querySelectorAll('#sharePeriodPills .pill').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-speriod') === period);
+    });
+    document.getElementById('shareModal').classList.add('open');
+    renderShareReportGraphic();
+  }
+
+  function selectSharePeriod(period, el) {
+    activeSharePeriod = period;
+    document.querySelectorAll('#sharePeriodPills .pill').forEach(btn => btn.classList.remove('active'));
+    if (el) el.classList.add('active');
+    renderShareReportGraphic();
+  }
+
+  function getTradesForSharePeriod(period) {
+    const scoped = getAccountScopedTrades();
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10);
+
+    if (period === 'DAILY') {
+      const dayList = scoped.filter(t => t.date === todayStr);
+      return { list: dayList.length ? dayList : scoped.slice(-5), label: `DAILY (${todayStr})` };
+    }
+    if (period === 'WEEKLY') {
+      const weekAgo = new Date(now);
+      weekAgo.setDate(now.getDate() - 7);
+      return { list: scoped.filter(t => new Date(t.date + 'T00:00:00') >= weekAgo), label: 'WEEKLY (Last 7 Days)' };
+    }
+    if (period === 'MONTHLY') {
+      return {
+        list: scoped.filter(t => {
+          const d = new Date(t.date + 'T00:00:00');
+          return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        }),
+        label: `MONTHLY (${now.toLocaleString('en-US', { month: 'short' })} ${now.getFullYear()})`
+      };
+    }
+    return {
+      list: scoped.filter(t => new Date(t.date + 'T00:00:00').getFullYear() === now.getFullYear()),
+      label: `YEARLY (${now.getFullYear()})`
+    };
+  }
+
+  function collectImagesFromTrades(list) {
+    const imgs = [];
+    list.forEach(t => {
+      const norm = normalizeTradeRecord(t);
+      norm.files.forEach(f => {
+        if (f && f.isImage && f.dataUrl) imgs.push(f.dataUrl);
+      });
+    });
+    return imgs.slice(0, 4);
+  }
+
+  function renderShareReportGraphic() {
+    const canvas = document.getElementById('shareReportCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    const handle = getRepeatedHandle();
+    const acc = getActiveAccount();
+    const startBal = getActiveStartingBalance();
+    const { list, label } = getTradesForSharePeriod(activeSharePeriod);
+
+    const netPnl = list.reduce((s, t) => s + (Number(t.pnl) || 0), 0);
+    const wins = list.filter(t => Number(t.pnl) > 0).length;
+    const winrate = list.length ? (wins / list.length) * 100 : 0;
+    const gainPct = startBal > 0 ? (netPnl / startBal) * 100 : 0;
+    const pnlSign = netPnl >= 0 ? '+' : '';
+    const gainSign = gainPct >= 0 ? '+' : '';
+
+    // Background gradient
+    const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+    bgGrad.addColorStop(0, '#0b1120');
+    bgGrad.addColorStop(0.55, '#111827');
+    bgGrad.addColorStop(1, '#0f172a');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Accent top bar
+    const accentGrad = ctx.createLinearGradient(0, 0, W, 0);
+    accentGrad.addColorStop(0, '#10b981');
+    accentGrad.addColorStop(0.5, '#3b82f6');
+    accentGrad.addColorStop(1, '#8b5cf6');
+    ctx.fillStyle = accentGrad;
+    ctx.fillRect(0, 0, W, 12);
+
+    // Header & Repeated Username
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = '800 38px sans-serif';
+    ctx.fillText('Trading journal by BIRUK', 56, 78);
+
+    ctx.fillStyle = '#10b981';
+    ctx.font = '800 28px sans-serif';
+    ctx.fillText(`${handle}  •  ${label}`, 56, 124);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '700 22px sans-serif';
+    ctx.fillText(`Account: ${acc.name}`, 56, 162);
+
+    // Hero P&L Card
+    ctx.fillStyle = 'rgba(30, 41, 59, 0.78)';
+    ctx.fillRect(56, 190, W - 112, 165);
+    ctx.strokeStyle = netPnl >= 0 ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(56, 190, W - 112, 165);
+
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '700 22px sans-serif';
+    ctx.fillText(`${activeSharePeriod} NET P&L`, 86, 236);
+
+    ctx.fillStyle = netPnl >= 0 ? '#34d399' : '#f87171';
+    ctx.font = '900 58px sans-serif';
+    ctx.fillText(`${pnlSign}$${netPnl.toFixed(2)}`, 86, 308);
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = '800 26px sans-serif';
+    ctx.fillText(`Return: ${gainSign}${gainPct.toFixed(2)}%   |   Winrate: ${winrate.toFixed(1)}%   |   Trades: ${list.length}`, 86, 342);
+
+    // Graph Panel (Cumulative P&L curve for selected period)
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+    ctx.fillRect(56, 382, W - 112, 280);
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(56, 382, W - 112, 280);
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '800 22px sans-serif';
+    ctx.fillText('Performance Graph', 82, 420);
+
+    const curve = [0];
+    let accPnl = 0;
+    list.forEach(t => {
+      accPnl += Number(t.pnl) || 0;
+      curve.push(accPnl);
+    });
+    const minV = Math.min(...curve);
+    const maxV = Math.max(...curve);
+    const spanV = (maxV - minV) || 1;
+    const gx = 86, gy = 445, gw = W - 172, gh = 185;
+
+    // Zero baseline
+    const zeroY = gy + gh - ((0 - minV) / spanV) * gh;
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+    ctx.setLineDash([6, 6]);
+    ctx.beginPath();
+    ctx.moveTo(gx, zeroY);
+    ctx.lineTo(gx + gw, zeroY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle = netPnl >= 0 ? '#10b981' : '#ef4444';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    curve.forEach((v, idx) => {
+      const px = curve.length === 1 ? gx + gw / 2 : gx + (idx / (curve.length - 1)) * gw;
+      const py = gy + gh - ((v - minV) / spanV) * gh;
+      if (idx === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+
+    // Visible Uploaded Trade Images Collage
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '800 22px sans-serif';
+    ctx.fillText('Uploaded Trade Images', 56, 704);
+
+    const imgs = collectImagesFromTrades(list);
+    const imgAreaY = 724;
+    const imgBoxW = (W - 112 - 20) / 2;
+    const imgBoxH = 225;
+
+    for (let i = 0; i < 4; i++) {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const bx = 56 + col * (imgBoxW + 20);
+      const by = imgAreaY + row * (imgBoxH + 16);
+
+      ctx.fillStyle = 'rgba(30, 41, 59, 0.7)';
+      ctx.fillRect(bx, by, imgBoxW, imgBoxH);
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(bx, by, imgBoxW, imgBoxH);
+
+      if (imgs[i]) {
+        const im = new Image();
+        im.onload = () => {
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(bx + 2, by + 2, imgBoxW - 4, imgBoxH - 4);
+          ctx.clip();
+          ctx.drawImage(im, bx + 2, by + 2, imgBoxW - 4, imgBoxH - 4);
+          ctx.restore();
+        };
+        im.src = imgs[i];
+      } else {
+        ctx.fillStyle = '#64748b';
+        ctx.font = '700 20px sans-serif';
+        ctx.fillText(i === 0 && !imgs.length ? 'No chart image in period' : `Slot ${i + 1}`, bx + 24, by + imgBoxH / 2 + 6);
+      }
+    }
+
+    // Footer inside graphic
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '700 20px sans-serif';
+    ctx.fillText(`Shared by ${handle}  •  All rights reserved by BIRUK MELKU`, 56, H - 36);
+
+    // Formatted Text Data
+    const topPairs = list.slice(-4).map(t => `${t.pair} (${t.dir} ${Number(t.pnl) >= 0 ? '+' : ''}$${Number(t.pnl).toFixed(2)})`).join(', ');
+    const formattedText = [
+      `📊 Trading journal by BIRUK — ${label}`,
+      `👤 Trader: ${handle} | Account: ${acc.name}`,
+      `💰 Net P&L: ${pnlSign}$${netPnl.toFixed(2)} (${gainSign}${gainPct.toFixed(2)}%)`,
+      `🎯 Winrate: ${winrate.toFixed(1)}% | Trades: ${list.length}`,
+      topPairs ? `📌 Recent Trades: ${topPairs}` : ''
+    ].filter(Boolean).join('\n');
+
+    document.getElementById('shareFormattedText').value = formattedText;
+  }
+
+  function downloadShareGraphicPng() {
+    const canvas = document.getElementById('shareReportCanvas');
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = `BIRUK_Journal_${activeSharePeriod}_${new Date().toISOString().slice(0, 10)}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  function copyShareText() {
+    const ta = document.getElementById('shareFormattedText');
+    if (!ta) return;
+    navigator.clipboard?.writeText(ta.value).catch(() => {});
+    alert('Report text copied!');
+  }
+
+  function shareToTelegramApp() {
+    const text = encodeURIComponent(document.getElementById('shareFormattedText').value || '');
+    const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
+    if (tg && typeof tg.openTelegramLink === 'function') {
+      tg.openTelegramLink(tgShareUrl);
+    } else {
+      window.open(tgShareUrl, '_blank');
+    }
+  }
+
+  async function shareGraphicAndText() {
+    const canvas = document.getElementById('shareReportCanvas');
+    const text = document.getElementById('shareFormattedText').value || '';
+    if (!canvas) return;
+
+    canvas.toBlob(async (blob) => {
+      if (blob && navigator.share) {
+        const file = new File([blob], `trading_report_${activeSharePeriod.toLowerCase()}.png`, { type: 'image/png' });
+        try {
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              title: `Trading journal by BIRUK (${activeSharePeriod})`,
+              text,
+              files: [file]
+            });
+            return;
+          }
+          await navigator.share({
+            title: `Trading journal by BIRUK (${activeSharePeriod})`,
+            text
+          });
+          return;
+        } catch (err) {}
+      }
+      downloadShareGraphicPng();
+      copyShareText();
+    }, 'image/png');
+  }
+
+  // Social Hub: Follow System, Chat & Daily Chat Streak
+  const COMMUNITY_TRADERS = [
+    { id: 'peer_biruk_fx', name: 'Biruk Melku', handle: '@biruk_fx', style: 'Gold & Indices' },
+    { id: 'peer_elena_pips', name: 'Elena Vance', handle: '@elenapips', style: 'London Session' },
+    { id: 'peer_marcus_ltf', name: 'Marcus Lin', handle: '@marcus_ltf', style: 'Scalper • 0.25L' }
+  ];
+
+  function getFollowingSet() {
+    try {
+      const arr = JSON.parse(localStorage.getItem(KEY_FOLLOWING) || '["peer_biruk_fx"]');
+      return new Set(Array.isArray(arr) ? arr : ['peer_biruk_fx']);
+    } catch (e) {
+      return new Set(['peer_biruk_fx']);
+    }
+  }
+
+  function toggleFollowTrader(peerId) {
+    const set = getFollowingSet();
+    if (set.has(peerId)) set.delete(peerId);
+    else set.add(peerId);
+    localStorage.setItem(KEY_FOLLOWING, JSON.stringify([...set]));
+    renderFollowList();
+  }
+
+  function renderFollowList() {
+    const container = document.getElementById('followListContainer');
+    const countLabel = document.getElementById('followingCountLabel');
+    if (!container) return;
+    const following = getFollowingSet();
+    if (countLabel) countLabel.innerText = `Following: ${following.size}`;
+
+    container.innerHTML = COMMUNITY_TRADERS.map(p => {
+      const isFollowing = following.has(p.id);
+      return `
+        <div class="follow-item">
+          <div>
+            <div style="font-weight:800; font-size:12px;">${escapeHtml(p.name)} <span style="color:var(--green);">${escapeHtml(p.handle)}</span></div>
+            <div style="font-size:10px; color:var(--text-muted);">${escapeHtml(p.style)}</div>
+          </div>
+          <button type="button" class="btn ${isFollowing ? 'btn-primary' : ''}" style="padding:5px 10px; font-size:11px;" onclick="toggleFollowTrader('${escapeHtml(p.id)}')">
+            ${isFollowing ? 'Following' : 'Follow'}
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function getStreakState() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY_CHAT_STREAK) || '{}');
+      return {
+        streak: Number(raw.streak) || 0,
+        lastDay: raw.lastDay || ''
+      };
+    } catch (e) {
+      return { streak: 0, lastDay: '' };
+    }
+  }
+
+  function updateDailyChatStreakOnMessage() {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    const st = getStreakState();
+    let nextStreak = st.streak;
+
+    if (st.lastDay === todayStr) {
+      nextStreak = Math.max(1, st.streak);
+    } else if (st.lastDay === yesterdayStr) {
+      nextStreak = st.streak + 1;
+    } else {
+      nextStreak = 1;
+    }
+
+    const updated = { streak: nextStreak, lastDay: todayStr };
+    localStorage.setItem(KEY_CHAT_STREAK, JSON.stringify(updated));
+    renderDailyChatStreak();
+    return nextStreak;
+  }
+
+  function renderDailyChatStreak() {
+    const st = getStreakState();
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const numEl = document.getElementById('dailyChatStreakNum');
+    const badgeEl = document.getElementById('dailyChatStreakBadge');
+    const statusEl = document.getElementById('streakStatusText');
+
+    if (numEl) numEl.innerText = `${st.streak}d`;
+    if (badgeEl) badgeEl.innerText = `Chat Streak: ${st.streak}d`;
+    if (statusEl) {
+      statusEl.innerText = st.lastDay === todayStr
+        ? `Active today (${todayStr}) — streak locked in!`
+        : 'Send a message today to build/keep your streak';
+    }
+  }
+
+  function getChatMessages() {
+    try {
+      const arr = JSON.parse(localStorage.getItem(KEY_CHAT_MSGS) || '[]');
+      if (Array.isArray(arr) && arr.length) return arr;
+    } catch (e) {}
+    return [
+      {
+        id: 'welcome_1',
+        senderHandle: '@biruk_fx',
+        streak: 5,
+        text: 'Welcome to the trader circle! Share your daily/weekly/monthly/yearly setups and keep your daily chat streak alive.',
+        images: [],
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        own: false
+      }
+    ];
+  }
+
+  function saveChatMessages(msgs) {
+    localStorage.setItem(KEY_CHAT_MSGS, JSON.stringify(msgs.slice(-60)));
+  }
+
+  function sendChatMessage(e) {
+    e.preventDefault();
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) {
+      triggerFieldShake(input);
+      return;
+    }
+
+    const streak = updateDailyChatStreakOnMessage();
+    const handle = getRepeatedHandle();
+    const msgs = getChatMessages();
+    msgs.push({
+      id: 'msg_' + Date.now(),
+      senderHandle: handle,
+      streak,
+      text,
+      images: [],
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      own: true
+    });
+    saveChatMessages(msgs);
+    input.value = '';
+    renderChatMessages();
+  }
+
+  function shareCurrentPeriodToChat() {
+    const streak = updateDailyChatStreakOnMessage();
+    const handle = getRepeatedHandle();
+    const { list, label } = getTradesForSharePeriod(activeSharePeriod);
+    const netPnl = list.reduce((s, t) => s + (Number(t.pnl) || 0), 0);
+    const imgs = collectImagesFromTrades(list);
+    const sign = netPnl >= 0 ? '+' : '';
+
+    const msgs = getChatMessages();
+    msgs.push({
+      id: 'share_msg_' + Date.now(),
+      senderHandle: handle,
+      streak,
+      text: `Shared ${label}: ${sign}$${netPnl.toFixed(2)} across ${list.length} trade(s).`,
+      images: imgs,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      own: true
+    });
+    saveChatMessages(msgs);
+    renderChatMessages();
+  }
+
+  function renderChatMessages() {
+    const box = document.getElementById('chatMessagesContainer');
+    if (!box) return;
+    const msgs = getChatMessages();
+    box.innerHTML = msgs.map(m => `
+      <div class="chat-msg ${m.own ? 'own' : ''}">
+        <div class="chat-msg-head">
+          <span>${escapeHtml(m.senderHandle)} <span class="badge-lot">🔥 ${Number(m.streak || 1)}d</span></span>
+          <span style="color:var(--text-muted); font-weight:600;">${escapeHtml(m.time || '')}</span>
+        </div>
+        <div>${escapeHtml(m.text)}</div>
+        ${Array.isArray(m.images) && m.images.length
+          ? `<div style="display:flex; flex-wrap:wrap; margin-top:4px;">${m.images.map(src => `<img src="${src}" class="chat-shared-thumb" />`).join('')}</div>`
+          : ''}
+      </div>
+    `).join('');
+    box.scrollTop = box.scrollHeight;
   }
 
   // Settings Page Navigation & Controls
@@ -2720,6 +3608,7 @@
     document.getElementById('chkPerfRisk').checked = customTemplateCfg.secPerfRisk !== false;
     document.getElementById('chkCalendar').checked = customTemplateCfg.secCalendar !== false;
     document.getElementById('chkTradeLog').checked = customTemplateCfg.secTradeLog !== false;
+    document.getElementById('chkSocialHub').checked = customTemplateCfg.secSocialHub !== false;
     document.getElementById('chkLeaderboard').checked = customTemplateCfg.secLeaderboard !== false;
 
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
@@ -2911,8 +3800,12 @@
 
   // Render Dashboard & Charts
   function renderAll() {
+    syncRepeatedUsernameEverywhere();
     renderTopAndAccountCards();
     renderLeaderboard();
+    renderFollowList();
+    renderDailyChatStreak();
+    renderChatMessages();
 
     const scopedTrades = getAccountScopedTrades();
     const startingBalance = getActiveStartingBalance();
@@ -2989,6 +3882,10 @@
 
     renderCalendar(scopedTrades, startingBalance);
     renderTradeList(filtered);
+
+    if (document.getElementById('shareModal').classList.contains('open')) {
+      renderShareReportGraphic();
+    }
   }
 
   function updatePeriodReturn(elId, days, scopedTrades, startingBalance) {
@@ -3260,16 +4157,18 @@
     document.getElementById('logCountLabel').innerText = `${list.length} entries`;
 
     if (!list.length) {
-      container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">No trades logged for this period. Tap <b>+ Add Trade</b> to record your first trade, lot size, screenshot, and experience.</div>`;
+      container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">No trades logged for this period. Tap <b>+ Add Trade</b> to record your first trade, lot size, multiple files, and experience.</div>`;
       return;
     }
 
     const reversed = [...list].reverse();
-    container.innerHTML = reversed.map((t, idx) => {
+    container.innerHTML = reversed.map((rawT, idx) => {
+      const t = normalizeTradeRecord(rawT);
       const isWin = t.pnl >= 0;
       const delayMs = Math.min(idx * 35, 280);
       const lotText = Number(t.lot || 0).toFixed(2);
       const accLabel = getAccountName(t.accountId);
+      const fileCountBadge = t.files.length > 1 ? `<span class="badge-lot">${t.files.length} files</span>` : '';
       const thumb = t.image
         ? `<img src="${t.image}" class="trade-thumb" />`
         : `<div class="trade-thumb" style="display:flex;align-items:center;justify-content:center;">${ICONS.chartPlaceholder}</div>`;
@@ -3281,6 +4180,7 @@
               <div style="font-weight:800; font-size:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                 <span>${escapeHtml(t.pair)}</span>
                 <span class="badge-lot">${lotText} lot</span>
+                ${fileCountBadge}
                 <span style="font-size:11px; color:var(--text-muted);">(${escapeHtml(t.dir)} • ${escapeHtml(t.date)})</span>
               </div>
               <div style="font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:450px;">
@@ -3300,11 +4200,23 @@
   }
 
   function viewTradeDetail(id) {
-    const t = trades.find(x => x.id === id);
-    if (!t) return;
+    const raw = trades.find(x => x.id === id);
+    if (!raw) return;
+    const t = normalizeTradeRecord(raw);
     const isWin = t.pnl >= 0;
     const lotText = Number(t.lot || 0).toFixed(2);
     const content = document.getElementById('viewModalContent');
+
+    const filesHtml = t.files.length
+      ? `<div style="margin-bottom:12px;">
+           <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Uploaded Files (${t.files.length}):</div>
+           ${t.files.map(f => f.isImage
+             ? `<div style="margin-bottom:8px;"><img src="${f.dataUrl}" alt="${escapeHtml(f.name)}" style="width:100%; border-radius:8px; border:1px solid var(--border);" /></div>`
+             : `<div style="margin-bottom:6px;"><a href="${f.dataUrl}" download="${escapeHtml(f.name)}" class="btn">📎 ${escapeHtml(f.name)}</a></div>`
+           ).join('')}
+         </div>`
+      : '';
+
     content.innerHTML = `
       <div class="card-header">
         <h3>${escapeHtml(t.pair)} (${escapeHtml(t.dir)}) — ${escapeHtml(t.date)}</h3>
@@ -3333,7 +4245,7 @@
         <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">Trade Experience &amp; Notes:</div>
         <div style="background:var(--bg-input); padding:12px; border-radius:8px; font-size:13px; line-height:1.5; white-space:pre-wrap;">${escapeHtml(t.notes || 'No notes recorded.')}</div>
       </div>
-      ${t.image ? `<div style="margin-bottom:12px;"><img src="${t.image}" style="width:100%; border-radius:8px; border:1px solid var(--border);" /></div>` : ''}
+      ${filesHtml}
       <div style="display:flex; justify-content:flex-end; gap:8px;">
         <button class="btn" onclick="closeModal('viewModal'); openTradeModal('', trades.find(x => x.id === '${t.id}'))">
           ${ICONS.edit}
