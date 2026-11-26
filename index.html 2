@@ -552,6 +552,59 @@
       color: var(--text-main);
     }
 
+    /* Multi-file preview grid */
+    .multi-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .multi-thumb-box {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .multi-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .multi-file-chip {
+      padding: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      word-break: break-word;
+      color: var(--text-main);
+    }
+
+    .multi-remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0, 0, 0, 0.72);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* Score / Leaderboard Section (Placed at Bottom) */
     #secLeaderboard {
       order: 99;
@@ -1625,8 +1678,9 @@
         </div>
 
         <div class="form-group">
-          <label>Upload Trade Chart Screenshot</label>
-          <input type="file" id="tradeImageInput" accept="image/*" class="form-control" onchange="previewImage(event)" />
+          <label>Upload Multiple Daily Files / Screenshots</label>
+          <input type="file" id="tradeImageInput" accept="image/*,.pdf,.csv,.txt,.json" multiple class="form-control" onchange="previewImage(event)" />
+          <div id="multiFilesPreviewGrid" class="multi-preview-grid"></div>
           <img id="imagePreview" class="preview-img" style="display:none;" />
         </div>
 
@@ -1933,6 +1987,7 @@
   let currentRange = 'ALL';
   let calDate = new Date();
   let currentBase64Image = '';
+  let draftTradeFiles = [];
 
   // Color & Luminance Helpers (Controls TEXT color only; Page Background follows Light/Dark mode)
   function parseRgb(hexOrRgb) {
@@ -1971,7 +2026,6 @@
     return (lighter + 0.05) / (darker + 0.05);
   }
 
-  // Returns high-contrast TEXT color for a given background surface
   function autoReadableTextColor(surfaceColorStr) {
     const bgLum = getRelativeLuminance(surfaceColorStr);
     const darkText = '#090d16';
@@ -1981,7 +2035,6 @@
       : lightText;
   }
 
-  // Returns high-contrast MUTED TEXT color for a given background surface
   function autoReadableMutedColor(surfaceColorStr) {
     const bgLum = getRelativeLuminance(surfaceColorStr);
     const darkMuted = '#1e293b';
@@ -1991,7 +2044,6 @@
       : lightMuted;
   }
 
-  // Ensures accent text stays sharp and legible over the active surface
   function autoReadableAccentText(colorHex, surfaceColorStr) {
     if (!colorHex) return colorHex;
     const bgLum = getRelativeLuminance(surfaceColorStr);
@@ -2045,7 +2097,6 @@
     const root = document.documentElement;
     const isLight = root.getAttribute('data-theme') === 'light';
 
-    // Page & card surfaces ALWAYS follow Light mode vs Dark mode
     const pageBg = isLight ? '#eef2f6' : '#0b0e14';
     const cardSurface = isLight ? '#ffffff' : '#131822';
     const cardHoverSurface = isLight ? '#f1f5f9' : '#1b2332';
@@ -2081,7 +2132,6 @@
 
     root.style.setProperty('--neutral', neutralReadable);
 
-    // Badge colors readable on both cards and gradients
     root.style.setProperty('--badge-win-bg', isLight ? 'rgba(4, 120, 87, 0.2)' : 'rgba(16, 185, 129, 0.26)');
     root.style.setProperty('--badge-win-text', isLight ? '#064e3b' : '#a7f3d0');
     root.style.setProperty('--badge-win-border', isLight ? 'rgba(4, 120, 87, 0.6)' : 'rgba(16, 185, 129, 0.65)');
@@ -2090,7 +2140,6 @@
     root.style.setProperty('--badge-loss-text', isLight ? '#7f1d1d' : '#fecaca');
     root.style.setProperty('--badge-loss-border', isLight ? 'rgba(185, 28, 28, 0.6)' : 'rgba(239, 68, 68, 0.65)');
 
-    // Top balance banner text automatically adapts to solid card or gradient
     if (cfg && cfg.useGradient && Array.isArray(cfg.gradientStops) && cfg.gradientStops.length >= 2) {
       const gradCss = buildCssGradientString(cfg.gradientStops, cfg.gradientAngle);
       root.style.setProperty('--banner-bg', gradCss);
@@ -2210,7 +2259,7 @@
     renderAll();
   }
 
-  // Calendar Animation State (Without Animation Settings Page)
+  // Calendar Animation State
   const calendarAnimation = localStorage.getItem(KEY_CAL_ANIM) || 'slide';
 
   function updateStyleSummaryChip() {
@@ -2230,7 +2279,7 @@
 
   document.body.setAttribute('data-cal-anim', calendarAnimation);
 
-  // View Template State (Auto + Presets + Custom inside Settings)
+  // View Template State
   let viewTemplate = localStorage.getItem(KEY_TEMPLATE) || 'auto';
   const defaultCustomCfg = {
     density: 'cozy',
@@ -2328,6 +2377,28 @@
     renderAll();
   };
 
+  function normalizeTradeRecord(t) {
+    const files = Array.isArray(t.files) ? [...t.files] : [];
+    if (!files.length && t.image) {
+      files.push({
+        id: 'legacy_img_' + (t.id || Date.now()),
+        name: 'chart_screenshot.jpg',
+        type: 'image/jpeg',
+        size: 0,
+        isImage: true,
+        dataUrl: t.image
+      });
+    }
+    const firstImg = files.find(f => f && f.isImage && f.dataUrl);
+    return {
+      ...t,
+      accountId: t.accountId || accounts[0].id,
+      lot: Number.isFinite(parseFloat(t.lot)) ? parseFloat(t.lot) : 0,
+      files,
+      image: firstImg ? firstImg.dataUrl : (t.image || '')
+    };
+  }
+
   function loadTrades() {
     if (!db) {
       trades = [];
@@ -2340,11 +2411,7 @@
     req.onsuccess = () => {
       const list = Array.isArray(req.result) ? req.result : [];
       trades = list
-        .map(t => ({
-          ...t,
-          accountId: t.accountId || accounts[0].id,
-          lot: Number.isFinite(parseFloat(t.lot)) ? parseFloat(t.lot) : 0
-        }))
+        .map(normalizeTradeRecord)
         .sort((a, b) => new Date(a.date) - new Date(b.date));
       renderAll();
     };
@@ -2354,7 +2421,7 @@
     return new Promise((resolve) => {
       if (!db) return resolve();
       const tx = db.transaction('trades', 'readwrite');
-      tx.objectStore('trades').put(trade);
+      tx.objectStore('trades').put(normalizeTradeRecord(trade));
       tx.oncomplete = () => resolve();
     });
   }
@@ -2368,7 +2435,7 @@
     });
   }
 
-  // Theme Toggle (Controls page background & card surfaces for Light vs Dark)
+  // Theme Toggle
   function applyTheme(theme) {
     const isLight = theme === 'light';
     document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
@@ -2388,7 +2455,7 @@
   applyTheme(localStorage.getItem(KEY_THEME) === 'light' ? 'light' : 'dark');
   applyViewTemplate();
 
-  // Account Helpers (Logged / Active Account Scoped)
+  // Account Helpers
   function getAccountName(accId) {
     const found = accounts.find(a => a.id === accId);
     return found ? found.name : (accounts[0] ? accounts[0].name : 'Main Account');
@@ -2460,7 +2527,7 @@
     });
   }
 
-  // Score Calculation & Live Leaderboard (Top 1, 2, 3 get icons; others have no icon)
+  // Score Calculation & Live Leaderboard
   function computeTraderScore(traderTrades, startingBal) {
     const count = traderTrades.length;
     if (!count) {
@@ -2547,29 +2614,82 @@
     }).join('');
   }
 
-  // Image Compression before saving
+  // Multiple File Upload & Image Compression
+  function renderDraftFilesPreview() {
+    const grid = document.getElementById('multiFilesPreviewGrid');
+    const singlePreview = document.getElementById('imagePreview');
+    if (!grid) return;
+
+    if (!draftTradeFiles.length) {
+      grid.innerHTML = '';
+      if (singlePreview) singlePreview.style.display = 'none';
+      return;
+    }
+
+    grid.innerHTML = draftTradeFiles.map((f, idx) => `
+      <div class="multi-thumb-box" title="${escapeHtml(f.name)}">
+        ${f.isImage
+          ? `<img src="${f.dataUrl}" alt="${escapeHtml(f.name)}" />`
+          : `<div class="multi-file-chip">${escapeHtml(f.name)}</div>`}
+        <button type="button" class="multi-remove-btn" onclick="removeDraftFile(${idx})" aria-label="Remove file">✕</button>
+      </div>
+    `).join('');
+
+    const firstImg = draftTradeFiles.find(f => f.isImage);
+    currentBase64Image = firstImg ? firstImg.dataUrl : '';
+    if (singlePreview) singlePreview.style.display = 'none';
+  }
+
+  function removeDraftFile(idx) {
+    draftTradeFiles.splice(idx, 1);
+    renderDraftFilesPreview();
+  }
+
   function previewImage(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const maxW = 1000;
-        const scale = Math.min(1, maxW / img.width);
-        canvas.width = img.width * scale;
-        canvas.height = img.height * scale;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        currentBase64Image = canvas.toDataURL('image/jpeg', 0.78);
-        const preview = document.getElementById('imagePreview');
-        preview.src = currentBase64Image;
-        preview.style.display = 'block';
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const rawUrl = event.target.result;
+        const isImg = file.type.startsWith('image/');
+        if (isImg) {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxW = 1000;
+            const scale = Math.min(1, maxW / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const compressed = canvas.toDataURL('image/jpeg', 0.78);
+            draftTradeFiles.push({
+              id: 'file_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+              name: file.name,
+              type: 'image/jpeg',
+              size: file.size,
+              isImage: true,
+              dataUrl: compressed
+            });
+            renderDraftFilesPreview();
+          };
+          img.src = rawUrl;
+        } else {
+          draftTradeFiles.push({
+            id: 'file_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+            name: file.name,
+            type: file.type || 'application/octet-stream',
+            size: file.size,
+            isImage: false,
+            dataUrl: rawUrl
+          });
+          renderDraftFilesPreview();
+        }
       };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+    });
   }
 
   // Modals
@@ -2579,25 +2699,24 @@
     document.querySelectorAll('#tradeForm .form-control').forEach(el => el.classList.remove('anim-shake'));
     document.getElementById('imagePreview').style.display = 'none';
     currentBase64Image = '';
+    draftTradeFiles = [];
     document.getElementById('deleteTradeBtn').style.display = 'none';
 
     if (tradeToEdit) {
+      const norm = normalizeTradeRecord(tradeToEdit);
       document.getElementById('modalTitle').innerText = 'Edit Trade';
-      document.getElementById('tradeId').value = tradeToEdit.id;
-      document.getElementById('tradeAccount').value = tradeToEdit.accountId || accounts[0].id;
-      document.getElementById('tradeDate').value = tradeToEdit.date;
-      document.getElementById('tradePair').value = tradeToEdit.pair;
-      document.getElementById('tradeDir').value = tradeToEdit.dir;
-      document.getElementById('tradeLot').value = tradeToEdit.lot !== undefined ? tradeToEdit.lot : 0.10;
-      document.getElementById('tradePnl').value = tradeToEdit.pnl;
-      document.getElementById('tradeSetup').value = tradeToEdit.setup || '';
-      document.getElementById('tradeScore').value = tradeToEdit.score || 8;
-      document.getElementById('tradeNotes').value = tradeToEdit.notes || '';
-      if (tradeToEdit.image) {
-        currentBase64Image = tradeToEdit.image;
-        document.getElementById('imagePreview').src = tradeToEdit.image;
-        document.getElementById('imagePreview').style.display = 'block';
-      }
+      document.getElementById('tradeId').value = norm.id;
+      document.getElementById('tradeAccount').value = norm.accountId || accounts[0].id;
+      document.getElementById('tradeDate').value = norm.date;
+      document.getElementById('tradePair').value = norm.pair;
+      document.getElementById('tradeDir').value = norm.dir;
+      document.getElementById('tradeLot').value = norm.lot !== undefined ? norm.lot : 0.10;
+      document.getElementById('tradePnl').value = norm.pnl;
+      document.getElementById('tradeSetup').value = norm.setup || '';
+      document.getElementById('tradeScore').value = norm.score || 8;
+      document.getElementById('tradeNotes').value = norm.notes || '';
+      draftTradeFiles = [...norm.files];
+      renderDraftFilesPreview();
       document.getElementById('deleteTradeBtn').style.display = 'inline-flex';
     } else {
       document.getElementById('modalTitle').innerText = 'Log New Trade';
@@ -2605,6 +2724,7 @@
       document.getElementById('tradeAccount').value = getActiveAccount().id;
       document.getElementById('tradeDate').value = datePrefill || new Date().toISOString().slice(0, 10);
       document.getElementById('tradeLot').value = '0.10';
+      renderDraftFilesPreview();
     }
     document.getElementById('tradeModal').classList.add('open');
   }
@@ -2654,6 +2774,7 @@
       return;
     }
 
+    const firstImg = draftTradeFiles.find(f => f.isImage && f.dataUrl);
     const id = document.getElementById('tradeId').value || (Date.now().toString() + '_' + Math.random().toString(36).slice(2, 6));
     const trade = {
       id,
@@ -2666,7 +2787,8 @@
       setup: document.getElementById('tradeSetup').value,
       score: parseInt(document.getElementById('tradeScore').value, 10) || 8,
       notes: document.getElementById('tradeNotes').value,
-      image: currentBase64Image
+      files: [...draftTradeFiles],
+      image: firstImg ? firstImg.dataUrl : currentBase64Image
     };
 
     await saveTradeToDB(trade);
@@ -3260,16 +3382,18 @@
     document.getElementById('logCountLabel').innerText = `${list.length} entries`;
 
     if (!list.length) {
-      container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">No trades logged for this period. Tap <b>+ Add Trade</b> to record your first trade, lot size, screenshot, and experience.</div>`;
+      container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">No trades logged for this period. Tap <b>+ Add Trade</b> to record your first trade, lot size, files, and experience.</div>`;
       return;
     }
 
     const reversed = [...list].reverse();
-    container.innerHTML = reversed.map((t, idx) => {
+    container.innerHTML = reversed.map((rawT, idx) => {
+      const t = normalizeTradeRecord(rawT);
       const isWin = t.pnl >= 0;
       const delayMs = Math.min(idx * 35, 280);
       const lotText = Number(t.lot || 0).toFixed(2);
       const accLabel = getAccountName(t.accountId);
+      const fileCountBadge = t.files.length > 1 ? `<span class="badge-lot">${t.files.length} files</span>` : '';
       const thumb = t.image
         ? `<img src="${t.image}" class="trade-thumb" />`
         : `<div class="trade-thumb" style="display:flex;align-items:center;justify-content:center;">${ICONS.chartPlaceholder}</div>`;
@@ -3281,6 +3405,7 @@
               <div style="font-weight:800; font-size:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                 <span>${escapeHtml(t.pair)}</span>
                 <span class="badge-lot">${lotText} lot</span>
+                ${fileCountBadge}
                 <span style="font-size:11px; color:var(--text-muted);">(${escapeHtml(t.dir)} • ${escapeHtml(t.date)})</span>
               </div>
               <div style="font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:450px;">
@@ -3300,11 +3425,23 @@
   }
 
   function viewTradeDetail(id) {
-    const t = trades.find(x => x.id === id);
-    if (!t) return;
+    const raw = trades.find(x => x.id === id);
+    if (!raw) return;
+    const t = normalizeTradeRecord(raw);
     const isWin = t.pnl >= 0;
     const lotText = Number(t.lot || 0).toFixed(2);
     const content = document.getElementById('viewModalContent');
+
+    const filesHtml = t.files.length
+      ? `<div style="margin-bottom:12px;">
+           <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Uploaded Files (${t.files.length}):</div>
+           ${t.files.map(f => f.isImage
+             ? `<div style="margin-bottom:8px;"><img src="${f.dataUrl}" alt="${escapeHtml(f.name)}" style="width:100%; border-radius:8px; border:1px solid var(--border);" /></div>`
+             : `<div style="margin-bottom:6px;"><a href="${f.dataUrl}" download="${escapeHtml(f.name)}" class="btn">📎 ${escapeHtml(f.name)}</a></div>`
+           ).join('')}
+         </div>`
+      : '';
+
     content.innerHTML = `
       <div class="card-header">
         <h3>${escapeHtml(t.pair)} (${escapeHtml(t.dir)}) — ${escapeHtml(t.date)}</h3>
@@ -3333,7 +3470,7 @@
         <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">Trade Experience &amp; Notes:</div>
         <div style="background:var(--bg-input); padding:12px; border-radius:8px; font-size:13px; line-height:1.5; white-space:pre-wrap;">${escapeHtml(t.notes || 'No notes recorded.')}</div>
       </div>
-      ${t.image ? `<div style="margin-bottom:12px;"><img src="${t.image}" style="width:100%; border-radius:8px; border:1px solid var(--border);" /></div>` : ''}
+      ${filesHtml}
       <div style="display:flex; justify-content:flex-end; gap:8px;">
         <button class="btn" onclick="closeModal('viewModal'); openTradeModal('', trades.find(x => x.id === '${t.id}'))">
           ${ICONS.edit}
